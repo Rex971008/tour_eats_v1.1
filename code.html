@@ -1,0 +1,1286 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TOUR EATS</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@300;400;500;700&family=Helvetica+Neue&display=swap" rel="stylesheet">
+    <style>
+        /* --- General & Base Styles (Adapted from no_one_help_official_website_25.html) --- */
+        :root {
+            --bg-color: #121212;
+            --surface-color: #1e1e1e;
+            --primary-color: #f0c419; /* Golden yellow */
+            --primary-gradient: linear-gradient(135deg, #c5a22d, #f0c419, #ffec8a);
+            --text-color: #e0e0e0;
+            --text-secondary-color: #a0a0a0;
+            --font-main: 'Noto Sans TC', 'Helvetica Neue', sans-serif;
+            --border-radius: 12px;
+            --shadow: 0 10px 30px rgba(0,0,0,0.5);
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: var(--font-main);
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            line-height: 1.7;
+            display: flex;
+            justify-content: center;
+            align-items: flex-start;
+            min-height: 100vh;
+            margin: 0;
+            padding: 30px 20px;
+            box-sizing: border-box;
+            overflow-x: hidden;
+        }
+        .container {
+            text-align: center;
+            background-color: var(--surface-color);
+            padding: 40px 30px;
+            border-radius: var(--border-radius);
+            box-shadow: var(--shadow);
+            max-width: 800px; /* Wider for AI results */
+            width: 100%;
+            border: 1px solid rgba(255,255,255,0.1);
+        }
+        h1 {
+            font-size: 2.8em;
+            font-weight: 700;
+            margin-top: 0;
+            margin-bottom: 20px;
+            letter-spacing: 1px;
+            background: var(--primary-gradient);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            text-fill-color: transparent;
+        }
+        h3, h4 {
+            color: var(--primary-color);
+            margin-top: 25px;
+            margin-bottom: 15px;
+            font-size: 1.5em;
+            font-weight: 500;
+            border-bottom: 2px solid rgba(255,255,255,0.1);
+            padding-bottom: 10px;
+        }
+        p#result {
+            color: var(--text-color);
+            font-size: 1.1em;
+            min-height: 25px;
+            margin-bottom: 25px;
+        }
+        .divider {
+            border-top: 1px solid rgba(255,255,255,0.1);
+            margin: 30px 0;
+        }
+
+        /* --- Input & Buttons (Adapted from code (3).html & no_one_help_official_website_25.html) --- */
+        input[type="file"] {
+            display: block;
+            margin: 20px auto;
+            width: 100%;
+            max-width: 400px;
+            padding: 10px;
+            color: var(--text-color);
+            background-color: var(--surface-color);
+            border: 1px solid rgba(255,255,255,0.2);
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 1em;
+        }
+        input[type="file"]::file-selector-button {
+            background: var(--primary-gradient);
+            color: #121212;
+            border: none;
+            padding: 8px 15px;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: transform 0.2s ease;
+            margin-right: 15px;
+        }
+        input[type="file"]::file-selector-button:hover {
+            transform: translateY(-1px);
+        }
+
+        #image-preview-container { margin-top: 20px; text-align: center; background-color: rgba(0,0,0,0.2); border-radius: 8px; padding: 10px;}
+        #image-preview { max-width: 100%; max-height: 300px; border-radius: 8px; border: 1px solid rgba(255,255,255,0.1); box-shadow: 0 2px 8px rgba(0,0,0,0.1); display: block; margin: 0 auto;}
+
+        #preferences-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 10px; margin-top: 15px;}
+        .pref-item label {
+            display: flex;
+            align-items: center;
+            cursor: pointer;
+            color: var(--text-color);
+            font-size: 1em;
+            background-color: rgba(255,255,255,0.08);
+            padding: 10px 15px;
+            border-radius: 8px;
+            transition: background-color 0.2s ease;
+        }
+        .pref-item label:hover {
+            background-color: rgba(255,255,255,0.15);
+        }
+        .pref-item input[type="checkbox"] {
+            margin-right: 10px;
+            appearance: none;
+            -webkit-appearance: none;
+            width: 20px;
+            height: 20px;
+            border: 2px solid var(--primary-color);
+            border-radius: 4px;
+            position: relative;
+            cursor: pointer;
+            outline: none;
+            transition: background-color 0.2s ease, border-color 0.2s ease;
+        }
+        .pref-item input[type="checkbox"]:checked {
+            background-color: var(--primary-color);
+            border-color: var(--primary-color);
+        }
+        .pref-item input[type="checkbox"]:checked::after {
+            content: '✓';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            color: #121212;
+            font-size: 14px;
+            font-weight: bold;
+        }
+
+        #custom-pref-container { display: flex; gap: 10px; margin-top: 15px; }
+        #custom-pref-input {
+            flex-grow: 1;
+            padding: 12px;
+            border: 1px solid rgba(255,255,255,0.2);
+            border-radius: 8px;
+            font-size: 1em;
+            background-color: rgba(0,0,0,0.2);
+            color: var(--text-color);
+        }
+        #custom-pref-input::placeholder { color: var(--text-secondary-color); }
+        #add-pref-btn {
+            background: linear-gradient(90deg, #2ecc71, #27ae60);
+            color: white;
+            border: none;
+            padding: 12px 20px;
+            border-radius: 8px;
+            font-size: 1em;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            flex-shrink: 0;
+            box-shadow: 0 4px 10px rgba(46, 204, 113, 0.3);
+        }
+        #add-pref-btn:hover { transform: translateY(-2px); box-shadow: 0 6px 15px rgba(46, 204, 113, 0.4); }
+
+        #custom-prefs-display { margin-top: 10px; display: flex; flex-wrap: wrap; gap: 8px; }
+        .custom-tag {
+            background-color: rgba(255,255,255,0.1);
+            color: var(--text-color);
+            padding: 6px 12px;
+            border-radius: 15px;
+            font-size: 0.9em;
+            display: inline-flex;
+            align-items: center;
+            border: 1px solid rgba(255,255,255,0.15);
+        }
+        .delete-tag-btn {
+            background: none;
+            border: none;
+            color: var(--text-secondary-color);
+            margin-left: 8px;
+            cursor: pointer;
+            font-weight: bold;
+            font-size: 0.9em;
+            line-height: 1;
+            transition: color 0.2s ease;
+        }
+        .delete-tag-btn:hover { color: var(--primary-color); }
+        
+        #language-selector {
+            width: 100%;
+            padding: 12px;
+            border-radius: 8px;
+            border: 1px solid rgba(255,255,255,0.2);
+            background-color: rgba(0,0,0,0.2);
+            color: var(--text-color);
+            margin-top: 15px;
+            font-size: 1em;
+            appearance: none;
+            -webkit-appearance: none;
+            background-image: url('data:image/svg+xml;utf8,<svg fill="%23e0e0e0" height="24" viewBox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg"><path d="M7 10l5 5 5-5z"/><path d="M0 0h24v24H0z" fill="none"/></svg>');
+            background-repeat: no-repeat;
+            background-position: right 10px center;
+            background-size: 20px;
+        }
+        #language-selector option {
+            background-color: var(--surface-color);
+            color: var(--text-color);
+        }
+
+        .process-button {
+            background: var(--primary-gradient);
+            color: #121212;
+            border: none;
+            padding: 15px 25px;
+            border-radius: 50px;
+            font-size: 1.2em;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: block;
+            width: 100%;
+            margin-top: 40px;
+            box-shadow: 0 4px 10px rgba(240, 196, 25, 0.3);
+        }
+        .process-button:hover { transform: translateY(-3px); box-shadow: 0 6px 15px rgba(240, 196, 25, 0.4); }
+        .process-button:disabled {
+            background-color: #bdc3c7;
+            background: #888;
+            cursor: not-allowed;
+            transform: none;
+            box-shadow: none;
+            color: #555;
+        }
+
+        /* --- AI Results Section (Adapted from code (3).html) --- */
+        .result-section {
+            background-color: rgba(0,0,0,0.2);
+            border: 1px solid rgba(255,255,255,0.1);
+            border-radius: 8px;
+            padding: 15px 20px;
+            margin-top: 20px;
+            text-align: left;
+        }
+        .result-section h4 {
+            margin-top: 0;
+            color: var(--primary-color);
+            font-size: 1.2em;
+            border-bottom: 1px solid rgba(255,255,255,0.1);
+            padding-bottom: 8px;
+        }
+        .result-section ul { list-style-type: none; padding: 0; margin: 0; }
+        .result-section li {
+            padding: 10px 0;
+            border-bottom: 1px solid rgba(255,255,255,0.05);
+            display: flex; /* For alignment */
+            flex-direction: column;
+        }
+        .result-section li:last-child { border-bottom: none; }
+        .dish-translation { display: flex; flex-direction: column; flex-grow: 1; }
+        .original-text { font-size: 0.8em; color: var(--text-secondary-color); margin-top: 4px; }
+        .original-text.filtered-out { color: #888 !important; }
+        .highlight { font-weight: 500; color: #fff;}
+        .filtered-out { color: #aaa; text-decoration: line-through; }
+        .reason-tag {
+            display: inline-block;
+            margin-top: 8px;
+            background-color: rgba(255, 193, 7, 0.15); /* light orange/yellow */
+            color: var(--primary-color);
+            font-size: 0.75em;
+            font-weight: 500;
+            padding: 4px 10px;
+            border-radius: 10px;
+            white-space: normal;
+            border: 1px solid rgba(255, 193, 7, 0.25);
+        }
+
+        #status-container { display: flex; justify-content: center; align-items: center; flex-direction: column; padding: 20px; }
+        .loader { border: 6px solid rgba(255,255,255,0.1); border-radius: 50%; border-top: 6px solid var(--primary-color); width: 50px; height: 50px; animation: spin 1.5s linear infinite; margin-bottom: 15px; }
+        @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+        .status-text { font-style: italic; color: var(--text-secondary-color); }
+
+        /* --- Spinner (from 初步正常.html) --- */
+        .spinner-section {
+            display: none; /* Hidden until analysis is done */
+            margin-top: 40px;
+            padding-top: 30px;
+            border-top: 1px solid rgba(255,255,255,0.1);
+        }
+        .wheel-container { position: relative; width: 300px; height: 300px; margin: 0 auto 30px; }
+        canvas#wheel {
+            width: 100%;
+            height: 100%;
+            transition: transform 5s cubic-bezier(0.1, 0.7, 0.3, 1);
+            border: 5px solid var(--primary-color);
+            border-radius: 50%;
+            background-color: #333; /* Fallback */
+        }
+        .pointer {
+            position: absolute;
+            top: -10px; /* Adjusted slightly higher */
+            left: 50%;
+            transform: translateX(-50%);
+            width: 0;
+            height: 0;
+            border-left: 15px solid transparent; /* Larger pointer */
+            border-right: 15px solid transparent;
+            border-top: 30px solid var(--primary-color); /* Matches primary color */
+            z-index: 10;
+        }
+
+        .spin-button {
+            background: var(--primary-gradient);
+            color: #121212;
+            border: none;
+            padding: 15px 45px;
+            font-size: 1.2em;
+            font-weight: bold;
+            border-radius: 50px;
+            cursor: pointer;
+            transition: all 0.3s;
+            margin-bottom: 40px;
+            box-shadow: 0 4px 10px rgba(240, 196, 25, 0.3);
+        }
+        .spin-button:hover { background-color: #d35400; transform: translateY(-3px); box-shadow: 0 6px 15px rgba(240, 196, 25, 0.4); }
+        .spin-button:disabled { background-color: #bdc3c7; background: #888; cursor: not-allowed; transform: none; box-shadow: none; color: #555;}
+        
+        .action-btn-group { display: flex; justify-content: center; gap: 15px; margin-top: 20px;}
+        .action-btn {
+            background-color: var(--primary-color);
+            color: #121212;
+            border: none;
+            padding: 12px 25px;
+            font-size: 1em;
+            font-weight: bold;
+            border-radius: 50px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        .action-btn.secondary {
+            background-color: rgba(255,255,255,0.1);
+            color: var(--text-color);
+        }
+        .action-btn:hover { transform: translateY(-2px); box-shadow: 0 4px 8px rgba(0,0,0,0.2); }
+        .action-btn.secondary:hover { background-color: rgba(255,255,255,0.2); }
+
+        /* --- History Section (from 初步正常.html) --- */
+        .history-section {
+            display: none;
+            margin-top: 40px;
+            padding-top: 30px;
+            border-top: 1px solid rgba(255,255,255,0.1);
+        }
+        #history-list {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+            display: grid;
+            gap: 20px;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); /* Card layout */
+        }
+        #history-list li {
+            background-color: rgba(0,0,0,0.2);
+            border-radius: 12px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+            overflow: hidden;
+            text-align: left;
+            border: 1px solid rgba(255,255,255,0.1);
+            position: relative; /* For the action buttons */
+        }
+        .history-img {
+            width: 100%;
+            height: 180px; /* Slightly smaller height */
+            object-fit: cover;
+            background-color: rgba(255,255,255,0.05);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            color: var(--text-secondary-color);
+            font-size: 0.9em;
+        }
+        .history-img img { width: 100%; height: 100%; object-fit: cover; }
+        .history-details { padding: 15px; }
+        .history-header { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 10px; }
+        .history-header h4 { margin: 0; color: #fff; font-size: 1.1em; border-bottom: none; padding-bottom: 0;}
+        .history-actions button {
+            background: none;
+            border: none;
+            font-size: 1em;
+            cursor: pointer;
+            padding: 5px;
+            line-height: 1;
+            opacity: 0.7;
+            transition: opacity 0.2s, color 0.2s;
+            color: var(--text-secondary-color);
+        }
+        .history-actions button:hover { opacity: 1; color: var(--primary-color); }
+        .history-details p { margin: 0 0 12px 0; font-size: 0.95em; color: var(--text-color); white-space: pre-wrap; word-break: break-word; }
+        .timestamp { font-size: 0.8em; color: var(--text-secondary-color); text-align: right; display: block; }
+        .clear-history-container { margin-top: 25px; text-align: center; }
+        #clear-history-btn {
+            background-color: #e74c3c;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+            box-shadow: 0 4px 10px rgba(231, 76, 60, 0.3);
+        }
+        #clear-history-btn:hover { background-color: #c0392b; transform: translateY(-2px); box-shadow: 0 6px 15px rgba(231, 76, 60, 0.4); }
+
+        /* --- Modal (from 初步正常.html) --- */
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.8);
+            backdrop-filter: blur(8px);
+            -webkit-backdrop-filter: blur(8px);
+            z-index: 2000;
+            display: none;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+            box-sizing: border-box;
+        }
+        .modal {
+            background: var(--surface-color);
+            padding: 25px;
+            border-radius: var(--border-radius);
+            width: 100%;
+            max-width: 400px;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.3);
+            text-align: left;
+            border: 1px solid rgba(255,255,255,0.1);
+        }
+        .modal h2 {
+            margin-top: 0;
+            margin-bottom: 20px;
+            color: var(--primary-color);
+            font-size: 1.5em;
+            text-align: center;
+            -webkit-background-clip: unset; /* Override text gradient */
+            -webkit-text-fill-color: unset; /* Override text gradient */
+        }
+        .modal-image-preview {
+            width: 100%;
+            height: 180px;
+            background: rgba(255,255,255,0.05);
+            border-radius: 8px;
+            margin-bottom: 15px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            overflow: hidden;
+            border: 1px dashed rgba(255,255,255,0.1);
+        }
+        .modal-image-preview img { max-width: 100%; max-height: 100%; object-fit: contain; }
+        .modal-image-preview span { color: var(--text-secondary-color); }
+        .modal #modal-image-input { display: none; }
+        .modal .upload-btn-label {
+            display: block;
+            width: 100%;
+            text-align: center;
+            padding: 10px;
+            background: #3498db;
+            color: #fff;
+            border-radius: 8px;
+            cursor: pointer;
+            margin-bottom: 15px;
+            transition: background 0.3s;
+            box-sizing: border-box;
+            font-weight: bold;
+        }
+        .modal .upload-btn-label:hover { background: #2980b9; }
+        .modal textarea {
+            width: 100%;
+            height: 80px;
+            padding: 10px;
+            border: 1px solid rgba(255,255,255,0.2);
+            border-radius: 8px;
+            font-size: 1em;
+            resize: vertical;
+            box-sizing: border-box;
+            margin-bottom: 20px;
+            background-color: rgba(0,0,0,0.2);
+            color: var(--text-color);
+        }
+        .modal textarea::placeholder { color: var(--text-secondary-color); }
+        .modal-actions { display: flex; justify-content: space-between; gap: 10px; }
+        .modal-actions button {
+            flex-grow: 1;
+            padding: 12px;
+            border: none;
+            border-radius: 8px;
+            font-size: 1em;
+            font-weight: bold;
+            cursor: pointer;
+            transition: background 0.3s;
+            color: #121212; /* Default for buttons in modal */
+        }
+        #modal-save-btn { background: #2ecc71; }
+        #modal-save-btn:hover { background: #27ae60; }
+        #modal-cancel-btn { background: #bdc3c7; color: #121212;}
+        #modal-cancel-btn:hover { background: #95a5a6; }
+
+        /* --- Responsive Adjustments --- */
+        @media (max-width: 768px) {
+            body { padding: 20px 15px; }
+            .container { padding: 30px 20px; }
+            h1 { font-size: 2.2em; }
+            h3, h4 { font-size: 1.3em; }
+            .wheel-container { width: 250px; height: 250px; }
+            .spin-button { padding: 12px 30px; font-size: 1em; }
+            .action-btn { padding: 10px 20px; font-size: 0.9em; }
+            #history-list { grid-template-columns: 1fr; }
+            .add-option input { max-width: 100%; }
+            #preferences-grid { grid-template-columns: 1fr; }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <h1>智慧菜單美食轉盤</h1>
+        <p id="result">上傳菜單圖片，設定偏好，讓 AI 幫您分析！</p>
+
+        <div class="main-content-section" id="initial-setup-section">
+            <h3>1. 上傳菜單圖片</h3>
+            <input type="file" id="menu-image" accept="image/*">
+            <div id="image-preview-container"><img id="image-preview" src="https://i.imgur.com/wSAa8a1.jpeg" alt="Menu Preview"></div>
+            
+            <div class="divider"></div>
+            <h3>2. 設定您的飲食偏好</h3>
+            <div id="preferences-grid">
+                <div class="pref-item"><label><input type="checkbox" id="pref-vegetarian"> 我是素食者</label></div>
+                <div class="pref-item"><label><input type="checkbox" id="pref-no-pork"> 不要豬肉</label></div>
+                <div class="pref-item"><label><input type="checkbox" id="pref-no-nuts"> 不要堅果/花生</label></div>
+                <div class="pref-item"><label><input type="checkbox" id="pref-no-alcohol"> 不要酒精</label></div>
+                <div class="pref-item"><label><input type="checkbox" id="pref-no-spicy"> 不吃辣</label></div>
+            </div>
+            <h4 style="margin-top:20px; margin-bottom: 5px; text-align: center;">自訂不想吃的食材 (例如: 雞肉)</h4>
+            <div id="custom-pref-container">
+                <input type="text" id="custom-pref-input" placeholder="輸入關鍵字...">
+                <button id="add-pref-btn">新增</button>
+            </div>
+            <div id="custom-prefs-display"></div>
+            
+            <div class="divider"></div>
+            <h3>3. 選擇翻譯語言</h3>
+            <select id="language-selector">
+                <option value="zh-TW">繁體中文 (Traditional Chinese)</option>
+                <option value="zh-CN">簡體中文 (Simplified Chinese)</option>
+                <option value="en">English</option>
+                <option value="ja">日本語 (Japanese)</option>
+                <option value="ko">한국어 (Korean)</option>
+            </select>
+            
+            <button class="process-button" id="process-btn">開始分析菜單</button>
+        </div>
+
+        <div id="analysis-results-section" style="display: none;">
+            <div class="divider"></div>
+            <h3>4. AI 分析結果</h3>
+            <div id="results"></div>
+        </div>
+
+        <div class="spinner-section" id="spinner-section">
+            <div class="divider"></div>
+            <h3>5. 美食選擇轉盤</h3>
+            <p id="spinner-result-text">點擊按鈕，決定你的下一餐！</p>
+            <div class="wheel-container">
+                <div class="pointer"></div>
+                <canvas id="wheel" width="350" height="350"></canvas>
+            </div>
+            <button class="spin-button" id="spin-btn">開始旋轉！</button>
+            <div class="action-btn-group" id="spin-actions" style="display: none;">
+                <button class="action-btn" id="keep-btn">就是它了！</button>
+                <button class="action-btn secondary" id="respin-btn">再轉一次</button>
+            </div>
+        </div>
+
+        <div class="history-section" id="history-section">
+            <div class="divider"></div>
+            <h3>美食日誌</h3>
+            <div id="history-list"></div>
+            <div class="clear-history-container"><button id="clear-history-btn">清除全部紀錄</button></div>
+        </div>
+    </div>
+
+    <!-- 記錄/編輯彈出視窗 HTML -->
+    <div class="modal-overlay" id="log-modal-overlay">
+        <div class="modal">
+            <h2 id="modal-title"></h2>
+            <div class="modal-image-preview" id="modal-image-preview"><span>圖片預覽區</span></div>
+            <label for="modal-image-input" class="upload-btn-label">更換照片</label>
+            <input type="file" id="modal-image-input" accept="image/*">
+            <textarea id="modal-text-input" placeholder="在這裡寫下你的用餐心得..."></textarea>
+            <div class="modal-actions">
+                <button id="modal-cancel-btn"></button>
+                <button id="modal-save-btn"></button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            // =====【您的 Azure 資訊】=====
+            // 請替換為您自己的 Azure AI 服務金鑰與端點
+            const AZURE_VISION_KEY = '2eIQpQlLKEaHUo6oPEOZ1Rc4OAcfgxwSQ1IGLPLMYxWxNavbuNxGJQQJ99BGACqBBLyXJ3w3AAAAACOG6FFo';
+        const AZURE_VISION_ENDPOINT = 'https://myhackathon-cv-service.services.ai.azure.com/';
+        const AZURE_TRANSLATOR_KEY = '4kHZNgnsEFrUxfkSAEkflaDgEOF4dDk9NI2EjDq8k6kcnYeqHiY2JQQJ99BGACqBBLyXJ3w3AAAAACOGrcjp';
+        const AZURE_TRANSLATOR_REGION = 'southeastasia';
+        const AZURE_OPENAI_ENDPOINT = 'https://menu.openai.azure.com/';
+        const AZURE_OPENAI_KEY = '6VpbFBGvvQkGXqnIqBu3AvoqYnqyenQUS2TIUzg2LyqVS5eMln9yJQQJ99BGACYeBjFXJ3w3AAABACOG1nCR';
+        const AZURE_OPENAI_DEPLOYMENT_NAME = 'my-menu-gpt';
+            // --- DOM Elements ---
+            const imageInput = document.getElementById('menu-image');
+            const imagePreview = document.getElementById('image-preview');
+            const processBtn = document.getElementById('process-btn');
+            const resultsDiv = document.getElementById('results');
+            const analysisResultsSection = document.getElementById('analysis-results-section');
+            const customPrefInput = document.getElementById('custom-pref-input');
+            const addPrefBtn = document.getElementById('add-pref-btn');
+            const customPrefsDisplay = document.getElementById('custom-prefs-display');
+            const languageSelector = document.getElementById('language-selector');
+
+            // Spinner DOM
+            const spinnerSection = document.getElementById('spinner-section');
+            const wheel = document.getElementById('wheel');
+            const spinBtn = document.getElementById('spin-btn');
+            const spinnerResultText = document.getElementById('spinner-result-text');
+            const spinActions = document.getElementById('spin-actions');
+            const keepBtn = document.getElementById('keep-btn');
+            const respinBtn = document.getElementById('respin-btn');
+            const ctx = wheel.getContext('2d');
+
+            // History DOM
+            const historySection = document.getElementById('history-section');
+            const historyList = document.getElementById('history-list');
+            const clearHistoryBtn = document.getElementById('clear-history-btn');
+
+            // Modal DOM
+            const modalOverlay = document.getElementById('log-modal-overlay');
+            const modalTitle = document.getElementById('modal-title');
+            const modalImagePreview = document.getElementById('modal-image-preview');
+            const modalImageInput = document.getElementById('modal-image-input');
+            const modalTextInput = document.getElementById('modal-text-input');
+            const modalSaveBtn = document.getElementById('modal-save-btn');
+            const modalCancelBtn = document.getElementById('modal-cancel-btn');
+
+            // --- Variables ---
+            let customPreferences = [];
+            let currentRotation = 0;
+            let isSpinning = false;
+            let history = [];
+            let editingIndex = null;
+            let currentLogEntry = {}; // Stores { text, image, note, timestamp }
+
+            // AI results storage
+            let allAnalyzedDishes = [];
+            let recommendedDishes = [];
+            let spinnerOptions = []; // Names for the spinner
+            
+            // Spinner colors (from 初步正常.html)
+            const spinnerColors = ['#34495e', '#f39c12', '#e74c3c', '#3498db', '#2ecc71', '#9b59b6', '#1abc9c', '#e67e22', '#a0a0a0', '#c0392b', '#7f8c8d', '#d35400'];
+
+            // --- Utility Functions ---
+            const updateStatus = (message, showLoader) => {
+                let loaderHtml = showLoader ? '<div class="loader"></div>' : '';
+                resultsDiv.innerHTML = `<div id="status-container">${loaderHtml}<div class="status-text">${message}</div></div>`;
+                analysisResultsSection.style.display = 'block';
+                spinnerSection.style.display = 'none'; // Hide spinner during analysis
+            };
+
+            const resizeImage = (file, maxWidth, maxHeight, quality) => new Promise((resolve, reject) => {
+                const reader = new FileReader();
+                reader.readAsDataURL(file);
+                reader.onload = event => {
+                    const img = new Image();
+                    img.src = event.target.result;
+                    img.onload = () => {
+                        const canvas = document.createElement('canvas');
+                        let { width, height } = img;
+                        if (width > height) {
+                            if (width > maxWidth) {
+                                height *= maxWidth / width;
+                                width = maxWidth;
+                            }
+                        } else {
+                            if (height > maxHeight) {
+                                width *= maxHeight / height;
+                                height = maxHeight;
+                            }
+                        }
+                        canvas.width = width;
+                        canvas.height = height;
+                        canvas.getContext('2d').drawImage(img, 0, 0, width, height);
+                        resolve(canvas.toDataURL('image/jpeg', quality));
+                    };
+                };
+                reader.onerror = error => reject(error);
+            });
+
+            // --- AI & Filtering Logic (Adapted from code (3).html) ---
+            async function getOcrText(imageSource) {
+                updateStatus('正在將圖片上傳至 Azure AI Vision (v3.2) 進行分析...', true);
+                const cleanEndpoint = AZURE_VISION_ENDPOINT.replace(/\/+$/, "");
+                const analyzeUrl = `${cleanEndpoint}/vision/v3.2/read/analyze`;
+                let imageBody;
+                if (typeof imageSource === 'string') {
+                    // Fetch if it's a URL (e.g., initial placeholder image)
+                    const imageResponse = await fetch(imageSource);
+                    imageBody = await imageResponse.blob();
+                } else {
+                    // Use directly if it's a File object
+                    imageBody = imageSource;
+                }
+                const response = await fetch(analyzeUrl, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/octet-stream', 'Ocp-Apim-Subscription-Key': AZURE_VISION_KEY },
+                    body: imageBody
+                });
+                if (!response.ok) { 
+                    const errorData = await response.json(); 
+                    throw new Error(`Azure API 錯誤 (提交階段): ${errorData.error.message}`); 
+                }
+                const operationLocation = response.headers.get('Operation-Location');
+                if (!operationLocation) throw new Error('無法從 Azure 回應中獲取操作位置。');
+                let result;
+                while (true) {
+                    await new Promise(resolve => setTimeout(resolve, 1000));
+                    updateStatus('正在從 Azure 獲取辨識結果...', true);
+                    const resultResponse = await fetch(operationLocation, { headers: { 'Ocp-Apim-Subscription-Key': AZURE_VISION_KEY } });
+                    result = await resultResponse.json();
+                    if (result.status === 'succeeded') return result.analyzeResult.readResults.flatMap(page => page.lines.map(line => line.text)).join('\n');
+                    if (result.status === 'failed') throw new Error(`Azure OCR 處理失敗: ${result.error?.message || '未知錯誤'}`);
+                }
+            }
+
+            async function filterDishesWithAzureAI(rawText) {
+                const apiEndpoint = `${AZURE_OPENAI_ENDPOINT}/openai/deployments/${AZURE_OPENAI_DEPLOYMENT_NAME}/chat/completions?api-version=2023-07-01-preview`;
+                const systemPrompt = `你是一位專業的菜單分析師。我會提供從菜單圖片 OCR 辨識出的文字。你的任務是：
+1. 只找出代表「菜品名稱」或「飲料名稱」的項目。
+2. 忽略所有分類標題（如 "主食", "飲料", "Appetizers"）、價格、地址、電話、描述性文字或任何非菜品項目。
+3. 將結果以一個 JSON 陣列的形式回傳，陣列中每個元素都是一個菜品名稱字串。例如: ["麻婆豆腐", "豚骨拉麵", "可口可樂"]。
+4. 如果找不到任何菜品，請回傳一個空的 JSON 陣列 []。
+5. 你的回傳必須是嚴格的 JSON 格式，且根物件要有一個 key 叫做 "dishes"，其 value 是菜品名稱陣列。範例： { "dishes": ["菜品A", "菜品B"] }`;
+                const userPrompt = `這是從菜單辨識出的文字，請幫我找出所有菜品和飲料名稱：\n\n${rawText}`;
+                const body = { messages: [ { role: "system", content: systemPrompt }, { role: "user", content: userPrompt } ] };
+
+                const response = await fetch(apiEndpoint, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json', 'api-key': AZURE_OPENAI_KEY },
+                    body: JSON.stringify(body)
+                });
+
+                if (!response.ok) { throw new Error(`Azure OpenAI (菜品辨識) API 錯誤: ${response.statusText}`); }
+                const data = await response.json();
+                try {
+                    const content = JSON.parse(data.choices[0].message.content);
+                    const dishes = content.dishes || [];
+                    if (!Array.isArray(dishes)) throw new Error("AI 回傳的格式不是有效的陣列。");
+                    return dishes;
+                } catch (e) {
+                    console.error("解析 AI 回應時出錯 (菜品辨識):", data.choices[0].message.content);
+                    throw new Error("無法解析 AI 回傳的菜品列表。");
+                }
+            }
+
+            async function analyzeIngredientsWithAzureAI(dishes, customPrefs) {
+                const apiEndpoint = `${AZURE_OPENAI_ENDPOINT}/openai/deployments/${AZURE_OPENAI_DEPLOYMENT_NAME}/chat/completions?api-version=2023-07-01-preview`;
+                const systemPrompt = `你是一位專業的食品科學家和廚師。你的任務是分析菜品，並根據使用者的自訂偏好進行語意判斷。
+
+**你的回傳必須是嚴格的 JSON 格式，包含以下欄位：**
+1.  \`name\`: (string) 菜品的原始名稱。
+2.  \`englishName\`: (string) 這道菜最標準的**英文翻譯名稱**。
+3.  \`mainIngredients\`: (string array) 這道菜最常見的**英文**主要食材列表。
+4.  \`allergens\`: (string array) 從這個固定列表中選擇可能的過敏原：Pork, Beef, Chicken, Fish, Seafood, Lamb, Nuts, Peanuts, Alcohol, Spicy, Dairy, Gluten, Eggs。
+5.  \`customFilterMatch\`: (string or null) 檢查菜品是否符合使用者的自訂偏好。如果符合，此欄位應為**解釋原因的英文**（例如："Contains chicken thigh, matching the 'chicken' filter"）；如果不符合，此欄位必須為 \`null\`。
+
+**語意判斷規則：**
+- 你必須「舉一反三」。如果使用者的偏好是「雞肉 (chicken)」，那麼菜品中的「雞腿」或「雞翅」都算符合。
+- 如果使用者的偏好是「牛肉 (beef)」，那麼「牛排」、「牛腩」或「牛尾」都算符合。
+- 如果使用者的自訂偏好列表為空，則 \`customFilterMatch\` 永遠為 \`null\`。`;
+                
+                const analysisPromises = dishes.map(dishName => {
+                    const userPrompt = `使用者的自訂排除項目是：[${customPrefs.join(', ')}]\n\n現在，請分析這道菜品: "${dishName}"`;
+                    const body = { messages: [ { role: "system", content: systemPrompt }, { role: "user", content: userPrompt } ] };
+                    
+                    return fetch(apiEndpoint, {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json', 'api-key': AZURE_OPENAI_KEY },
+                        body: JSON.stringify(body)
+                    }).then(response => {
+                        if (!response.ok) { return { name: dishName, error: true, englishName: dishName, mainIngredients: [], allergens: [], customFilterMatch: null }; }
+                        return response.json();
+                    }).then(data => {
+                        if (data.error) return data;
+                        try {
+                            const parsedContent = JSON.parse(data.choices[0].message.content);
+                            return {
+                                name: parsedContent.name || dishName,
+                                englishName: parsedContent.englishName || dishName,
+                                mainIngredients: parsedContent.mainIngredients || [],
+                                allergens: parsedContent.allergens || [],
+                                customFilterMatch: parsedContent.customFilterMatch || null,
+                                error: false
+                            };
+                        } catch (e) { return { name: dishName, error: true, englishName: dishName, mainIngredients: ["Analysis failed"], allergens: [], customFilterMatch: null }; }
+                    }).catch(err => { return { name: dishName, error: true, englishName: dishName, mainIngredients: ["Network error"], allergens: [], customFilterMatch: null }; });
+                });
+                return Promise.all(analysisPromises);
+            }
+
+            async function translateText(textArray, sourceLang, targetLang) {
+                const endpoint = "https://api.cognitive.microsofttranslator.com";
+                let url = `${endpoint}/translate?api-version=3.0&from=${sourceLang}&to=${targetLang}`;
+                
+                const textsToTranslate = [
+                    ...textArray,
+                    '👍 Recommended Dishes', '👎 Filtered Dishes', 
+                    'No recommended dishes found matching all your preferences.',
+                    "Great! All dishes seem to match your preferences.",
+                    'Contains meat', 'Contains pork', 'Contains nuts', 'Contains alcohol', 'Spicy', 'Analysis failed' // Common filter reasons
+                ];
+                // Filter out empty or duplicate texts
+                const uniqueTexts = Array.from(new Set(textsToTranslate.filter(t => t && typeof t === 'string' && t.trim() !== '')));
+                const body = uniqueTexts.map(text => ({ 'text': text }));
+
+                if (body.length === 0) return {}; // No text to translate
+
+                const response = await fetch(url, {
+                    method: 'POST',
+                    headers: { 'Ocp-Apim-Subscription-Key': AZURE_TRANSLATOR_KEY, 'Ocp-Apim-Subscription-Region': AZURE_TRANSLATOR_REGION, 'Content-Type': 'application/json' },
+                    body: JSON.stringify(body)
+                });
+                if (!response.ok) { const errorData = await response.json(); throw new Error(`Azure Translator API 錯誤: ${errorData.error.message}`); }
+                const data = await response.json();
+                const translationMap = {};
+                for (let i = 0; i < uniqueTexts.length; i++) {
+                    translationMap[uniqueTexts[i]] = data[i].translations[0].text;
+                }
+                return translationMap;
+            }
+            
+            function getFilterReasons(analyzedDish) {
+                const isVegetarian = document.getElementById('pref-vegetarian').checked;
+                const noPork = document.getElementById('pref-no-pork').checked;
+                const noNuts = document.getElementById('pref-no-nuts').checked;
+                const noAlcohol = document.getElementById('pref-no-alcohol').checked;
+                const noSpicy = document.getElementById('pref-no-spicy').checked;
+                
+                if(analyzedDish.error){
+                    return "Analysis failed";
+                }
+
+                const lowerCaseAllergens = (analyzedDish.allergens || []).map(a => a.toLowerCase());
+                let reason = '';
+
+                const meatAllergens = ['pork', 'beef', 'chicken', 'lamb', 'fish', 'seafood'];
+                if (isVegetarian && lowerCaseAllergens.some(a => meatAllergens.includes(a))) reason = 'Contains meat';
+                else if (noPork && lowerCaseAllergens.includes('pork')) reason = 'Contains pork';
+                else if (noNuts && (lowerCaseAllergens.includes('nuts') || lowerCaseAllergens.includes('peanuts'))) reason = 'Contains nuts';
+                else if (noAlcohol && lowerCaseAllergens.includes('alcohol')) reason = 'Contains alcohol';
+                else if (noSpicy && lowerCaseAllergens.includes('spicy')) reason = 'Spicy';
+                else if (analyzedDish.customFilterMatch) reason = analyzedDish.customFilterMatch; // This already comes translated from AI or is English.
+
+                return reason;
+            }
+            
+            function generateFinalHtml(dishesWithReasons, translationMap) {
+                let recommendedList = '';
+                let filteredList = '';
+                let recommendedCount = 0;
+                let filteredCount = 0;
+
+                dishesWithReasons.forEach((dish) => {
+                    const filterReason = dish.filterReason; // Now dish object includes filterReason
+
+                    const translatedName = translationMap[dish.englishName] || dish.englishName;
+                    const translatedIngredients = translationMap[dish.mainIngredients.join(', ')] || dish.mainIngredients.join(', ');
+                    const translatedReason = translationMap[filterReason] || filterReason;
+
+                    const originalNameHtml = (translatedName.toLowerCase() !== dish.name.toLowerCase()) ? `<span class="original-text">${dish.name}</span>` : '';
+                    const ingredientsHtml = `<span class="original-text">${dish.error ? (translationMap["Analysis failed"] || "分析失敗") : translatedIngredients}</span>`;
+
+                    if (filterReason) {
+                        filteredCount++;
+                        const reasonHtml = `<span class="reason-tag">⚠️ ${translatedReason}</span>`;
+                        const itemHtml = `<div class="dish-translation">
+                                              <span class="filtered-out">${translatedName}</span>
+                                              ${originalNameHtml}
+                                              ${ingredientsHtml}
+                                              ${reasonHtml}
+                                          </div>`;
+                        filteredList += `<li>${itemHtml}</li>`;
+                    } else {
+                        recommendedCount++;
+                        const itemHtml = `<div class="dish-translation">
+                                              <span class="highlight">${translatedName}</span>
+                                              ${originalNameHtml}
+                                              ${ingredientsHtml}
+                                          </div>`;
+                        recommendedList += `<li>${itemHtml}</li>`;
+                    }
+                });
+
+                const translatedRecommendedTitle = translationMap['👍 Recommended Dishes'] || '👍 推薦菜色';
+                const translatedFilteredTitle = translationMap['👎 Filtered Dishes'] || '👎 已過濾菜色';
+                const noRecFound = translationMap['No recommended dishes found matching all your preferences.'] || '沒有找到符合您所有偏好的推薦菜色。';
+                const allMatch = translationMap["Great! All dishes seem to match your preferences."] || '太棒了！所有菜色似乎都符合您的偏好。';
+
+                let finalHtml = `<div class="result-section"><h4>${translatedRecommendedTitle} (${recommendedCount})</h4><ul>${recommendedList || `<li>${noRecFound}</li>`}</ul></div>`;
+                finalHtml += `<div class="result-section"><h4>${translatedFilteredTitle} (${filteredCount})</h4><ul>${filteredList || `<li>${allMatch}</li>`}</ul></div>`;
+                
+                return finalHtml;
+            }
+
+            // --- Spinner Logic (from 初步正常.html, adapted) ---
+            const drawWheel = () => {
+                const numOptions = spinnerOptions.length;
+                if (numOptions === 0) {
+                    ctx.clearRect(0, 0, wheel.width, wheel.height);
+                    spinnerResultText.textContent = '沒有推薦菜色可供選擇，請調整您的偏好。';
+                    spinBtn.disabled = true;
+                    spinActions.style.display = 'none';
+                    return;
+                }
+
+                const arcSize = 2 * Math.PI / numOptions;
+                const centerX = wheel.width / 2;
+                const centerY = wheel.height / 2;
+                const radius = wheel.width / 2 - 5;
+
+                ctx.clearRect(0, 0, wheel.width, wheel.height);
+                ctx.strokeStyle = '#fff';
+                ctx.lineWidth = 3;
+
+                spinnerOptions.forEach((option, i) => {
+                    const angle = i * arcSize - Math.PI / 2;
+                    ctx.fillStyle = spinnerColors[i % spinnerColors.length];
+                    ctx.beginPath();
+                    ctx.moveTo(centerX, centerY);
+                    ctx.arc(centerX, centerY, radius, angle, angle + arcSize);
+                    ctx.closePath();
+                    ctx.fill();
+                    ctx.stroke();
+
+                    ctx.save();
+                    ctx.fillStyle = '#fff';
+                    // Use the computed font style from the body, fallback to sans-serif
+                    ctx.font = `bold 18px ${getComputedStyle(document.body).fontFamily.split(',')[0]}, sans-serif`;
+                    ctx.textAlign = 'center';
+                    ctx.textBaseline = 'middle';
+                    const textAngle = angle + arcSize / 2;
+                    ctx.translate(centerX + Math.cos(textAngle) * radius * 0.6, centerY + Math.sin(textAngle) * radius * 0.6);
+                    ctx.rotate(textAngle + Math.PI / 2);
+                    ctx.fillText(option, 0, 0);
+                    ctx.restore();
+                });
+                spinnerResultText.textContent = '點擊按鈕來決定你的下一餐！';
+                spinBtn.disabled = false;
+                spinActions.style.display = 'none';
+            };
+
+            const spin = () => {
+                if (isSpinning || spinnerOptions.length === 0) return;
+
+                isSpinning = true;
+                spinBtn.disabled = true;
+                spinnerResultText.textContent = '轉啊轉...';
+                spinActions.style.display = 'none';
+
+                const randomSpins = Math.floor(Math.random() * 5) + 5; // 5-9 full rotations
+                const randomStopAngle = Math.random() * 360; // 0-360 degrees
+                const totalRotation = randomSpins * 360 + randomStopAngle;
+                const newRotation = currentRotation + totalRotation;
+
+                wheel.style.transition = 'transform 5s cubic-bezier(0.1, 0.7, 0.3, 1)';
+                wheel.style.transform = `rotate(${newRotation}deg)`;
+                currentRotation = newRotation;
+
+                setTimeout(() => {
+                    isSpinning = false;
+                    spinBtn.disabled = false;
+
+                    // Calculate winner based on final rotation and pointer position (top)
+                    // The pointer is at the top (0 degrees). We need to see which sector lands at the top.
+                    // The wheel rotates clockwise.
+                    // If the wheel rotated 360+randomStopAngle, the effective rotation is randomStopAngle.
+                    // The sectors are drawn starting from -PI/2 (top-left).
+                    // Winner index calculation:
+                    // (360 - (final angle relative to 0) + 90 degrees offset to make pointer at top center) % 360
+                    const finalAngleNormalized = (newRotation % 360 + 360) % 360; // Normalize to 0-360
+                    const effectiveAngleForPointer = (finalAngleNormalized + 270) % 360; // Adjust for pointer at 0 deg, sector start at -90 deg
+                    
+                    const arcSizeDeg = 360 / spinnerOptions.length;
+                    const winnerIndex = Math.floor(effectiveAngleForPointer / arcSizeDeg);
+                    const winnerDishName = spinnerOptions[winnerIndex];
+
+                    if (winnerDishName) {
+                        spinnerResultText.textContent = `恭喜！今天的選擇是：${winnerDishName}`;
+                        // Find the original dish details from recommendedDishes array
+                        const dishFullDetails = recommendedDishes.find(d => 
+                            (languageSelector.value === 'en' ? d.englishName : (finalTranslationMap[d.englishName] || d.englishName)) === winnerDishName
+                        );
+                        currentLogEntry = { text: winnerDishName, fullDetails: dishFullDetails }; // Store full details for log
+                        spinActions.style.display = 'flex'; // Show Keep/Respin buttons
+                    } else {
+                        spinnerResultText.textContent = '出錯了，請刷新頁面！';
+                        spinActions.style.display = 'none';
+                    }
+                }, 5000);
+            };
+
+            // --- History Log (from 初步正常.html) ---
+            const formatTimestamp = (ts) => new Date(ts).toLocaleString('zh-TW', { dateStyle: 'short', timeStyle: 'short' });
+
+            const renderHistory = () => {
+                historySection.style.display = history.length > 0 ? 'block' : 'none';
+                historyList.innerHTML = '';
+                history.slice().reverse().forEach((entry, revIndex) => {
+                    const originalIndex = history.length - 1 - revIndex;
+                    const li = document.createElement('li');
+                    const imgHTML = entry.image ? `<img src="${entry.image}" class="history-img" alt="${entry.text}">` : `<div class="history-img">無圖片</div>`;
+                    const noteHTML = entry.note ? `<p>${entry.note}</p>` : '';
+
+                    li.innerHTML = `
+                        ${imgHTML}
+                        <div class="history-details">
+                            <div class="history-header">
+                                <h4>${entry.text}</h4>
+                                <div class="history-actions">
+                                    <button class="action-btn edit-btn" title="編輯">✏️</button>
+                                    <button class="action-btn delete-btn" title="刪除">🗑️</button>
+                                </div>
+                            </div>
+                            ${noteHTML}
+                            <span class="timestamp">${formatTimestamp(entry.timestamp)}</span>
+                        </div>
+                    `;
+
+                    li.querySelector('.edit-btn').addEventListener('click', () => {
+                        showLogModal({
+                            index: originalIndex,
+                            entry: history[originalIndex],
+                            title: `編輯日誌 - ${history[originalIndex].text}`,
+                            saveText: '儲存變更',
+                            cancelText: '取消'
+                        });
+                    });
+
+                    li.querySelector('.delete-btn').addEventListener('click', () => deleteHistoryEntry(originalIndex));
+                    historyList.appendChild(li);
+                });
+            };
+
+            const saveHistory = (entry) => {
+                if (editingIndex !== null) { // Edit mode
+                    history[editingIndex] = { ...history[editingIndex], ...entry };
+                } else { // Add mode
+                    entry.timestamp = Date.now();
+                    history.push(entry);
+                }
+                localStorage.setItem('foodWheelHistory', JSON.stringify(history));
+                renderHistory();
+            };
+            
+            const deleteHistoryEntry = (index) => {
+                if (confirm(`確定要刪除這筆「${history[index].text}」的日誌嗎？`)) {
+                    history.splice(index, 1);
+                    localStorage.setItem('foodWheelHistory', JSON.stringify(history));
+                    renderHistory();
+                }
+            };
+            
+            const loadHistory = () => {
+                const savedHistory = localStorage.getItem('foodWheelHistory');
+                if (savedHistory) history = JSON.parse(savedHistory);
+                renderHistory();
+            };
+
+            const clearHistory = () => {
+                if (history.length > 0 && confirm('確定要清除【所有】美食日誌紀錄嗎？此操作無法復原。')) {
+                    history = [];
+                    localStorage.removeItem('foodWheelHistory');
+                    renderHistory();
+                }
+            };
+
+            // --- Log Modal Functions (from 初步正常.html) ---
+            const showLogModal = (config) => {
+                editingIndex = typeof config.index === 'number' ? config.index : null;
+                currentLogEntry = { ...config.entry };
+                modalTitle.textContent = config.title;
+                modalImagePreview.innerHTML = currentLogEntry.image ? `<img src="${currentLogEntry.image}" alt="預覽">` : '<span>圖片預覽區</span>';
+                modalTextInput.value = currentLogEntry.note || '';
+                modalImageInput.value = ''; // Clear file input
+                modalSaveBtn.textContent = config.saveText;
+                modalCancelBtn.textContent = config.cancelText;
+                modalOverlay.style.display = 'flex';
+            };
+            const hideLogModal = () => modalOverlay.style.display = 'none';
+
+            const handleImageUpload = async (event) => {
+                const file = event.target.files[0];
+                if (!file) return;
+                try {
+                    currentLogEntry.image = await resizeImage(file, 800, 800, 0.8);
+                    modalImagePreview.innerHTML = `<img src="${currentLogEntry.image}" alt="預覽">`;
+                } catch (error) { console.error("圖片處理失敗:", error); alert("圖片處理失敗，請稍後再試。"); }
+            };
+            
+            const handleSaveLog = () => {
+                currentLogEntry.note = modalTextInput.value.trim();
+                saveHistory(currentLogEntry);
+                hideLogModal();
+            };
+
+            // --- Custom Preferences (from code (3).html) ---
+            function renderCustomPrefs() {
+                customPrefsDisplay.innerHTML = '';
+                customPreferences.forEach((pref, index) => {
+                    const tag = document.createElement('span');
+                    tag.className = 'custom-tag';
+                    tag.textContent = pref;
+                    const deleteBtn = document.createElement('button');
+                    deleteBtn.className = 'delete-tag-btn';
+                    deleteBtn.textContent = 'x';
+                    deleteBtn.onclick = () => { customPreferences.splice(index, 1); renderCustomPrefs(); savePrefsToLocalStorage(); };
+                    tag.appendChild(deleteBtn);
+                    customPrefsDisplay.appendChild(tag);
+                });
+            }
+            function savePrefsToLocalStorage() { localStorage.setItem('myMenuAppCustomPrefs', JSON.stringify(customPreferences)); }
+            function loadPrefsFromLocalStorage() { const savedPrefs = localStorage.getItem('myMenuAppCustomPrefs'); if (savedPrefs) { customPreferences = JSON.parse(savedPrefs); renderCustomPrefs(); } }
+
+            // --- Main Process Flow ---
+            let finalTranslationMap = {}; // Declare this globally to be accessible by spin logic
+
+            processBtn.addEventListener('click', async () => {
+                let imageSource = (imageInput.files && imageInput.files.length > 0) ? imageInput.files[0] : imagePreview.src;
+                if (!imageSource) { alert('沒有找到可分析的圖片！'); return; }
+
+                processBtn.disabled = true;
+                analysisResultsSection.style.display = 'block'; // Show analysis section
+
+                try {
+                    const ocrText = await getOcrText(imageSource);
+                    if (!ocrText) { updateStatus('錯誤：無法從圖片中辨識文字。', false); return; }
+                    
+                    updateStatus('OCR 辨識完成，正在請 AI 辨識菜品名稱...', true);
+                    const originalDishes = await filterDishesWithAzureAI(ocrText);
+                    if (originalDishes.length === 0) {
+                        updateStatus('AI 在圖片中沒有找到可辨識的菜品項目。', false);
+                        spinnerSection.style.display = 'none';
+                        return;
+                    }
+
+                    updateStatus(`菜品辨識完成 (${originalDishes.length}項)，正在為每個菜品進行智慧分析與英文預翻譯... (這可能需要一些時間)`, true);
+                    allAnalyzedDishes = await analyzeIngredientsWithAzureAI(originalDishes, customPreferences);
+                    
+                    // Filter dishes based on preferences and add filterReason to each dish object
+                    recommendedDishes = [];
+                    const dishesWithReasons = allAnalyzedDishes.map(dish => {
+                        const filterReason = getFilterReasons(dish);
+                        return { ...dish, filterReason: filterReason };
+                    });
+
+                    dishesWithReasons.forEach(dish => {
+                        if (!dish.filterReason) {
+                            recommendedDishes.push(dish);
+                        }
+                    });
+
+                    // Collect all texts for final translation (including spinner options and results display)
+                    const targetLang = languageSelector.value;
+                    const allTextsToTranslate = new Set();
+                    dishesWithReasons.forEach(dish => {
+                        if(dish.error) return;
+                        allTextsToTranslate.add(dish.englishName);
+                        allTextsToTranslate.add(dish.mainIngredients.join(', '));
+                        if (dish.filterReason) allTextsToTranslate.add(dish.filterReason);
+                    });
+                    
+                    finalTranslationMap = await translateText(Array.from(allTextsToTranslate), 'en', targetLang);
+
+                    // Generate HTML for results display using the full list of dishes with reasons
+                    const finalHtml = generateFinalHtml(dishesWithReasons, finalTranslationMap);
+                    resultsDiv.innerHTML = finalHtml;
+
+                    // Prepare spinner options using translated recommended dish names
+                    spinnerOptions = recommendedDishes.map(dish => {
+                        return targetLang === 'en' ? dish.englishName : (finalTranslationMap[dish.englishName] || dish.englishName);
+                    });
+
+                    spinnerSection.style.display = 'block'; // Show spinner section
+                    drawWheel(); // Redraw wheel with recommended dishes
+                    
+                } catch (error) {
+                    console.error('發生錯誤:', error);
+                    updateStatus(`發生錯誤: ${error.message}`, false);
+                    spinnerSection.style.display = 'none'; // Ensure spinner is hidden on error
+                } finally {
+                    processBtn.disabled = false;
+                }
+            });
+
+            // --- Event Listeners ---
+            imageInput.addEventListener('change', (event) => {
+                const file = event.target.files[0];
+                if (file) {
+                    const reader = new FileReader();
+                    reader.onload = (e) => {
+                        imagePreview.src = e.target.result;
+                    };
+                    reader.readAsDataURL(file);
+                }
+            });
+
+            addPrefBtn.addEventListener('click', () => {
+                const newPref = customPrefInput.value.trim();
+                if (newPref && !customPreferences.includes(newPref)) {
+                    customPreferences.push(newPref);
+                    customPrefInput.value = '';
+                    renderCustomPrefs();
+                    savePrefsToLocalStorage();
+                }
+            });
+
+            customPrefInput.addEventListener('keypress', (e) => {
+                if (e.key === 'Enter') addPrefBtn.click();
+            });
+
+            spinBtn.addEventListener('click', spin);
+
+            keepBtn.addEventListener('click', () => {
+                showLogModal({
+                    entry: currentLogEntry,
+                    title: `記錄美食 - ${currentLogEntry.text}`,
+                    saveText: '儲存日誌',
+                    cancelText: '略過'
+                });
+                spinActions.style.display = 'none'; // Hide action buttons after choosing
+                spinnerResultText.textContent = `恭喜！今天的選擇是：${currentLogEntry.text}`; // Reset text
+            });
+
+            respinBtn.addEventListener('click', () => {
+                spinActions.style.display = 'none'; // Hide action buttons
+                spinnerResultText.textContent = '重新選擇中...';
+                spin(); // Respin
+            });
+
+            clearHistoryBtn.addEventListener('click', clearHistory);
+            modalImageInput.addEventListener('change', handleImageUpload);
+            modalSaveBtn.addEventListener('click', handleSaveLog);
+            modalCancelBtn.addEventListener('click', hideLogModal);
+            modalOverlay.addEventListener('click', (e) => { if (e.target === modalOverlay) hideLogModal(); });
+
+            // --- Initial Load ---
+            loadPrefsFromLocalStorage();
+            loadHistory();
+            drawWheel(); // Initial draw of an empty/default wheel
+        });
+    </script>
+</body>
+</html>
