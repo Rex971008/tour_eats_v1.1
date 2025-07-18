@@ -898,35 +898,43 @@
                 return finalHtml;
             }
 
-            // --- Spinner Logic (MODIFIED) ---
+            // --- Spinner Logic (CORRECTED) ---
             const drawWheel = () => {
                 const numOptions = spinnerOptions.length;
                 const centerX = wheel.width / 2;
                 const centerY = wheel.height / 2;
-                const baseRadius = wheel.width / 2 - 10; // Leave space for highlight effect
+                const baseRadius = wheel.width / 2 - 10; 
 
                 ctx.clearRect(0, 0, wheel.width, wheel.height);
                 
                 if (numOptions === 0) {
-                    spinnerResultText.textContent = '沒有推薦菜色可供選擇，請調整您的偏好。';
                     spinBtn.disabled = true;
+                    if (analysisResultsSection.style.display !== 'none') {
+                         spinnerResultText.textContent = '沒有推薦菜色可供選擇。';
+                    } else {
+                         spinnerResultText.textContent = '請先分析菜單以載入選項。';
+                    }
                     spinActions.style.display = 'none';
                     return;
+                }
+                
+                // ** THE FIX IS HERE **
+                // Ensure spin button is enabled if there are options
+                if (!isSpinning) {
+                    spinBtn.disabled = false;
                 }
 
                 const arcSize = 2 * Math.PI / numOptions;
                 
                 spinnerOptions.forEach((option, i) => {
                     const isHighlighted = (i === hoveredSliceIndex);
-                    const radius = isHighlighted ? baseRadius + 5 : baseRadius; // Slightly larger if highlighted
+                    const radius = isHighlighted ? baseRadius + 5 : baseRadius;
                     const angle = i * arcSize - Math.PI / 2;
 
-                    ctx.save(); // Save for each slice's unique state
-
-                    // --- 1. Draw Slice Fill & Shadow ---
+                    ctx.save();
                     ctx.fillStyle = spinnerColors[i % spinnerColors.length];
                     if (isHighlighted) {
-                        ctx.shadowColor = '#f0c419'; // Golden glow
+                        ctx.shadowColor = '#f0c419';
                         ctx.shadowBlur = 20;
                     }
                     ctx.beginPath();
@@ -934,9 +942,8 @@
                     ctx.arc(centerX, centerY, radius, angle, angle + arcSize);
                     ctx.closePath();
                     ctx.fill();
-                    ctx.restore(); // Restore to remove shadow for stroke/text
+                    ctx.restore();
 
-                    // --- 2. Draw Slice Stroke ---
                     ctx.save();
                     ctx.strokeStyle = '#fff';
                     ctx.lineWidth = 3;
@@ -947,7 +954,6 @@
                     ctx.stroke();
                     ctx.restore();
 
-                    // --- 3. Draw Text if Highlighted ---
                     if (isHighlighted) {
                         ctx.save();
                         ctx.fillStyle = '#fff';
@@ -957,13 +963,10 @@
                         const textAngle = angle + arcSize / 2;
                         ctx.translate(centerX + Math.cos(textAngle) * radius * 0.65, centerY + Math.sin(textAngle) * radius * 0.65);
                         ctx.rotate(textAngle + Math.PI / 2);
-                        
                         ctx.shadowColor = 'rgba(0, 0, 0, 0.7)';
                         ctx.shadowBlur = 5;
-                        
-                        const maxWidth = radius * 1.1; // Max width for text to prevent overflow
+                        const maxWidth = radius * 1.1;
                         ctx.fillText(option, 0, 0, maxWidth);
-                        
                         ctx.restore();
                     }
                 });
@@ -975,8 +978,8 @@
                 spinBtn.disabled = true;
                 spinnerResultText.textContent = '轉啊轉...';
                 spinActions.style.display = 'none';
-                hoveredSliceIndex = null; // Clear hover state during spin
-                drawWheel(); // Redraw without highlight
+                hoveredSliceIndex = null;
+                drawWheel(); 
 
                 const randomSpins = Math.floor(Math.random() * 5) + 5;
                 const randomStopAngle = Math.random() * 360;
@@ -990,10 +993,12 @@
                 setTimeout(() => {
                     isSpinning = false;
                     spinBtn.disabled = false;
-                    const finalAngleNormalized = (newRotation % 360 + 360) % 360;
-                    const effectiveAngleForPointer = (360 - finalAngleNormalized) % 360;
+                    
+                    // Simplified and corrected winner calculation
+                    const finalAngle = currentRotation % 360;
+                    const winningAngle = (360 - finalAngle) % 360; 
                     const arcSizeDeg = 360 / spinnerOptions.length;
-                    const winnerIndex = Math.floor(effectiveAngleForPointer / arcSizeDeg);
+                    const winnerIndex = Math.floor(winningAngle / arcSizeDeg);
                     const winnerDishName = spinnerOptions[winnerIndex];
 
                     if (winnerDishName) {
@@ -1027,13 +1032,25 @@
                 const oldHoveredIndex = hoveredSliceIndex;
                 let newHoveredIndex = null;
 
-                if (distance <= baseRadius + 5) { // Check against the largest possible radius
-                    let angle = Math.atan2(dy, dx) - (currentRotation % 360) * Math.PI / 180;
-                    let normalizedAngle = (angle + (2.5 * Math.PI)) % (2 * Math.PI); // Normalize and offset
+                if (distance <= baseRadius + 5) {
                     const numOptions = spinnerOptions.length;
                     if (numOptions > 0) {
-                        const arcSize = 2 * Math.PI / numOptions;
-                        newHoveredIndex = Math.floor(normalizedAngle / arcSize);
+                        // This is the robust, corrected calculation
+                        const mouseAngleRad = Math.atan2(dy, dx);
+                        const rotationRad = (currentRotation % 360) * Math.PI / 180;
+                        const unrotatedAngleRad = mouseAngleRad - rotationRad;
+                        
+                        // Adjust for our drawing start at -PI/2 (the top)
+                        const angleRelativeToTop = unrotatedAngleRad + Math.PI / 2;
+                        
+                        // Normalize to a 0 to 2*PI range
+                        let normalizedAngle = angleRelativeToTop % (2 * Math.PI);
+                        if (normalizedAngle < 0) {
+                            normalizedAngle += (2 * Math.PI);
+                        }
+                        
+                        const arcSizeRad = 2 * Math.PI / numOptions;
+                        newHoveredIndex = Math.floor(normalizedAngle / arcSizeRad);
                     }
                 }
 
@@ -1042,7 +1059,7 @@
                     drawWheel();
                     if (newHoveredIndex !== null) {
                         spinnerResultText.textContent = '點擊按鈕來決定你的下一餐！';
-                    } else if (!isSpinning) {
+                    } else if (!isSpinning && spinActions.style.display === 'none') {
                         spinnerResultText.textContent = '將滑鼠移到轉盤上看看有什麼好料！';
                     }
                 }
@@ -1053,7 +1070,9 @@
                 if (hoveredSliceIndex !== null) {
                     hoveredSliceIndex = null;
                     drawWheel();
-                    spinnerResultText.textContent = '將滑鼠移到轉盤上看看有什麼好料！';
+                    if (!isSpinning && spinActions.style.display === 'none') {
+                        spinnerResultText.textContent = '將滑鼠移到轉盤上看看有什麼好料！';
+                    }
                 }
             }
 
@@ -1068,22 +1087,20 @@
                     const li = document.createElement('li');
                     const imgHTML = entry.image ? `<img src="${entry.image}" class="history-img" alt="${entry.text}">` : `<div class="history-img">無圖片</div>`;
                     const noteHTML = entry.note ? `<p>${entry.note}</p>` : '';
-
                     li.innerHTML = `
                         ${imgHTML}
                         <div class="history-details">
                             <div class="history-header">
                                 <h4>${entry.text}</h4>
                                 <div class="history-actions">
-                                    <button class="action-btn edit-btn" title="編輯">✏️</button>
-                                    <button class="action-btn delete-btn" title="刪除">🗑️</button>
+                                    <button class="edit-btn" title="編輯" style="background:none; border:none; cursor:pointer; color: var(--text-secondary-color); font-size: 1em; opacity: 0.7;">✏️</button>
+                                    <button class="delete-btn" title="刪除" style="background:none; border:none; cursor:pointer; color: var(--text-secondary-color); font-size: 1em; opacity: 0.7;">🗑️</button>
                                 </div>
                             </div>
                             ${noteHTML}
                             <span class="timestamp">${formatTimestamp(entry.timestamp)}</span>
                         </div>
                     `;
-
                     li.querySelector('.edit-btn').addEventListener('click', () => {
                         showLogModal({ index: originalIndex, entry: history[originalIndex], title: `編輯日誌 - ${history[originalIndex].text}`, saveText: '儲存變更', cancelText: '取消' });
                     });
