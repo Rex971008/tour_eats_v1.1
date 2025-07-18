@@ -695,17 +695,47 @@
                     text: `這是我在 TOUR EATS 上的美食紀錄：\n\n「${entry.text}」\n心得：${entry.note || '無'}\n\n你也來試試這個有趣的 App 吧！`,
                 };
 
+                // --- 新增：處理圖片分享 ---
+                if (entry.image && navigator.share) {
+                    try {
+                        // 步驟 1: 將 Base64 Data URL 轉換為 Blob 物件
+                        const response = await fetch(entry.image);
+                        const blob = await response.blob();
+
+                        // 步驟 2: 建立一個 File 物件
+                        const filename = `${entry.text.replace(/[\s/\\?%*:|"<>]/g, '_')}.jpg`;
+                        const file = new File([blob], filename, { type: blob.type });
+
+                        // 步驟 3: 使用 navigator.canShare() 檢查瀏覽器是否支援分享此類檔案
+                        if (navigator.canShare && navigator.canShare({ files: [file] })) {
+                            // 如果支援，將檔案陣列加入到分享資料中
+                            shareData.files = [file];
+                        }
+                        // 如果不支援檔案分享，shareData.files 會是 undefined，API 會自動忽略它，只分享文字
+
+                    } catch (e) {
+                        console.error('圖片轉換或檢查分享能力時發生錯誤:', e);
+                        // 如果轉換失敗，就只分享文字，不中斷流程
+                    }
+                }
+                // --- 圖片處理結束 ---
+
                 if (navigator.share) {
                     try {
+                        // 無論是否包含圖片，都嘗試進行分享
                         await navigator.share(shareData);
                         console.log('日誌分享成功！');
                     } catch (err) {
-                        console.error('分享失敗:', err);
+                        // 使用者取消分享或發生錯誤
+                        if (err.name !== 'AbortError') {
+                           console.error('分享失敗:', err);
+                        }
                     }
                 } else {
+                    // 如果瀏覽器完全不支援 Web Share API，退回至複製到剪貼簿
                     navigator.clipboard.writeText(shareData.text)
                         .then(() => {
-                            alert('分享內容已複製到剪貼簿，可以手動貼上分享囉！');
+                            alert('您的瀏覽器不支援直接分享，分享內容已複製到剪貼簿，可以手動貼上分享囉！');
                         })
                         .catch(err => {
                              alert('複製失敗，您的瀏覽器可能不支援此功能。');
