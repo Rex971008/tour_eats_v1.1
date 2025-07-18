@@ -179,42 +179,72 @@
         .history-details { padding: 15px; pointer-events: none; }
         .history-header { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 10px; }
         .history-header h4 { margin: 0; color: #fff; font-size: 1.1em; border-bottom: none; padding-bottom: 0;}
-        .history-actions { position: absolute; top: 10px; right: 10px; pointer-events: all; } /* 讓動作按鈕可以點擊 */
+        .history-actions { position: absolute; top: 10px; right: 10px; pointer-events: all; }
         .history-actions button { background: rgba(0,0,0,0.5); border: none; font-size: 1.1em; cursor: pointer; padding: 8px; border-radius: 50%; line-height: 1; opacity: 0.8; transition: opacity 0.2s, color 0.2s, background-color 0.2s; color: var(--text-color); }
         .history-actions button:hover { opacity: 1; background: #e74c3c; color: #fff; }
         .history-details p.truncated-note { margin: 0 0 12px 0; font-size: 0.95em; color: var(--text-color); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; display: block; }
         .timestamp { font-size: 0.8em; color: var(--text-secondary-color); text-align: right; display: block; }
-        .clear-history-container { margin-top: 25px; text-align: center; }
-        #clear-history-btn { background-color: #e74c3c; color: white; border: none; padding: 10px 20px; border-radius: 8px; cursor: pointer; transition: background-color 0.3s; box-shadow: 0 4px 10px rgba(231, 76, 60, 0.3); }
+        
+        /* 日誌底部按鈕區 */
+        .history-footer-actions { margin-top: 25px; text-align: center; display: flex; flex-wrap: wrap; justify-content: center; gap: 15px; }
+        #clear-history-btn, #add-new-log-btn { color: white; border: none; padding: 10px 20px; border-radius: 8px; cursor: pointer; transition: all 0.3s; font-weight: 500; }
+        #add-new-log-btn { background-color: #3498db; box-shadow: 0 4px 10px rgba(52, 152, 219, 0.3); }
+        #add-new-log-btn:hover { background-color: #2980b9; transform: translateY(-2px); box-shadow: 0 6px 15px rgba(52, 152, 219, 0.4); }
+        #clear-history-btn { background-color: #e74c3c; box-shadow: 0 4px 10px rgba(231, 76, 60, 0.3); }
         #clear-history-btn:hover { background-color: #c0392b; transform: translateY(-2px); box-shadow: 0 6px 15px rgba(231, 76, 60, 0.4); }
 
         /* --- 彈出視窗 (通用) --- */
         .modal-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0, 0, 0, 0.8); backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px); z-index: 2000; display: none; justify-content: center; align-items: center; padding: 20px; box-sizing: border-box; }
-        .modal { background: var(--surface-color); padding: 25px; border-radius: var(--border-radius); width: 100%; max-width: 450px; box-shadow: 0 5px 20px rgba(0,0,0,0.3); text-align: left; border: 1px solid rgba(255,255,255,0.1); }
-        .modal h2 { margin-top: 0; margin-bottom: 20px; color: var(--primary-color); font-size: 1.5em; text-align: center; -webkit-background-clip: unset; -webkit-text-fill-color: unset; }
-        .modal-image-preview { width: 100%; height: 180px; background: rgba(255,255,255,0.05); border-radius: 8px; margin-bottom: 15px; display: flex; justify-content: center; align-items: center; overflow: hidden; border: 1px dashed rgba(255,255,255,0.1); }
+        .modal {
+            background: var(--surface-color);
+            padding: 30px;
+            border-radius: var(--border-radius);
+            width: 100%;
+            max-width: 500px;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.3);
+            text-align: left;
+            border: 1px solid rgba(255,255,255,0.1);
+            position: relative;
+            max-height: 90vh; /* Prevent modal from becoming too tall */
+            display: flex;
+            flex-direction: column;
+        }
+        .modal h2 { margin: 0; margin-bottom: 20px; padding-right: 30px; color: var(--primary-color); font-size: 1.5em; text-align: center; -webkit-background-clip: unset; -webkit-text-fill-color: unset; }
+        .modal-image-preview { width: 100%; height: 200px; background: rgba(255,255,255,0.05); border-radius: 8px; margin-bottom: 15px; display: flex; justify-content: center; align-items: center; overflow: hidden; border: 1px dashed rgba(255,255,255,0.1); }
         .modal-image-preview img { max-width: 100%; max-height: 100%; object-fit: contain; }
         .modal-image-preview span { color: var(--text-secondary-color); }
         .modal .upload-btn-label { display: block; width: 100%; text-align: center; padding: 10px; background: #3498db; color: #fff; border-radius: 8px; cursor: pointer; margin-bottom: 15px; transition: background 0.3s; box-sizing: border-box; font-weight: bold; }
         .modal .upload-btn-label:hover { background: #2980b9; }
-        .modal-actions { display: flex; justify-content: space-between; gap: 10px; margin-top: 20px; }
+        .modal-actions { display: flex; flex-wrap: wrap; justify-content: space-between; gap: 10px; margin-top: 25px; }
         .modal-actions button { flex-grow: 1; padding: 12px; border: none; border-radius: 8px; font-size: 1em; font-weight: bold; cursor: pointer; transition: all 0.3s; }
-        
+        .modal-close-btn { position: absolute; top: 15px; right: 15px; background: none; border: none; font-size: 1.8em; color: var(--text-secondary-color); cursor: pointer; line-height: 1; padding: 5px; transition: color 0.2s, transform 0.2s; }
+        .modal-close-btn:hover { color: var(--text-color); transform: rotate(90deg); }
+
         /* "編輯"彈出視窗特定樣式 */
         #log-modal-overlay #modal-image-input { display: none; }
-        #log-modal-overlay textarea { width: 100%; min-height: 80px; padding: 10px; border: 1px solid rgba(255,255,255,0.2); border-radius: 8px; font-size: 1em; resize: vertical; box-sizing: border-box; background-color: rgba(0,0,0,0.2); color: var(--text-color); }
+        #log-modal-overlay #log-title-input { width: 100%; background-color: transparent; border: none; border-bottom: 2px solid rgba(255,255,255,0.2); padding: 8px 0; margin-bottom: 20px; font-size: 1.5em; color: var(--primary-color); font-weight: 500; text-align: center; }
+        #log-modal-overlay #log-title-input:focus { outline: none; border-bottom-color: var(--primary-color); }
+        #log-modal-overlay textarea { width: 100%; min-height: 100px; padding: 10px; border: 1px solid rgba(255,255,255,0.2); border-radius: 8px; font-size: 1em; resize: vertical; box-sizing: border-box; background-color: rgba(0,0,0,0.2); color: var(--text-color); }
         #log-modal-overlay textarea::placeholder { color: var(--text-secondary-color); }
-        #modal-save-btn { background: #2ecc71; color: white; }
+        #modal-save-btn { background: #2ecc71; color: white; flex-basis: 100%;}
         #modal-save-btn:hover { background: #27ae60; }
-        #modal-cancel-btn { background: #bdc3c7; color: #121212;}
-        #modal-cancel-btn:hover { background: #95a5a6; }
-
+        
         /* "檢視"彈出視窗特定樣式 */
-        #history-view-text { background-color: rgba(0,0,0,0.2); padding: 15px; border-radius: 8px; min-height: 80px; white-space: pre-wrap; word-break: break-word; color: var(--text-color); margin-bottom: 20px; }
+        #history-view-text {
+            background-color: rgba(0,0,0,0.2);
+            padding: 15px;
+            border-radius: 8px;
+            min-height: 80px;
+            white-space: pre-wrap;
+            word-break: break-word;
+            color: var(--text-color);
+            margin-bottom: 20px;
+            overflow-y: auto; /* Enable vertical scroll if content overflows */
+        }
+        #history-view-share-btn { background: #8e44ad; color: white; }
+        #history-view-share-btn:hover { background: #733290; transform: translateY(-2px); }
         #history-view-edit-btn { background: var(--primary-gradient); color: #121212; }
         #history-view-edit-btn:hover { transform: translateY(-2px); }
-        #history-view-close-btn { background: #bdc3c7; color: #121212; }
-        #history-view-close-btn:hover { background: #95a5a6; }
         
         /* --- 煙火與通知 --- */
         #fireworks-canvas { position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: 3001; pointer-events: none; }
@@ -241,6 +271,8 @@
             #history-list { grid-template-columns: 1fr; }
             #preferences-grid { grid-template-columns: 1fr; }
             .tab-nav { margin-left: -20px; margin-right: -20px; padding-left: 20px; padding-right: 20px; }
+            .modal-actions button { flex-basis: 100%; } /* 讓按鈕在小螢幕上垂直排列 */
+            .modal-actions #history-view-edit-btn { order: -1; } /* 將編輯按鈕移到最上方 */
         }
     </style>
 </head>
@@ -312,10 +344,11 @@
             </div>
 
             <div class="tab-content" id="tab-content-history">
-                <div class="history-section">
-                    <h3>美食日誌</h3>
-                    <div id="history-list"></div>
-                    <div class="clear-history-container"><button id="clear-history-btn">清除全部紀錄</button></div>
+                <h3>美食日誌</h3>
+                <div id="history-list"></div>
+                <div class="history-footer-actions">
+                    <button id="add-new-log-btn">✍️ 撰寫新的日誌</button>
+                    <button id="clear-history-btn">🗑️ 清除全部紀錄</button>
                 </div>
             </div>
         </div>
@@ -324,14 +357,14 @@
     <!-- 記錄/編輯彈出視窗 (Modal) HTML -->
     <div class="modal-overlay" id="log-modal-overlay">
         <div class="modal">
-            <h2 id="modal-title"></h2>
-            <div class="modal-image-preview" id="modal-image-preview"><span>圖片預覽區</span></div>
-            <label for="modal-image-input" class="upload-btn-label">更換照片</label>
+            <button class="modal-close-btn" aria-label="關閉">&times;</button>
+            <input id="log-title-input" placeholder="請輸入餐點名稱...">
+            <div class="modal-image-preview" id="modal-image-preview"><span>點擊下方按鈕上傳照片</span></div>
+            <label for="modal-image-input" class="upload-btn-label">上傳或更換照片</label>
             <input type="file" id="modal-image-input" accept="image/*">
             <textarea id="modal-text-input" placeholder="在這裡寫下你的用餐心得..."></textarea>
             <div class="modal-actions">
-                <button id="modal-cancel-btn"></button>
-                <button id="modal-save-btn"></button>
+                <button id="modal-save-btn">儲存日誌</button>
             </div>
         </div>
     </div>
@@ -339,12 +372,13 @@
     <!-- "檢視日誌"彈出視窗 (Modal) HTML -->
     <div class="modal-overlay" id="history-view-modal-overlay">
         <div class="modal">
+            <button class="modal-close-btn" aria-label="關閉">&times;</button>
             <h2 id="history-view-title"></h2>
             <div class="modal-image-preview" id="history-view-image"></div>
             <p id="history-view-text"></p>
             <div class="modal-actions">
-                <button id="history-view-close-btn">關閉</button>
                 <button id="history-view-edit-btn">編輯日誌</button>
+                <button id="history-view-share-btn">分享此日誌</button>
             </div>
         </div>
     </div>
@@ -393,24 +427,24 @@
             const ctx = wheel.getContext('2d');
             const historyList = document.getElementById('history-list');
             const clearHistoryBtn = document.getElementById('clear-history-btn');
+            const addNewLogBtn = document.getElementById('add-new-log-btn');
             
             // "編輯"彈出視窗 DOM
-            const modalOverlay = document.getElementById('log-modal-overlay');
-            const modalTitle = document.getElementById('modal-title');
+            const logModalOverlay = document.getElementById('log-modal-overlay');
+            const logTitleInput = document.getElementById('log-title-input');
             const modalImagePreview = document.getElementById('modal-image-preview');
             const modalImageInput = document.getElementById('modal-image-input');
             const modalTextInput = document.getElementById('modal-text-input');
             const modalSaveBtn = document.getElementById('modal-save-btn');
-            const modalCancelBtn = document.getElementById('modal-cancel-btn');
-
+            
             // "檢視"彈出視窗 DOM
             const historyViewModalOverlay = document.getElementById('history-view-modal-overlay');
             const historyViewTitle = document.getElementById('history-view-title');
             const historyViewImage = document.getElementById('history-view-image');
             const historyViewText = document.getElementById('history-view-text');
             const historyViewEditBtn = document.getElementById('history-view-edit-btn');
-            const historyViewCloseBtn = document.getElementById('history-view-close-btn');
-
+            const historyViewShareBtn = document.getElementById('history-view-share-btn');
+            
             // 通知與煙火 DOM
             const toastNotification = document.getElementById('toast-notification');
             const toastMessage = document.getElementById('toast-message');
@@ -427,7 +461,7 @@
             let isResultDisplayed = false; 
             let history = [];
             let editingIndex = null;
-            let viewingIndex = null; // 追蹤正在檢視的項目索引
+            let viewingIndex = null;
             let currentLogEntry = {};
             let hoveredSliceIndex = null;
             let finalTranslationMap = {};
@@ -492,7 +526,6 @@
                     });
                 }
             }
-            
             function animateFireworks() {
                 fireworksCtx.clearRect(0, 0, fireworksCanvas.width, fireworksCanvas.height);
                 let activeParticles = false;
@@ -517,9 +550,7 @@
                     fireworksCtx.clearRect(0, 0, fireworksCanvas.width, fireworksCanvas.height);
                 }
             }
-
             const hideToast = () => toastNotification.classList.remove('show');
-            
             const showSaveToast = (savedIndex, savedText, isEditing) => {
                 toastMessage.textContent = `「${savedText}」${isEditing ? '已更新' : '已儲存至日誌'}！`;
                 toastNotification.classList.add('show');
@@ -529,279 +560,44 @@
                 
                 toastEditBtn.onclick = () => {
                     hideToast();
-                    showLogModal({ index: savedIndex, entry: history[savedIndex], title: `編輯日誌 - ${history[savedIndex].text}`, saveText: '儲存變更', cancelText: '取消' });
+                    showLogModal({ index: savedIndex, entry: history[savedIndex], saveText: '儲存變更' });
                 };
 
                 toastConfirmBtn.onclick = hideToast;
-                setTimeout(hideToast, 6000); // 6秒後自動關閉
+                setTimeout(hideToast, 6000);
             };
 
             // --- AI 與過濾邏輯 (未變更) ---
-            async function getOcrText(imageSource) {
-                updateStatus('正在將圖片上傳至 Azure AI Vision (v3.2) 進行分析...', true);
-                const cleanEndpoint = AZURE_VISION_ENDPOINT.replace(/\/+$/, "");
-                const analyzeUrl = `${cleanEndpoint}/vision/v3.2/read/analyze`;
-                let imageBody;
-                if (typeof imageSource === 'string') {
-                    const imageResponse = await fetch(imageSource);
-                    imageBody = await imageResponse.blob();
-                } else { imageBody = imageSource; }
-                const response = await fetch(analyzeUrl, { method: 'POST', headers: { 'Content-Type': 'application/octet-stream', 'Ocp-Apim-Subscription-Key': AZURE_VISION_KEY }, body: imageBody });
-                if (!response.ok) { const errorData = await response.json(); throw new Error(`Azure API 錯誤 (提交階段): ${errorData.error.message}`); }
-                const operationLocation = response.headers.get('Operation-Location');
-                if (!operationLocation) throw new Error('無法從 Azure 回應中獲取操作位置。');
-                let result;
-                while (true) {
-                    await new Promise(resolve => setTimeout(resolve, 1000));
-                    updateStatus('正在從 Azure 獲取辨識結果...', true);
-                    const resultResponse = await fetch(operationLocation, { headers: { 'Ocp-Apim-Subscription-Key': AZURE_VISION_KEY } });
-                    result = await resultResponse.json();
-                    if (result.status === 'succeeded') return result.analyzeResult.readResults.flatMap(page => page.lines.map(line => line.text)).join('\n');
-                    if (result.status === 'failed') throw new Error(`Azure OCR 處理失敗: ${result.error?.message || '未知錯誤'}`);
-                }
-            }
-            async function filterDishesWithAzureAI(rawText) {
-                const apiEndpoint = `${AZURE_OPENAI_ENDPOINT}/openai/deployments/${AZURE_OPENAI_DEPLOYMENT_NAME}/chat/completions?api-version=2023-07-01-preview`;
-                const systemPrompt = `你是一位專業的菜單分析師。我會提供從菜單圖片 OCR 辨識出的文字。你的任務是：
-1. 只找出代表「菜品名稱」或「飲料名稱」的項目。
-2. 忽略所有分類標題（如 "主食", "飲料", "Appetizers"）、價格、地址、電話、描述性文字或任何非菜品項目。
-3. 將結果以一個 JSON 陣列的形式回傳，陣列中每個元素都是一個菜品名稱字串。例如: ["麻婆豆腐", "豚骨拉麵", "可口可樂"]。
-4. 如果找不到任何菜品，請回傳一個空的 JSON 陣列 []。
-5. 你的回傳必須是嚴格的 JSON 格式，且根物件要有一個 key 叫做 "dishes"，其 value 是菜品名稱陣列。範例： { "dishes": ["菜品A", "菜品B"] }`;
-                const userPrompt = `這是從菜單辨識出的文字，請幫我找出所有菜品和飲料名稱：\n\n${rawText}`;
-                const body = { messages: [ { role: "system", content: systemPrompt }, { role: "user", content: userPrompt } ] };
-                const response = await fetch(apiEndpoint, { method: 'POST', headers: { 'Content-Type': 'application/json', 'api-key': AZURE_OPENAI_KEY }, body: JSON.stringify(body) });
-                if (!response.ok) { throw new Error(`Azure OpenAI (菜品辨識) API 錯誤: ${response.statusText}`); }
-                const data = await response.json();
-                try {
-                    const content = JSON.parse(data.choices[0].message.content);
-                    const dishes = content.dishes || [];
-                    if (!Array.isArray(dishes)) throw new Error("AI 回傳的格式不是有效的陣列。");
-                    return dishes;
-                } catch (e) { console.error("解析 AI 回應時出錯 (菜品辨識):", data.choices[0].message.content); throw new Error("無法解析 AI 回傳的菜品列表。"); }
-            }
-            async function analyzeIngredientsWithAzureAI(dishes, customPrefs) {
-                const apiEndpoint = `${AZURE_OPENAI_ENDPOINT}/openai/deployments/${AZURE_OPENAI_DEPLOYMENT_NAME}/chat/completions?api-version=2023-07-01-preview`;
-                const systemPrompt = `你是一位專業的食品科學家和廚師。你的任務是分析菜品，並根據使用者的自訂偏好進行語意判斷。
-**你的回傳必須是嚴格的 JSON 格式，包含以下欄位：**
-1.  \`name\`: (string) 菜品的原始名稱。
-2.  \`englishName\`: (string) 這道菜最標準的**英文翻譯名稱**。
-3.  \`mainIngredients\`: (string array) 這道菜最常見的**英文**主要食材列表。
-4.  \`allergens\`: (string array) 從這個固定列表中選擇可能的過敏原：Pork, Beef, Chicken, Fish, Seafood, Lamb, Nuts, Peanuts, Alcohol, Spicy, Dairy, Gluten, Eggs。
-5.  \`customFilterMatch\`: (string or null) 檢查菜品是否符合使用者的自訂偏好。如果符合，此欄位應為**解釋原因的英文**（例如："Contains chicken thigh, matching the 'chicken' filter"）；如果不符合，此欄位必須為 \`null\`。
-**語意判斷規則：**
-- 你必須「舉一反三」。如果使用者的偏好是「雞肉 (chicken)」，那麼菜品中的「雞腿」或「雞翅」都算符合。
-- 如果使用者的偏好是「牛肉 (beef)」，那麼「牛排」、「牛腩」或「牛尾」都算符合。
-- 如果使用者的自訂偏好列表為空，則 \`customFilterMatch\` 永遠為 \`null\`。`;
-                const analysisPromises = dishes.map(dishName => {
-                    const userPrompt = `使用者的自訂排除項目是：[${customPrefs.join(', ')}]\n\n現在，請分析這道菜品: "${dishName}"`;
-                    const body = { messages: [ { role: "system", content: systemPrompt }, { role: "user", content: userPrompt } ] };
-                    return fetch(apiEndpoint, { method: 'POST', headers: { 'Content-Type': 'application/json', 'api-key': AZURE_OPENAI_KEY }, body: JSON.stringify(body) })
-                        .then(response => response.ok ? response.json() : { error: true })
-                        .then(data => {
-                            if (data.error) return { name: dishName, error: true, englishName: dishName, mainIngredients: [], allergens: [], customFilterMatch: null };
-                            try {
-                                const parsedContent = JSON.parse(data.choices[0].message.content);
-                                return { name: parsedContent.name || dishName, englishName: parsedContent.englishName || dishName, mainIngredients: parsedContent.mainIngredients || [], allergens: parsedContent.allergens || [], customFilterMatch: parsedContent.customFilterMatch || null, error: false };
-                            } catch (e) { return { name: dishName, error: true, englishName: dishName, mainIngredients: ["Analysis failed"], allergens: [], customFilterMatch: null }; }
-                        }).catch(err => ({ name: dishName, error: true, englishName: dishName, mainIngredients: ["Network error"], allergens: [], customFilterMatch: null }));
-                });
-                return Promise.all(analysisPromises);
-            }
-            async function translateText(textArray, sourceLang, targetLang) {
-                const endpoint = "https://api.cognitive.microsofttranslator.com";
-                const url = `${endpoint}/translate?api-version=3.0&from=${sourceLang}&to=${targetLang}`;
-                const textsToTranslate = [...textArray, '👍 Recommended Dishes', '👎 Filtered Dishes', 'No recommended dishes found matching all your preferences.', "Great! All dishes seem to match your preferences.", 'Contains meat', 'Contains pork', 'Contains nuts', 'Contains alcohol', 'Spicy', 'Analysis failed'];
-                const uniqueTexts = Array.from(new Set(textsToTranslate.filter(t => t && typeof t === 'string' && t.trim() !== '')));
-                const body = uniqueTexts.map(text => ({ 'text': text }));
-                if (body.length === 0) return {};
-                const response = await fetch(url, { method: 'POST', headers: { 'Ocp-Apim-Subscription-Key': AZURE_TRANSLATOR_KEY, 'Ocp-Apim-Subscription-Region': AZURE_TRANSLATOR_REGION, 'Content-Type': 'application/json' }, body: JSON.stringify(body) });
-                if (!response.ok) { const errorData = await response.json(); throw new Error(`Azure Translator API 錯誤: ${errorData.error.message}`); }
-                const data = await response.json();
-                const translationMap = {};
-                for (let i = 0; i < uniqueTexts.length; i++) { translationMap[uniqueTexts[i]] = data[i].translations[0].text; }
-                return translationMap;
-            }
-            function getFilterReasons(analyzedDish) {
-                const isVegetarian = document.getElementById('pref-vegetarian').checked, noPork = document.getElementById('pref-no-pork').checked, noNuts = document.getElementById('pref-no-nuts').checked, noAlcohol = document.getElementById('pref-no-alcohol').checked, noSpicy = document.getElementById('pref-no-spicy').checked;
-                if(analyzedDish.error) return "Analysis failed";
-                const lowerCaseAllergens = (analyzedDish.allergens || []).map(a => a.toLowerCase());
-                let reason = '';
-                if (isVegetarian && lowerCaseAllergens.some(a => ['pork', 'beef', 'chicken', 'lamb', 'fish', 'seafood'].includes(a))) reason = 'Contains meat';
-                else if (noPork && lowerCaseAllergens.includes('pork')) reason = 'Contains pork';
-                else if (noNuts && (lowerCaseAllergens.includes('nuts') || lowerCaseAllergens.includes('peanuts'))) reason = 'Contains nuts';
-                else if (noAlcohol && lowerCaseAllergens.includes('alcohol')) reason = 'Contains alcohol';
-                else if (noSpicy && lowerCaseAllergens.includes('spicy')) reason = 'Spicy';
-                else if (analyzedDish.customFilterMatch) reason = analyzedDish.customFilterMatch;
-                return reason;
-            }
-            function generateFinalHtml(dishesWithReasons, translationMap) {
-                let recommendedList = '', filteredList = '', recommendedCount = 0, filteredCount = 0;
-                dishesWithReasons.forEach(dish => {
-                    const translatedName = translationMap[dish.englishName] || dish.englishName;
-                    const originalNameHtml = (translatedName.toLowerCase() !== dish.name.toLowerCase()) ? `<span class="original-text">${dish.name}</span>` : '';
-                    const ingredientsHtml = `<span class="original-text">${dish.error ? (translationMap["Analysis failed"] || "分析失敗") : (translationMap[dish.mainIngredients.join(', ')] || dish.mainIngredients.join(', '))}</span>`;
-                    if (dish.filterReason) {
-                        filteredCount++;
-                        const reasonHtml = `<span class="reason-tag">⚠️ ${translationMap[dish.filterReason] || dish.filterReason}</span>`;
-                        filteredList += `<li><div class="dish-translation"><span class="filtered-out">${translatedName}</span>${originalNameHtml}${ingredientsHtml}${reasonHtml}</div></li>`;
-                    } else {
-                        recommendedCount++;
-                        recommendedList += `<li><div class="dish-translation"><span class="highlight">${translatedName}</span>${originalNameHtml}${ingredientsHtml}</div></li>`;
-                    }
-                });
-                const tRecommended = translationMap['👍 Recommended Dishes'] || '👍 推薦菜色';
-                const tFiltered = translationMap['👎 Filtered Dishes'] || '👎 已過濾菜色';
-                const tNoRec = translationMap['No recommended dishes found matching all your preferences.'] || '沒有找到符合您所有偏好的推薦菜色。';
-                const tAllMatch = translationMap["Great! All dishes seem to match your preferences."] || '太棒了！所有菜色似乎都符合您的偏好。';
-                let finalHtml = `<div class="result-section"><h4>${tRecommended} (${recommendedCount})</h4><ul>${recommendedList || `<li>${tNoRec}</li>`}</ul></div>`;
-                finalHtml += `<div class="result-section"><h4>${tFiltered} (${filteredCount})</h4><ul>${filteredList || `<li>${tAllMatch}</li>`}</ul></div>`;
-                return finalHtml;
-            }
+            async function getOcrText(imageSource) { updateStatus('正在將圖片上傳至 Azure AI Vision (v3.2) 進行分析...', true); const cleanEndpoint = AZURE_VISION_ENDPOINT.replace(/\/+$/, ""); const analyzeUrl = `${cleanEndpoint}/vision/v3.2/read/analyze`; let imageBody; if (typeof imageSource === 'string') { const imageResponse = await fetch(imageSource); imageBody = await imageResponse.blob(); } else { imageBody = imageSource; } const response = await fetch(analyzeUrl, { method: 'POST', headers: { 'Content-Type': 'application/octet-stream', 'Ocp-Apim-Subscription-Key': AZURE_VISION_KEY }, body: imageBody }); if (!response.ok) { const errorData = await response.json(); throw new Error(`Azure API 錯誤 (提交階段): ${errorData.error.message}`); } const operationLocation = response.headers.get('Operation-Location'); if (!operationLocation) throw new Error('無法從 Azure 回應中獲取操作位置。'); let result; while (true) { await new Promise(resolve => setTimeout(resolve, 1000)); updateStatus('正在從 Azure 獲取辨識結果...', true); const resultResponse = await fetch(operationLocation, { headers: { 'Ocp-Apim-Subscription-Key': AZURE_VISION_KEY } }); result = await resultResponse.json(); if (result.status === 'succeeded') return result.analyzeResult.readResults.flatMap(page => page.lines.map(line => line.text)).join('\n'); if (result.status === 'failed') throw new Error(`Azure OCR 處理失敗: ${result.error?.message || '未知錯誤'}`); } }
+            async function filterDishesWithAzureAI(rawText) { const apiEndpoint = `${AZURE_OPENAI_ENDPOINT}/openai/deployments/${AZURE_OPENAI_DEPLOYMENT_NAME}/chat/completions?api-version=2023-07-01-preview`; const systemPrompt = `你是一位專業的菜單分析師。我會提供從菜單圖片 OCR 辨識出的文字。你的任務是：\n1. 只找出代表「菜品名稱」或「飲料名稱」的項目。\n2. 忽略所有分類標題（如 "主食", "飲料", "Appetizers"）、價格、地址、電話、描述性文字或任何非菜品項目。\n3. 將結果以一個 JSON 陣列的形式回傳，陣列中每個元素都是一個菜品名稱字串。例如: ["麻婆豆腐", "豚骨拉麵", "可口可樂"]。\n4. 如果找不到任何菜品，請回傳一個空的 JSON 陣列 []。\n5. 你的回傳必須是嚴格的 JSON 格式，且根物件要有一個 key 叫做 "dishes"，其 value 是菜品名稱陣列。範例： { "dishes": ["菜品A", "菜品B"] }`; const userPrompt = `這是從菜單辨識出的文字，請幫我找出所有菜品和飲料名稱：\n\n${rawText}`; const body = { messages: [ { role: "system", content: systemPrompt }, { role: "user", content: userPrompt } ] }; const response = await fetch(apiEndpoint, { method: 'POST', headers: { 'Content-Type': 'application/json', 'api-key': AZURE_OPENAI_KEY }, body: JSON.stringify(body) }); if (!response.ok) { throw new Error(`Azure OpenAI (菜品辨識) API 錯誤: ${response.statusText}`); } const data = await response.json(); try { const content = JSON.parse(data.choices[0].message.content); const dishes = content.dishes || []; if (!Array.isArray(dishes)) throw new Error("AI 回傳的格式不是有效的陣列。"); return dishes; } catch (e) { console.error("解析 AI 回應時出錯 (菜品辨識):", data.choices[0].message.content); throw new Error("無法解析 AI 回傳的菜品列表。"); } }
+            async function analyzeIngredientsWithAzureAI(dishes, customPrefs) { const apiEndpoint = `${AZURE_OPENAI_ENDPOINT}/openai/deployments/${AZURE_OPENAI_DEPLOYMENT_NAME}/chat/completions?api-version=2023-07-01-preview`; const systemPrompt = `你是一位專業的食品科學家和廚師。你的任務是分析菜品，並根據使用者的自訂偏好進行語意判斷。\n**你的回傳必須是嚴格的 JSON 格式，包含以下欄位：**\n1.  \`name\`: (string) 菜品的原始名稱。\n2.  \`englishName\`: (string) 這道菜最標準的**英文翻譯名稱**。\n3.  \`mainIngredients\`: (string array) 這道菜最常見的**英文**主要食材列表。\n4.  \`allergens\`: (string array) 從這個固定列表中選擇可能的過敏原：Pork, Beef, Chicken, Fish, Seafood, Lamb, Nuts, Peanuts, Alcohol, Spicy, Dairy, Gluten, Eggs。\n5.  \`customFilterMatch\`: (string or null) 檢查菜品是否符合使用者的自訂偏好。如果符合，此欄位應為**解釋原因的英文**（例如："Contains chicken thigh, matching the 'chicken' filter"）；如果不符合，此欄位必須為 \`null\`。\n**語意判斷規則：**\n- 你必須「舉一反三」。如果使用者的偏好是「雞肉 (chicken)」，那麼菜品中的「雞腿」或「雞翅」都算符合。\n- 如果使用者的偏好是「牛肉 (beef)」，那麼「牛排」、「牛腩」或「牛尾」都算符合。\n- 如果使用者的自訂偏好列表為空，則 \`customFilterMatch\` 永遠為 \`null\`。`; const analysisPromises = dishes.map(dishName => { const userPrompt = `使用者的自訂排除項目是：[${customPrefs.join(', ')}]\n\n現在，請分析這道菜品: "${dishName}"`; const body = { messages: [ { role: "system", content: systemPrompt }, { role: "user", content: userPrompt } ] }; return fetch(apiEndpoint, { method: 'POST', headers: { 'Content-Type': 'application/json', 'api-key': AZURE_OPENAI_KEY }, body: JSON.stringify(body) }).then(response => response.ok ? response.json() : { error: true }).then(data => { if (data.error) return { name: dishName, error: true, englishName: dishName, mainIngredients: [], allergens: [], customFilterMatch: null }; try { const parsedContent = JSON.parse(data.choices[0].message.content); return { name: parsedContent.name || dishName, englishName: parsedContent.englishName || dishName, mainIngredients: parsedContent.mainIngredients || [], allergens: parsedContent.allergens || [], customFilterMatch: parsedContent.customFilterMatch || null, error: false }; } catch (e) { return { name: dishName, error: true, englishName: dishName, mainIngredients: ["Analysis failed"], allergens: [], customFilterMatch: null }; } }).catch(err => ({ name: dishName, error: true, englishName: dishName, mainIngredients: ["Network error"], allergens: [], customFilterMatch: null })); }); return Promise.all(analysisPromises); }
+            async function translateText(textArray, sourceLang, targetLang) { const endpoint = "https://api.cognitive.microsofttranslator.com"; const url = `${endpoint}/translate?api-version=3.0&from=${sourceLang}&to=${targetLang}`; const textsToTranslate = [...textArray, '👍 Recommended Dishes', '👎 Filtered Dishes', 'No recommended dishes found matching all your preferences.', "Great! All dishes seem to match your preferences.", 'Contains meat', 'Contains pork', 'Contains nuts', 'Contains alcohol', 'Spicy', 'Analysis failed']; const uniqueTexts = Array.from(new Set(textsToTranslate.filter(t => t && typeof t === 'string' && t.trim() !== ''))); const body = uniqueTexts.map(text => ({ 'text': text })); if (body.length === 0) return {}; const response = await fetch(url, { method: 'POST', headers: { 'Ocp-Apim-Subscription-Key': AZURE_TRANSLATOR_KEY, 'Ocp-Apim-Subscription-Region': AZURE_TRANSLATOR_REGION, 'Content-Type': 'application/json' }, body: JSON.stringify(body) }); if (!response.ok) { const errorData = await response.json(); throw new Error(`Azure Translator API 錯誤: ${errorData.error.message}`); } const data = await response.json(); const translationMap = {}; for (let i = 0; i < uniqueTexts.length; i++) { translationMap[uniqueTexts[i]] = data[i].translations[0].text; } return translationMap; }
+            function getFilterReasons(analyzedDish) { const isVegetarian = document.getElementById('pref-vegetarian').checked, noPork = document.getElementById('pref-no-pork').checked, noNuts = document.getElementById('pref-no-nuts').checked, noAlcohol = document.getElementById('pref-no-alcohol').checked, noSpicy = document.getElementById('pref-no-spicy').checked; if(analyzedDish.error) return "Analysis failed"; const lowerCaseAllergens = (analyzedDish.allergens || []).map(a => a.toLowerCase()); let reason = ''; if (isVegetarian && lowerCaseAllergens.some(a => ['pork', 'beef', 'chicken', 'lamb', 'fish', 'seafood'].includes(a))) reason = 'Contains meat'; else if (noPork && lowerCaseAllergens.includes('pork')) reason = 'Contains pork'; else if (noNuts && (lowerCaseAllergens.includes('nuts') || lowerCaseAllergens.includes('peanuts'))) reason = 'Contains nuts'; else if (noAlcohol && lowerCaseAllergens.includes('alcohol')) reason = 'Contains alcohol'; else if (noSpicy && lowerCaseAllergens.includes('spicy')) reason = 'Spicy'; else if (analyzedDish.customFilterMatch) reason = analyzedDish.customFilterMatch; return reason; }
+            function generateFinalHtml(dishesWithReasons, translationMap) { let recommendedList = '', filteredList = '', recommendedCount = 0, filteredCount = 0; dishesWithReasons.forEach(dish => { const translatedName = translationMap[dish.englishName] || dish.englishName; const originalNameHtml = (translatedName.toLowerCase() !== dish.name.toLowerCase()) ? `<span class="original-text">${dish.name}</span>` : ''; const ingredientsHtml = `<span class="original-text">${dish.error ? (translationMap["Analysis failed"] || "分析失敗") : (translationMap[dish.mainIngredients.join(', ')] || dish.mainIngredients.join(', '))}</span>`; if (dish.filterReason) { filteredCount++; const reasonHtml = `<span class="reason-tag">⚠️ ${translationMap[dish.filterReason] || dish.filterReason}</span>`; filteredList += `<li><div class="dish-translation"><span class="filtered-out">${translatedName}</span>${originalNameHtml}${ingredientsHtml}${reasonHtml}</div></li>`; } else { recommendedCount++; recommendedList += `<li><div class="dish-translation"><span class="highlight">${translatedName}</span>${originalNameHtml}${ingredientsHtml}</div></li>`; } }); const tRecommended = translationMap['👍 Recommended Dishes'] || '👍 推薦菜色'; const tFiltered = translationMap['👎 Filtered Dishes'] || '👎 已過濾菜色'; const tNoRec = translationMap['No recommended dishes found matching all your preferences.'] || '沒有找到符合您所有偏好的推薦菜色。'; const tAllMatch = translationMap["Great! All dishes seem to match your preferences."] || '太棒了！所有菜色似乎都符合您的偏好。'; let finalHtml = `<div class="result-section"><h4>${tRecommended} (${recommendedCount})</h4><ul>${recommendedList || `<li>${tNoRec}</li>`}</ul></div>`; finalHtml += `<div class="result-section"><h4>${tFiltered} (${filteredCount})</h4><ul>${filteredList || `<li>${tAllMatch}</li>`}</ul></div>`; return finalHtml; }
 
             // --- 轉盤邏輯 (未變更) ---
-            const drawWheel = () => {
-                const numOptions = spinnerOptions.length;
-                const centerX = wheel.width / 2;
-                const centerY = wheel.height / 2;
-                const baseRadius = wheel.width / 2 - 10;
-                ctx.clearRect(0, 0, wheel.width, wheel.height);
-                if (numOptions === 0) {
-                    spinBtn.disabled = true;
-                    spinnerResultText.textContent = analysisResultsSection.style.display !== 'none' ? '沒有推薦菜色可供選擇。' : '請先分析菜單以載入選項。';
-                    spinActions.style.display = 'none';
-                    return;
-                }
-                if (!isSpinning) { spinBtn.disabled = false; }
-                const arcSize = 2 * Math.PI / numOptions;
-                spinnerOptions.forEach((option, i) => {
-                    const isHighlighted = (i === hoveredSliceIndex);
-                    const radius = isHighlighted ? baseRadius + 5 : baseRadius;
-                    const angle = i * arcSize - Math.PI / 2;
-                    ctx.save();
-                    ctx.fillStyle = spinnerColors[i % spinnerColors.length];
-                    if (isHighlighted) { ctx.shadowColor = '#f0c419'; ctx.shadowBlur = 20; }
-                    ctx.beginPath();
-                    ctx.moveTo(centerX, centerY);
-                    ctx.arc(centerX, centerY, radius, angle, angle + arcSize);
-                    ctx.closePath();
-                    ctx.fill();
-                    ctx.restore();
-                    ctx.save();
-                    ctx.strokeStyle = '#fff';
-                    ctx.lineWidth = 3;
-                    ctx.beginPath();
-                    ctx.moveTo(centerX, centerY);
-                    ctx.arc(centerX, centerY, radius, angle, angle + arcSize);
-                    ctx.closePath();
-                    ctx.stroke();
-                    ctx.restore();
-                    if (isHighlighted) {
-                        ctx.save();
-                        ctx.fillStyle = '#fff';
-                        ctx.font = `bold 16px ${getComputedStyle(document.body).fontFamily.split(',')[0]}, sans-serif`;
-                        ctx.textAlign = 'center';
-                        ctx.textBaseline = 'middle';
-                        const textAngle = angle + arcSize / 2;
-                        ctx.translate(centerX + Math.cos(textAngle) * radius * 0.65, centerY + Math.sin(textAngle) * radius * 0.65);
-                        ctx.rotate(textAngle + Math.PI / 2);
-                        ctx.shadowColor = 'rgba(0, 0, 0, 0.7)';
-                        ctx.shadowBlur = 5;
-                        const maxWidth = radius * 1.1;
-                        ctx.fillText(option, 0, 0, maxWidth);
-                        ctx.restore();
-                    }
-                });
-             };
-            const spin = () => {
-                if (isSpinning || spinnerOptions.length === 0) return;
-                isSpinning = true;
-                isResultDisplayed = false;
-                spinBtn.disabled = true;
-                spinnerResultText.textContent = '轉啊轉...';
-                spinActions.style.display = 'none';
-                hoveredSliceIndex = null;
-                drawWheel(); 
-                const randomSpins = Math.floor(Math.random() * 5) + 5;
-                const randomStopAngle = Math.random() * 360;
-                const totalRotation = randomSpins * 360 + randomStopAngle;
-                const newRotation = currentRotation + totalRotation;
-                wheel.style.transition = 'transform 5s cubic-bezier(0.1, 0.7, 0.3, 1)';
-                wheel.style.transform = `rotate(${newRotation}deg)`;
-                currentRotation = newRotation;
-                setTimeout(() => {
-                    isSpinning = false;
-                    isResultDisplayed = true; 
-                    spinBtn.disabled = false;
-                    spinBtn.textContent = '再轉一次';
-                    const finalAngle = currentRotation % 360;
-                    const winnerIndex = Math.floor(((360 - finalAngle) % 360) / (360 / spinnerOptions.length));
-                    const winnerDishName = spinnerOptions[winnerIndex];
-                    if (winnerDishName) {
-                        spinnerResultText.textContent = `恭喜！今天的選擇是：${winnerDishName}`;
-                        const dishFullDetails = recommendedDishes.find(d => (languageSelector.value === 'en' ? d.englishName : (finalTranslationMap[d.englishName] || d.englishName)) === winnerDishName);
-                        currentLogEntry = { text: winnerDishName, fullDetails: dishFullDetails };
-                        spinActions.style.display = 'block';
-                    } else {
-                        spinnerResultText.textContent = '出錯了，請刷新頁面！';
-                        spinActions.style.display = 'none';
-                    }
-                }, 5000);
-            };
-            function handleMouseMove(e) {
-                if (isSpinning || isResultDisplayed) return;
-                const rect = wheel.getBoundingClientRect(), scaleX = wheel.width / rect.width, scaleY = wheel.height / rect.height, mouseX = (e.clientX - rect.left) * scaleX, mouseY = (e.clientY - rect.top) * scaleY;
-                const dx = mouseX - wheel.width / 2, dy = mouseY - wheel.height / 2, distance = Math.sqrt(dx * dx + dy * dy);
-                const oldHoveredIndex = hoveredSliceIndex;
-                let newHoveredIndex = null;
-                if (distance <= (wheel.width / 2 - 10) + 5 && spinnerOptions.length > 0) {
-                    let normalizedAngle = (Math.atan2(dy, dx) - (currentRotation % 360) * Math.PI / 180 + (2.5 * Math.PI)) % (2 * Math.PI);
-                    newHoveredIndex = Math.floor(normalizedAngle / (2 * Math.PI / spinnerOptions.length));
-                }
-                if (newHoveredIndex !== oldHoveredIndex) {
-                    hoveredSliceIndex = newHoveredIndex;
-                    drawWheel();
-                    spinnerResultText.textContent = newHoveredIndex !== null ? '點擊按鈕來決定你的下一餐！' : '將滑鼠移到轉盤上看看有什麼好料！';
-                }
-            }
-            function handleMouseLeave() {
-                if (isSpinning || isResultDisplayed || hoveredSliceIndex === null) return;
-                hoveredSliceIndex = null;
-                drawWheel();
-                spinnerResultText.textContent = '將滑鼠移到轉盤上看看有什麼好料！';
-            }
+            const drawWheel = () => { const numOptions = spinnerOptions.length; const centerX = wheel.width / 2; const centerY = wheel.height / 2; const baseRadius = wheel.width / 2 - 10; ctx.clearRect(0, 0, wheel.width, wheel.height); if (numOptions === 0) { spinBtn.disabled = true; spinnerResultText.textContent = analysisResultsSection.style.display !== 'none' ? '沒有推薦菜色可供選擇。' : '請先分析菜單以載入選項。'; spinActions.style.display = 'none'; return; } if (!isSpinning) { spinBtn.disabled = false; } const arcSize = 2 * Math.PI / numOptions; spinnerOptions.forEach((option, i) => { const isHighlighted = (i === hoveredSliceIndex); const radius = isHighlighted ? baseRadius + 5 : baseRadius; const angle = i * arcSize - Math.PI / 2; ctx.save(); ctx.fillStyle = spinnerColors[i % spinnerColors.length]; if (isHighlighted) { ctx.shadowColor = '#f0c419'; ctx.shadowBlur = 20; } ctx.beginPath(); ctx.moveTo(centerX, centerY); ctx.arc(centerX, centerY, radius, angle, angle + arcSize); ctx.closePath(); ctx.fill(); ctx.restore(); ctx.save(); ctx.strokeStyle = '#fff'; ctx.lineWidth = 3; ctx.beginPath(); ctx.moveTo(centerX, centerY); ctx.arc(centerX, centerY, radius, angle, angle + arcSize); ctx.closePath(); ctx.stroke(); ctx.restore(); if (isHighlighted) { ctx.save(); ctx.fillStyle = '#fff'; ctx.font = `bold 16px ${getComputedStyle(document.body).fontFamily.split(',')[0]}, sans-serif`; ctx.textAlign = 'center'; ctx.textBaseline = 'middle'; const textAngle = angle + arcSize / 2; ctx.translate(centerX + Math.cos(textAngle) * radius * 0.65, centerY + Math.sin(textAngle) * radius * 0.65); ctx.rotate(textAngle + Math.PI / 2); ctx.shadowColor = 'rgba(0, 0, 0, 0.7)'; ctx.shadowBlur = 5; const maxWidth = radius * 1.1; ctx.fillText(option, 0, 0, maxWidth); ctx.restore(); } }); };
+            const spin = () => { if (isSpinning || spinnerOptions.length === 0) return; isSpinning = true; isResultDisplayed = false; spinBtn.disabled = true; spinnerResultText.textContent = '轉啊轉...'; spinActions.style.display = 'none'; hoveredSliceIndex = null; drawWheel(); const randomSpins = Math.floor(Math.random() * 5) + 5; const randomStopAngle = Math.random() * 360; const totalRotation = randomSpins * 360 + randomStopAngle; const newRotation = currentRotation + totalRotation; wheel.style.transition = 'transform 5s cubic-bezier(0.1, 0.7, 0.3, 1)'; wheel.style.transform = `rotate(${newRotation}deg)`; currentRotation = newRotation; setTimeout(() => { isSpinning = false; isResultDisplayed = true; spinBtn.disabled = false; spinBtn.textContent = '再轉一次'; const finalAngle = currentRotation % 360; const winnerIndex = Math.floor(((360 - finalAngle) % 360) / (360 / spinnerOptions.length)); const winnerDishName = spinnerOptions[winnerIndex]; if (winnerDishName) { spinnerResultText.textContent = `恭喜！今天的選擇是：${winnerDishName}`; const dishFullDetails = recommendedDishes.find(d => (languageSelector.value === 'en' ? d.englishName : (finalTranslationMap[d.englishName] || d.englishName)) === winnerDishName); currentLogEntry = { text: winnerDishName, fullDetails: dishFullDetails }; spinActions.style.display = 'block'; } else { spinnerResultText.textContent = '出錯了，請刷新頁面！'; spinActions.style.display = 'none'; } }, 5000); };
+            function handleMouseMove(e) { if (isSpinning || isResultDisplayed) return; const rect = wheel.getBoundingClientRect(), scaleX = wheel.width / rect.width, scaleY = wheel.height / rect.height, mouseX = (e.clientX - rect.left) * scaleX, mouseY = (e.clientY - rect.top) * scaleY; const dx = mouseX - wheel.width / 2, dy = mouseY - wheel.height / 2, distance = Math.sqrt(dx * dx + dy * dy); const oldHoveredIndex = hoveredSliceIndex; let newHoveredIndex = null; if (distance <= (wheel.width / 2 - 10) + 5 && spinnerOptions.length > 0) { let normalizedAngle = (Math.atan2(dy, dx) - (currentRotation % 360) * Math.PI / 180 + (2.5 * Math.PI)) % (2 * Math.PI); newHoveredIndex = Math.floor(normalizedAngle / (2 * Math.PI / spinnerOptions.length)); } if (newHoveredIndex !== oldHoveredIndex) { hoveredSliceIndex = newHoveredIndex; drawWheel(); spinnerResultText.textContent = newHoveredIndex !== null ? '點擊按鈕來決定你的下一餐！' : '將滑鼠移到轉盤上看看有什麼好料！'; } }
+            function handleMouseLeave() { if (isSpinning || isResultDisplayed || hoveredSliceIndex === null) return; hoveredSliceIndex = null; drawWheel(); spinnerResultText.textContent = '將滑鼠移到轉盤上看看有什麼好料！'; }
 
             // --- 美食日誌邏輯 ---
             const formatTimestamp = (ts) => new Date(ts).toLocaleString('zh-TW', { dateStyle: 'short', timeStyle: 'short' });
             const renderHistory = () => {
                 if (history.length === 0) {
-                    historyList.innerHTML = `<p style="color: var(--text-secondary-color);">目前沒有任何美食紀錄喔！</p>`;
-                    clearHistoryBtn.style.display = 'none';
+                    historyList.innerHTML = `<p style="color: var(--text-secondary-color); margin-bottom: 15px;">目前沒有任何美食紀錄喔！</p>`;
                 } else {
-                    clearHistoryBtn.style.display = 'inline-block';
                     historyList.innerHTML = '';
                     history.slice().reverse().forEach((entry, revIndex) => {
                         const originalIndex = history.length - 1 - revIndex;
                         const li = document.createElement('li');
-                        li.dataset.index = originalIndex; // 設定索引以利點擊處理
+                        li.dataset.index = originalIndex;
                         const imgHTML = entry.image ? `<img src="${entry.image}" class="history-img" alt="${entry.text}">` : `<div class="history-img">無圖片</div>`;
                         const noteHTML = entry.note ? `<p class="truncated-note">${entry.note}</p>` : `<p class="truncated-note" style="color: var(--text-secondary-color);"><i>無心得筆記</i></p>`;
-                        li.innerHTML = `
-                            ${imgHTML}
-                            <div class="history-details">
-                                <div class="history-header"><h4>${entry.text}</h4></div>
-                                ${noteHTML}
-                                <span class="timestamp">${formatTimestamp(entry.timestamp)}</span>
-                            </div>
-                            <div class="history-actions"><button class="delete-btn" title="刪除">🗑️</button></div>
-                        `;
-                        // 監聽整個卡片的點擊事件 (刪除按鈕除外)
+                        li.innerHTML = `${imgHTML}<div class="history-details"><div class="history-header"><h4>${entry.text}</h4></div>${noteHTML}<span class="timestamp">${formatTimestamp(entry.timestamp)}</span></div><div class="history-actions"><button class="delete-btn" title="刪除">🗑️</button></div>`;
                         li.addEventListener('click', (e) => {
-                            if (!e.target.closest('.delete-btn')) {
-                                showHistoryViewModal(originalIndex);
-                            }
+                            if (!e.target.closest('.delete-btn')) { showHistoryViewModal(originalIndex); }
                         });
-                        // 單獨監聽刪除按鈕
                         li.querySelector('.delete-btn').addEventListener('click', () => deleteHistoryEntry(originalIndex));
                         historyList.appendChild(li);
                     });
@@ -839,17 +635,22 @@
 
             // --- 彈出視窗 (編輯與檢視) ---
             const showLogModal = (config) => { // "編輯"彈出視窗
+                const entry = config.entry || {};
                 editingIndex = typeof config.index === 'number' ? config.index : null;
-                currentLogEntry = { ...config.entry };
-                modalTitle.textContent = config.title;
-                modalImagePreview.innerHTML = currentLogEntry.image ? `<img src="${currentLogEntry.image}" alt="預覽">` : '<span>圖片預覽區</span>';
-                modalTextInput.value = currentLogEntry.note || '';
+                currentLogEntry = { ...entry }; // 複製一份，避免直接修改
+                
+                logTitleInput.value = entry.text || '';
+                modalImagePreview.innerHTML = entry.image ? `<img src="${currentLogEntry.image}" alt="預覽">` : '<span>點擊下方按鈕上傳照片</span>';
+                modalTextInput.value = entry.note || '';
                 modalImageInput.value = '';
-                modalSaveBtn.textContent = config.saveText;
-                modalCancelBtn.textContent = config.cancelText;
-                modalOverlay.style.display = 'flex';
+                modalSaveBtn.textContent = config.saveText || '儲存日誌';
+                logModalOverlay.style.display = 'flex';
+                document.body.style.overflow = 'hidden';
             };
-            const hideLogModal = () => modalOverlay.style.display = 'none';
+            const hideLogModal = () => {
+                logModalOverlay.style.display = 'none';
+                document.body.style.overflow = 'auto';
+            };
 
             const showHistoryViewModal = (index) => { // "檢視"彈出視窗
                 viewingIndex = index;
@@ -858,9 +659,13 @@
                 historyViewImage.innerHTML = entry.image ? `<img src="${entry.image}" alt="${entry.text}">` : '<span>無照片</span>';
                 historyViewText.textContent = entry.note || '沒有留下任何心得筆記。';
                 historyViewModalOverlay.style.display = 'flex';
+                document.body.style.overflow = 'hidden';
             };
-            const hideHistoryViewModal = () => historyViewModalOverlay.style.display = 'none';
-
+            const hideHistoryViewModal = () => {
+                historyViewModalOverlay.style.display = 'none';
+                document.body.style.overflow = 'auto';
+            };
+            
             const handleImageUpload = async (event) => {
                 const file = event.target.files[0];
                 if (!file) return;
@@ -869,26 +674,47 @@
                     modalImagePreview.innerHTML = `<img src="${currentLogEntry.image}" alt="預覽">`;
                 } catch (error) { console.error("圖片處理失敗:", error); alert("圖片處理失敗，請稍後再試。"); }
             };
+
             const handleSaveLog = () => {
+                const title = logTitleInput.value.trim();
+                if (!title) { alert('請務必填寫餐點名稱！'); return; }
+                
+                currentLogEntry.text = title;
                 currentLogEntry.note = modalTextInput.value.trim();
                 const isEditing = editingIndex !== null;
                 const savedIndex = isEditing ? editingIndex : history.length;
-                const savedText = currentLogEntry.text;
                 saveHistory(currentLogEntry);
                 hideLogModal();
-                showSaveToast(savedIndex, savedText, isEditing);
+                showSaveToast(savedIndex, title, isEditing);
+            };
+
+            const shareLog = async (index) => {
+                const entry = history[index];
+                const shareData = {
+                    title: `[美食日誌分享] 我吃了：${entry.text}`,
+                    text: `這是我在 TOUR EATS 上的美食紀錄：\n\n「${entry.text}」\n心得：${entry.note || '無'}\n\n你也來試試這個有趣的 App 吧！`,
+                };
+
+                if (navigator.share) {
+                    try {
+                        await navigator.share(shareData);
+                        console.log('日誌分享成功！');
+                    } catch (err) {
+                        console.error('分享失敗:', err);
+                    }
+                } else {
+                    navigator.clipboard.writeText(shareData.text)
+                        .then(() => {
+                            alert('分享內容已複製到剪貼簿，可以手動貼上分享囉！');
+                        })
+                        .catch(err => {
+                             alert('複製失敗，您的瀏覽器可能不支援此功能。');
+                        });
+                }
             };
 
             // --- 自訂偏好 ---
-            function renderCustomPrefs() {
-                customPrefsDisplay.innerHTML = '';
-                customPreferences.forEach((pref, index) => {
-                    const tag = document.createElement('span'); tag.className = 'custom-tag'; tag.textContent = pref;
-                    const deleteBtn = document.createElement('button'); deleteBtn.className = 'delete-tag-btn'; deleteBtn.textContent = 'x';
-                    deleteBtn.onclick = () => { customPreferences.splice(index, 1); renderCustomPrefs(); savePrefsToLocalStorage(); };
-                    tag.appendChild(deleteBtn); customPrefsDisplay.appendChild(tag);
-                });
-            }
+            function renderCustomPrefs() { customPrefsDisplay.innerHTML = ''; customPreferences.forEach((pref, index) => { const tag = document.createElement('span'); tag.className = 'custom-tag'; tag.textContent = pref; const deleteBtn = document.createElement('button'); deleteBtn.className = 'delete-tag-btn'; deleteBtn.textContent = 'x'; deleteBtn.onclick = () => { customPreferences.splice(index, 1); renderCustomPrefs(); savePrefsToLocalStorage(); }; tag.appendChild(deleteBtn); customPrefsDisplay.appendChild(tag); }); }
             function savePrefsToLocalStorage() { localStorage.setItem('myMenuAppCustomPrefs', JSON.stringify(customPreferences)); }
             function loadPrefsFromLocalStorage() { const savedPrefs = localStorage.getItem('myMenuAppCustomPrefs'); if (savedPrefs) { customPreferences = JSON.parse(savedPrefs); renderCustomPrefs(); } }
 
@@ -930,39 +756,28 @@
 
             // --- 事件監聽 ---
             tabNav.addEventListener('click', (e) => {
-                if (e.target.matches('.tab-btn')) {
-                    const targetTab = e.target.dataset.tab;
-                    tabBtns.forEach(btn => btn.classList.remove('active'));
-                    tabContents.forEach(content => content.classList.remove('active'));
-                    e.target.classList.add('active');
-                    document.getElementById(`tab-content-${targetTab}`).classList.add('active');
-                }
+                if (e.target.matches('.tab-btn')) { const targetTab = e.target.dataset.tab; tabBtns.forEach(btn => btn.classList.remove('active')); tabContents.forEach(content => content.classList.remove('active')); e.target.classList.add('active'); document.getElementById(`tab-content-${targetTab}`).classList.add('active'); }
             });
-            imageInput.addEventListener('change', (event) => {
-                const file = event.target.files[0]; if (file) { const reader = new FileReader(); reader.onload = (e) => { imagePreview.src = e.target.result; }; reader.readAsDataURL(file); }
-            });
-            addPrefBtn.addEventListener('click', () => {
-                const newPref = customPrefInput.value.trim(); if (newPref && !customPreferences.includes(newPref)) { customPreferences.push(newPref); customPrefInput.value = ''; renderCustomPrefs(); savePrefsToLocalStorage(); }
-            });
+            imageInput.addEventListener('change', (event) => { const file = event.target.files[0]; if (file) { const reader = new FileReader(); reader.onload = (e) => { imagePreview.src = e.target.result; }; reader.readAsDataURL(file); } });
+            addPrefBtn.addEventListener('click', () => { const newPref = customPrefInput.value.trim(); if (newPref && !customPreferences.includes(newPref)) { customPreferences.push(newPref); customPrefInput.value = ''; renderCustomPrefs(); savePrefsToLocalStorage(); } });
             customPrefInput.addEventListener('keypress', (e) => { if (e.key === 'Enter') addPrefBtn.click(); });
             spinBtn.addEventListener('click', spin);
             keepBtn.addEventListener('click', () => {
                 spinBtn.disabled = true; isResultDisplayed = false;
-                showLogModal({ entry: currentLogEntry, title: `記錄美食 - ${currentLogEntry.text}`, saveText: '儲存日誌', cancelText: '略過' });
+                showLogModal({ entry: currentLogEntry, saveText: '儲存日誌' });
                 spinActions.style.display = 'none'; spinnerResultText.textContent = `太棒了！就決定吃「${currentLogEntry.text}」`;
             });
             clearHistoryBtn.addEventListener('click', clearHistory);
+            addNewLogBtn.addEventListener('click', () => { showLogModal({ saveText: '建立新日誌' }); });
             
             modalImageInput.addEventListener('change', handleImageUpload);
             modalSaveBtn.addEventListener('click', handleSaveLog);
-            modalCancelBtn.addEventListener('click', hideLogModal);
-            modalOverlay.addEventListener('click', (e) => { if (e.target === modalOverlay) hideLogModal(); });
+            logModalOverlay.querySelectorAll('.modal-close-btn').forEach(btn => btn.addEventListener('click', hideLogModal));
+            logModalOverlay.addEventListener('click', (e) => { if (e.target === logModalOverlay) hideLogModal(); });
             
-            historyViewCloseBtn.addEventListener('click', hideHistoryViewModal);
-            historyViewEditBtn.addEventListener('click', () => {
-                hideHistoryViewModal();
-                showLogModal({ index: viewingIndex, entry: history[viewingIndex], title: `編輯日誌 - ${history[viewingIndex].text}`, saveText: '儲存變更', cancelText: '取消' });
-            });
+            historyViewModalOverlay.querySelectorAll('.modal-close-btn').forEach(btn => btn.addEventListener('click', hideHistoryViewModal));
+            historyViewEditBtn.addEventListener('click', () => { hideHistoryViewModal(); showLogModal({ index: viewingIndex, entry: history[viewingIndex], saveText: '儲存變更' }); });
+            historyViewShareBtn.addEventListener('click', () => { shareLog(viewingIndex); });
             historyViewModalOverlay.addEventListener('click', (e) => { if (e.target === historyViewModalOverlay) hideHistoryViewModal(); });
             
             wheel.addEventListener('mousemove', handleMouseMove);
