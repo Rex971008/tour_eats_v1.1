@@ -115,6 +115,49 @@
         @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
 
         /* --- 輸入與按鈕 --- */
+        /* [新增] 上傳選項按鈕容器 */
+        .upload-options {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            margin: 20px auto;
+        }
+        /* [新增] 上傳選項按鈕通用樣式 */
+        .upload-btn {
+            flex: 1;
+            max-width: 220px;
+            padding: 12px 20px;
+            border-radius: 8px;
+            font-size: 1em;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+        }
+        /* [新增] 相機按鈕樣式 */
+        #capture-camera-btn {
+            background: var(--primary-gradient);
+            color: #121212;
+            border: none;
+            box-shadow: 0 4px 10px rgba(240, 196, 25, 0.3);
+        }
+        #capture-camera-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 15px rgba(240, 196, 25, 0.4);
+        }
+        /* [新增] 相簿按鈕樣式 */
+        #upload-file-btn {
+            background: var(--surface-color);
+            color: var(--primary-color);
+            border: 2px solid var(--primary-color);
+        }
+         #upload-file-btn:hover {
+            background-color: rgba(240, 196, 25, 0.1);
+        }
+
         input[type="file"] { display: block; margin: 20px auto; width: 100%; max-width: 400px; padding: 10px; color: var(--text-color); background-color: var(--surface-color); border: 1px solid rgba(255,255,255,0.2); border-radius: 8px; cursor: pointer; font-size: 1em; }
         input[type="file"]::file-selector-button { background: var(--primary-gradient); color: #121212; border: none; padding: 8px 15px; border-radius: 6px; cursor: pointer; transition: transform 0.2s ease; margin-right: 15px; }
         input[type="file"]::file-selector-button:hover { transform: translateY(-1px); }
@@ -293,7 +336,16 @@
                 <p id="result">上傳菜單圖片，設定偏好，讓 AI 幫您分析！</p>
                 <div class="main-content-section" id="initial-setup-section">
                     <h3>1. 上傳菜單圖片</h3>
-                    <input type="file" id="menu-image" accept="image/*">
+                    
+                    <!-- [修改] 將單一上傳改為兩個按鈕 -->
+                    <div class="upload-options">
+                        <button id="capture-camera-btn" class="upload-btn">📷 相機掃描</button>
+                        <button id="upload-file-btn" class="upload-btn">🖼️ 從相簿選取</button>
+                    </div>
+                    <!-- [新增] 兩個隱藏的 file input -->
+                    <input type="file" id="menu-image-upload" accept="image/*" style="display:none;">
+                    <input type="file" id="menu-image-capture" accept="image/*" capture="environment" style="display:none;">
+
                     <div id="image-preview-container"><img id="image-preview" src="https://i.imgur.com/wSAa8a1.jpeg" alt="菜單預覽"></div>
                     <div class="divider"></div>
                     <h3>2. 設定您的飲食偏好</h3>
@@ -406,7 +458,12 @@
             const AZURE_OPENAI_DEPLOYMENT_NAME = 'my-menu-gpt';
 
             // --- DOM 元素 ---
-            const imageInput = document.getElementById('menu-image');
+            // [修改] 獲取新的按鈕和隱藏的 input
+            const uploadFileBtn = document.getElementById('upload-file-btn');
+            const captureCameraBtn = document.getElementById('capture-camera-btn');
+            const uploadInput = document.getElementById('menu-image-upload');
+            const captureInput = document.getElementById('menu-image-capture');
+            
             const imagePreview = document.getElementById('image-preview');
             const processBtn = document.getElementById('process-btn');
             const resultsDiv = document.getElementById('results');
@@ -711,28 +768,21 @@
                             // 如果支援，將檔案陣列加入到分享資料中
                             shareData.files = [file];
                         }
-                        // 如果不支援檔案分享，shareData.files 會是 undefined，API 會自動忽略它，只分享文字
-
                     } catch (e) {
                         console.error('圖片轉換或檢查分享能力時發生錯誤:', e);
-                        // 如果轉換失敗，就只分享文字，不中斷流程
                     }
                 }
-                // --- 圖片處理結束 ---
-
+                
                 if (navigator.share) {
                     try {
-                        // 無論是否包含圖片，都嘗試進行分享
                         await navigator.share(shareData);
                         console.log('日誌分享成功！');
                     } catch (err) {
-                        // 使用者取消分享或發生錯誤
                         if (err.name !== 'AbortError') {
                            console.error('分享失敗:', err);
                         }
                     }
                 } else {
-                    // 如果瀏覽器完全不支援 Web Share API，退回至複製到剪貼簿
                     navigator.clipboard.writeText(shareData.text)
                         .then(() => {
                             alert('您的瀏覽器不支援直接分享，分享內容已複製到剪貼簿，可以手動貼上分享囉！');
@@ -750,14 +800,20 @@
 
             // --- 主要流程 ---
             processBtn.addEventListener('click', async () => {
-                let imageSource = (imageInput.files && imageInput.files.length > 0) ? imageInput.files[0] : imagePreview.src;
-                if (!imageSource) { alert('沒有找到可分析的圖片！'); return; }
+                // [修改] 直接使用 imagePreview.src 作為圖片來源
+                const imageSource = imagePreview.src;
+                if (!imageSource || imageSource.endsWith('wSAa8a1.jpeg')) { // 檢查是否為預設圖片
+                    alert('請先用相機掃描或從相簿選取一張菜單圖片！'); 
+                    return;
+                }
+                
                 processBtn.disabled = true;
                 spinBtn.textContent = '開始旋轉！';
                 spinBtn.disabled = true;
                 spinActions.style.display = 'none';
                 isResultDisplayed = false; 
                 analysisResultsSection.style.display = 'block';
+
                 try {
                     const ocrText = await getOcrText(imageSource);
                     if (!ocrText) { updateStatus('錯誤：無法從圖片中辨識文字。', false); return; }
@@ -788,7 +844,27 @@
             tabNav.addEventListener('click', (e) => {
                 if (e.target.matches('.tab-btn')) { const targetTab = e.target.dataset.tab; tabBtns.forEach(btn => btn.classList.remove('active')); tabContents.forEach(content => content.classList.remove('active')); e.target.classList.add('active'); document.getElementById(`tab-content-${targetTab}`).classList.add('active'); }
             });
-            imageInput.addEventListener('change', (event) => { const file = event.target.files[0]; if (file) { const reader = new FileReader(); reader.onload = (e) => { imagePreview.src = e.target.result; }; reader.readAsDataURL(file); } });
+
+            // [新增] 圖片選擇的共用處理函式
+            const handleImageSelection = (event) => {
+                const file = event.target.files[0];
+                if (file) {
+                    const reader = new FileReader();
+                    reader.onload = (e) => {
+                        imagePreview.src = e.target.result;
+                    };
+                    reader.readAsDataURL(file);
+                }
+                // 清空 input 的 value，確保下次選同一個檔案也能觸發 change 事件
+                event.target.value = '';
+            };
+            
+            // [新增] 為新的上傳按鈕和隱藏 input 綁定事件
+            uploadFileBtn.addEventListener('click', () => uploadInput.click());
+            captureCameraBtn.addEventListener('click', () => captureInput.click());
+            uploadInput.addEventListener('change', handleImageSelection);
+            captureInput.addEventListener('change', handleImageSelection);
+
             addPrefBtn.addEventListener('click', () => { const newPref = customPrefInput.value.trim(); if (newPref && !customPreferences.includes(newPref)) { customPreferences.push(newPref); customPrefInput.value = ''; renderCustomPrefs(); savePrefsToLocalStorage(); } });
             customPrefInput.addEventListener('keypress', (e) => { if (e.key === 'Enter') addPrefBtn.click(); });
             spinBtn.addEventListener('click', spin);
