@@ -19,6 +19,9 @@
             --font-main: 'Noto Sans TC', 'Helvetica Neue', sans-serif;
             --border-radius: 12px;
             --shadow: 0 10px 30px rgba(0,0,0,0.5);
+            --danger-color: #e74c3c;
+            --success-color: #2ecc71;
+            --info-color: #3498db;
         }
 
         * { margin: 0; padding: 0; box-sizing: border-box; }
@@ -67,24 +70,6 @@
             font-weight: 500;
             border-bottom: 2px solid rgba(255,255,255,0.1);
             padding-bottom: 10px;
-        }
-        /* Style for sub-headings within preference groups */
-        .pref-group h4 {
-            color: var(--text-color);
-            margin-top: 20px;
-            margin-bottom: 15px;
-            font-size: 1.2em; /* Smaller than main H3, larger than standard text */
-            font-weight: 500;
-            border-bottom: 1px solid rgba(255,255,255,0.05); /* Lighter border */
-            padding-bottom: 8px;
-            text-align: left;
-        }
-
-        p#result {
-            color: var(--text-color);
-            font-size: 1.1em;
-            min-height: 25px;
-            margin-bottom: 25px;
         }
         .divider {
             border-top: 1px solid rgba(255,255,255,0.1);
@@ -147,39 +132,124 @@
             justify-content: center;
             gap: 8px;
         }
-        #capture-camera-btn, #modal-capture-camera-btn {
-            background: var(--primary-gradient);
-            color: #121212;
-            border: none;
-            box-shadow: 0 4px 10px rgba(240, 196, 25, 0.3);
-        }
-        #capture-camera-btn:hover, #modal-capture-camera-btn:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 6px 15px rgba(240, 196, 25, 0.4);
-        }
-        #upload-file-btn, #modal-upload-file-btn {
-            background: var(--surface-color);
-            color: var(--primary-color);
-            border: 2px solid var(--primary-color);
-        }
-        #upload-file-btn:hover, #modal-upload-file-btn:hover {
-            background-color: rgba(240, 196, 25, 0.1);
-        }
-
+        #capture-camera-btn, #modal-capture-camera-btn { background: var(--primary-gradient); color: #121212; border: none; box-shadow: 0 4px 10px rgba(240, 196, 25, 0.3); }
+        #capture-camera-btn:hover, #modal-capture-camera-btn:hover { transform: translateY(-2px); box-shadow: 0 6px 15px rgba(240, 196, 25, 0.4); }
+        #upload-file-btn, #modal-upload-file-btn { background: var(--surface-color); color: var(--primary-color); border: 2px solid var(--primary-color); }
+        #upload-file-btn:hover, #modal-upload-file-btn:hover { background-color: rgba(240, 196, 25, 0.1); }
         input[type="file"] { display: none; }
         #image-preview-container { margin-top: 20px; text-align: center; background-color: rgba(0,0,0,0.2); border-radius: 8px; padding: 10px;}
         #image-preview { max-width: 100%; max-height: 300px; border-radius: 8px; border: 1px solid rgba(255,255,255,0.1); box-shadow: 0 2px 8px rgba(0,0,0,0.1); display: block; margin: 0 auto;}
         
-        /* Styles for the preference grouping */
-        .pref-group {
-            margin-bottom: 30px; /* Space between groups */
+        /* --- 設定檔管理介面 --- */
+        #profile-management-section {
+            background-color: rgba(0,0,0,0.2);
+            padding: 20px;
+            border-radius: var(--border-radius);
+            margin-bottom: 25px;
+            border: 1px solid rgba(255,255,255,0.1);
+            text-align: left;
         }
+        #profile-management-section h4 {
+            color: var(--text-color);
+            margin: 0 0 15px 0;
+            font-size: 1.2em;
+            border-bottom: 1px solid rgba(255,255,255,0.1);
+            padding-bottom: 10px;
+        }
+        .profile-controls-grid {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 15px;
+        }
+        .profile-controls-row {
+            display: flex;
+            gap: 10px;
+            align-items: center;
+        }
+        .profile-controls-grid select, .profile-controls-grid input {
+            flex-grow: 1;
+            padding: 12px;
+            border: 1px solid rgba(255,255,255,0.2);
+            border-radius: 8px;
+            font-size: 1em;
+            background-color: rgba(0,0,0,0.2);
+            color: var(--text-color);
+        }
+        .profile-controls-grid button {
+            padding: 10px 15px;
+            border-radius: 8px;
+            border: none;
+            color: #fff;
+            cursor: pointer;
+            font-weight: 500;
+            transition: all 0.2s ease;
+            font-size: 0.9em;
+        }
+        #save-profile-btn { background-color: var(--success-color); }
+        #save-profile-btn:hover { background-color: #27ae60; }
+        #update-profile-btn { background-color: var(--info-color); }
+        #update-profile-btn:hover { background-color: #2980b9; }
+        #delete-profile-btn { background-color: var(--danger-color); }
+        #delete-profile-btn:hover { background-color: #c0392b; }
+        @media (min-width: 600px) {
+            .profile-controls-grid { grid-template-columns: 1fr 1fr; }
+            .profile-controls-row.full-width { grid-column: 1 / -1; }
+        }
+
+        /* --- 手風琴 (Accordion) 偏好設定 --- */
+        .pref-group {
+            margin-bottom: 10px; /* Space between groups */
+            border: 1px solid rgba(255,255,255,0.08);
+            border-radius: 8px;
+            overflow: hidden;
+        }
+        .pref-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px;
+            background-color: rgba(255,255,255,0.05);
+            cursor: pointer;
+            transition: background-color 0.2s ease;
+        }
+        .pref-header:hover {
+             background-color: rgba(255,255,255,0.1);
+        }
+        .pref-header h4 {
+            color: var(--text-color);
+            margin: 0;
+            padding: 0;
+            border: none;
+            font-size: 1.2em;
+            font-weight: 500;
+        }
+        .toggle-icon {
+            font-size: 1.2em;
+            font-weight: bold;
+            color: var(--primary-color);
+            transition: transform 0.3s ease-out;
+            transform-origin: center;
+        }
+        .pref-group.active .toggle-icon {
+            transform: rotate(180deg);
+        }
+        .pref-content {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.4s ease-out, padding 0.4s ease-out;
+            padding: 0 15px;
+        }
+        .pref-group.active .pref-content {
+            max-height: 1000px; /* A large value to ensure it fits content */
+            padding: 15px;
+            transition: max-height 0.5s ease-in, padding 0.5s ease-in;
+        }
+        
         .pref-items-grid {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
             gap: 10px;
         }
-
         .pref-item label { 
             display: flex; 
             align-items: center; 
@@ -190,11 +260,11 @@
             padding: 10px 15px; 
             border-radius: 8px; 
             transition: background-color 0.2s ease; 
-            height: 100%; /* Ensures labels fill grid cells uniformly */
+            height: 100%;
             text-align: left;
         }
         .pref-item label:hover { background-color: rgba(255,255,255,0.15); }
-        .pref-item input[type="checkbox"] { margin-right: 10px; appearance: none; -webkit-appearance: none; width: 20px; height: 20px; border: 2px solid var(--primary-color); border-radius: 4px; position: relative; cursor: pointer; outline: none; transition: background-color 0.2s ease, border-color 0.2s ease; }
+        .pref-item input[type="checkbox"] { margin-right: 10px; appearance: none; -webkit-appearance: none; width: 20px; height: 20px; border: 2px solid var(--primary-color); border-radius: 4px; position: relative; cursor: pointer; outline: none; transition: background-color 0.2s ease, border-color 0.2s ease; flex-shrink: 0; }
         .pref-item input[type="checkbox"]:checked { background-color: var(--primary-color); border-color: var(--primary-color); }
         .pref-item input[type="checkbox"]:checked::after { content: '✓'; position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); color: #121212; font-size: 14px; font-weight: bold; }
         #custom-pref-container { display: flex; gap: 10px; margin-top: 15px; }
@@ -211,6 +281,12 @@
         .process-button { background: var(--primary-gradient); color: #121212; border: none; padding: 15px 25px; border-radius: 50px; font-size: 1.2em; font-weight: bold; cursor: pointer; transition: all 0.3s ease; display: block; width: 100%; margin-top: 40px; box-shadow: 0 4px 10px rgba(240, 196, 25, 0.3); }
         .process-button:hover { transform: translateY(-3px); box-shadow: 0 6px 15px rgba(240, 196, 25, 0.4); }
         .process-button:disabled { background: #888; cursor: not-allowed; transform: none; box-shadow: none; color: #555; }
+        p#result {
+            color: var(--text-color);
+            font-size: 1.1em;
+            min-height: 25px;
+            margin-bottom: 25px;
+        }
 
         /* --- AI 分析結果 --- */
         .result-section { background-color: rgba(0,0,0,0.2); border: 1px solid rgba(255,255,255,0.1); border-radius: 8px; padding: 15px 20px; margin-top: 20px; text-align: left; }
@@ -270,9 +346,9 @@
         
         .history-footer-actions { margin-top: 25px; text-align: center; display: flex; flex-wrap: wrap; justify-content: center; gap: 15px; }
         #clear-history-btn, #add-new-log-btn { color: white; border: none; padding: 10px 20px; border-radius: 8px; cursor: pointer; transition: all 0.3s; font-weight: 500; }
-        #add-new-log-btn { background-color: #3498db; box-shadow: 0 4px 10px rgba(52, 152, 219, 0.3); }
+        #add-new-log-btn { background-color: var(--info-color); box-shadow: 0 4px 10px rgba(52, 152, 219, 0.3); }
         #add-new-log-btn:hover { background-color: #2980b9; transform: translateY(-2px); box-shadow: 0 6px 15px rgba(52, 152, 219, 0.4); }
-        #clear-history-btn { background-color: #e74c3c; box-shadow: 0 4px 10px rgba(231, 76, 60, 0.3); }
+        #clear-history-btn { background-color: var(--danger-color); box-shadow: 0 4px 10px rgba(231, 76, 60, 0.3); }
         #clear-history-btn:hover { background-color: #c0392b; transform: translateY(-2px); box-shadow: 0 6px 15px rgba(231, 76, 60, 0.4); }
 
         /* --- 彈出視窗 (通用) --- */
@@ -305,7 +381,7 @@
         #log-modal-overlay #log-title-input:focus { outline: none; border-bottom-color: var(--primary-color); }
         #log-modal-overlay textarea { width: 100%; min-height: 100px; padding: 10px; border: 1px solid rgba(255,255,255,0.2); border-radius: 8px; font-size: 1em; resize: vertical; box-sizing: border-box; background-color: rgba(0,0,0,0.2); color: var(--text-color); }
         #log-modal-overlay textarea::placeholder { color: var(--text-secondary-color); }
-        #modal-save-btn { background: #2ecc71; color: white; flex-basis: 100%;}
+        #modal-save-btn { background: var(--success-color); color: white; flex-basis: 100%;}
         #modal-save-btn:hover { background: #27ae60; }
         
         /* "護照檢視"彈出視窗特定樣式 */
@@ -337,24 +413,28 @@
         #toast-edit-btn:hover { background-color: #d4ac17; }
         #toast-confirm-btn { background-color: rgba(255,255,255,0.15); color: var(--text-color); }
         #toast-confirm-btn:hover { background-color: rgba(255,255,255,0.25); }
+         /* --- Camera Modal Styles --- */
+        #camera-modal { max-width: 640px; }
+        #camera-modal video { width: 100%; border-radius: 8px; background: #000; }
+        #camera-modal .modal-actions button { flex-basis: auto; flex-grow: 1; }
 
         /* --- 響應式調整 --- */
         @media (max-width: 768px) {
             body { padding: 20px 15px; }
             .container { padding: 30px 20px; }
             h1 { font-size: 2.2em; }
-            h3, .pref-group h4 { font-size: 1.3em; } /* Adjusting h4 size for smaller screens */
+            h3 { font-size: 1.3em; }
             .wheel-container { width: 250px; height: 250px; }
             .spin-button { padding: 12px 30px; font-size: 1em; }
             .action-btn { padding: 10px 20px; font-size: 0.9em; }
             #history-list { grid-template-columns: 1fr; }
-            /* Make preference grids stack on smaller screens */
             .pref-items-grid {
                 grid-template-columns: 1fr; 
             }
             .tab-nav { margin-left: -20px; margin-right: -20px; padding-left: 20px; padding-right: 20px; }
             .modal-actions button { flex-basis: 100%; }
             .modal-actions #history-view-edit-btn { order: -1; } 
+            #camera-modal .modal-actions { flex-direction: column; }
         }
     </style>
 </head>
@@ -365,112 +445,233 @@
         <h1>TOUR EATS</h1>
         
         <div class="tab-nav">
-            <button class="tab-btn active" data-tab="analysis">智慧分析 & 轉盤</button>
-            <button class="tab-btn" data-tab="history">美食護照</button>
+            <button class="tab-btn active" data-tab="analysis" data-translate-key="tab_analysis">智慧分析 & 轉盤</button>
+            <button class="tab-btn" data-tab="history" data-translate-key="tab_history">美食護照</button>
         </div>
 
         <div class="tab-content-wrapper">
 
             <div class="tab-content active" id="tab-content-analysis">
-                <p id="result">上傳菜單圖片，設定偏好，讓 AI 幫您分析！</p>
+                <p id="result" data-translate-key="app_description_initial">上傳菜單圖片，設定偏好，讓 AI 幫您分析！</p>
                 <div class="main-content-section" id="initial-setup-section">
-                    <h3>1. 上傳菜單圖片</h3>
+                    <h3 data-translate-key="step1_title">1. 上傳菜單圖片</h3>
                     
                     <div class="upload-options">
-                        <button id="capture-camera-btn" class="upload-btn">📷 相機掃描</button>
-                        <button id="upload-file-btn" class="upload-btn">🖼️ 從相簿選取</button>
+                        <button id="capture-camera-btn" class="upload-btn" data-translate-key="button_camera_scan">📷 相機掃描</button>
+                        <button id="upload-file-btn" class="upload-btn" data-translate-key="button_album_select">🖼️ 從相簿選取</button>
                     </div>
                     <input type="file" id="menu-image-upload" accept="image/*">
-                    <!-- Note: menu-image-capture is handled via openCamera logic -->
 
                     <div id="image-preview-container"><img id="image-preview" src="https://i.imgur.com/wSAa8a1.jpeg" alt="菜單預覽"></div>
                     <div class="divider"></div>
-                    <h3>2. 設定您的飲食偏好</h3>
+                    <h3 data-translate-key="step2_title">2. 設定您的飲食偏好</h3>
 
-                    <div id="dietary-preferences-groups">
-                        <!-- Group 1: General Preferences -->
-                        <div class="pref-group">
-                            <h4>一般飲食偏好</h4>
-                            <div class="pref-items-grid" id="general-dietary-prefs">
-                                <div class="pref-item"><label><input type="checkbox" id="pref-vegetarian"> 我是素食者</label></div>
-                                <div class="pref-item"><label><input type="checkbox" id="pref-vegan"> 我是全素者 (Vegan)</label></div>
-                                <div class="pref-item"><label><input type="checkbox" id="pref-no-spicy"> 不吃辣</label></div>
-                                <div class="pref-item"><label><input type="checkbox" id="pref-no-alcohol"> 不要酒精</label></div>
+                    <div id="profile-management-section">
+                        <h4 data-translate-key="profile_manage_title">偏好設定檔管理</h4>
+                        <div class="profile-controls-grid">
+                            <div class="profile-controls-row full-width">
+                                <select id="profile-selector">
+                                    <option value="" data-translate-key="profile_load_placeholder">-- 載入設定檔 --</option>
+                                </select>
+                                <button id="update-profile-btn" title="用目前勾選的設定更新所選的設定檔" data-translate-key="button_update_profile" data-translate-title-key="tooltip_update_profile">更新</button>
+                                <button id="delete-profile-btn" title="刪除所選的設定檔" data-translate-key="button_delete_profile" data-translate-title-key="tooltip_delete_profile">刪除</button>
                             </div>
-                        </div>
-
-                        <!-- Group 2: Religious Dietary Needs -->
-                        <div class="pref-group">
-                            <h4>宗教飲食偏好</h4>
-                            <div class="pref-items-grid" id="religious-dietary-prefs">
-                                <div class="pref-item"><label><input type="checkbox" id="pref-halal"> 清真 (Halal)</label></div>
-                                <div class="pref-item"><label><input type="checkbox" id="pref-kosher"> 潔食 (Kosher)</label></div>
-                                <div class="pref-item"><label><input type="checkbox" id="pref-buddhist-vegetarian"> 佛門素食</label></div>
-                            </div>
-                        </div>
-
-                        <!-- Group 3: Allergen Information -->
-                        <div class="pref-group">
-                            <h4>特定食材與過敏原</h4>
-                            <div class="pref-items-grid" id="allergen-information-prefs">
-                                <div class="pref-item"><label><input type="checkbox" id="pref-no-pork"> 不要豬肉</label></div>
-                                <div class="pref-item"><label><input type="checkbox" id="pref-no-beef"> 不要牛肉</label></div>
-                                <div class="pref-item"><label><input type="checkbox" id="pref-no-fish"> 不要魚肉</label></div>
-                                <div class="pref-item"><label><input type="checkbox" id="pref-shellfish-free"> 無貝類</label></div>
-                                <div class="pref-item"><label><input type="checkbox" id="pref-no-nuts"> 不要堅果/花生</label></div>
-                                <div class="pref-item"><label><input type="checkbox" id="pref-gluten-free"> 無麩質</label></div>
-                                <div class="pref-item"><label><input type="checkbox" id="pref-dairy-free"> 無乳製品</label></div>
-                                <div class="pref-item"><label><input type="checkbox" id="pref-egg-free"> 無雞蛋</label></div>
-                                <div class="pref-item"><label><input type="checkbox" id="pref-no-soy"> 不要大豆</label></div>
+                            <div class="profile-controls-row full-width">
+                                <input type="text" id="profile-name-input" data-translate-placeholder-key="placeholder_new_profile_name" placeholder="輸入新設定檔名稱...">
+                                <button id="save-profile-btn" data-translate-key="button_save_profile">儲存為新設定檔</button>
                             </div>
                         </div>
                     </div>
 
-                    <h4 style="margin-top:20px; margin-bottom: 5px; text-align: center;">自訂不想吃的食材 (例如: 雞肉, 海鮮, 豆腐)</h4>
+                    <div id="dietary-preferences-groups">
+                        <div class="pref-group">
+                            <div class="pref-header">
+                                <h4 data-translate-key="pref_general_title">一般飲食偏好</h4>
+                                <span class="toggle-icon">▼</span>
+                            </div>
+                            <div class="pref-content">
+                                <div class="pref-items-grid" id="general-dietary-prefs">
+                                    <div class="pref-item"><label><input type="checkbox" id="pref-vegetarian"> <span data-translate-key="pref_vegetarian">我是素食者</span></label></div>
+                                    <div class="pref-item"><label><input type="checkbox" id="pref-vegan"> <span data-translate-key="pref_vegan">我是全素者 (Vegan)</span></label></div>
+                                    <div class="pref-item"><label><input type="checkbox" id="pref-no-spicy"> <span data-translate-key="pref_no_spicy">不吃辣</span></label></div>
+                                    <div class="pref-item"><label><input type="checkbox" id="pref-no-alcohol"> <span data-translate-key="pref_no_alcohol">不要酒精</span></label></div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="pref-group">
+                             <div class="pref-header">
+                                <h4 data-translate-key="pref_religious_title">宗教飲食偏好</h4>
+                                <span class="toggle-icon">▼</span>
+                            </div>
+                            <div class="pref-content">
+                                <div class="pref-items-grid" id="religious-dietary-prefs">
+                                    <div class="pref-item"><label><input type="checkbox" id="pref-halal"> <span data-translate-key="pref_halal">清真 (Halal)</span></label></div>
+                                    <div class="pref-item"><label><input type="checkbox" id="pref-kosher"> <span data-translate-key="pref_kosher">潔食 (Kosher)</span></label></div>
+                                    <div class="pref-item"><label><input type="checkbox" id="pref-buddhist-vegetarian"> <span data-translate-key="pref_buddhist_vegetarian">佛門素食</span></label></div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="pref-group">
+                             <div class="pref-header">
+                                <h4 data-translate-key="pref_allergens_title">特定食材與過敏原</h4>
+                                <span class="toggle-icon">▼</span>
+                            </div>
+                            <div class="pref-content">
+                                <div class="pref-items-grid" id="allergen-information-prefs">
+                                    <div class="pref-item"><label><input type="checkbox" id="pref-no-pork"> <span data-translate-key="pref_no_pork">不要豬肉</span></label></div>
+                                    <div class="pref-item"><label><input type="checkbox" id="pref-no-beef"> <span data-translate-key="pref_no_beef">不要牛肉</span></label></div>
+                                    <div class="pref-item"><label><input type="checkbox" id="pref-no-fish"> <span data-translate-key="pref_no_fish">不要魚肉</span></label></div>
+                                    <div class="pref-item"><label><input type="checkbox" id="pref-shellfish-free"> <span data-translate-key="pref_shellfish_free">無貝類</span></label></div>
+                                    <div class="pref-item"><label><input type="checkbox" id="pref-no-nuts"> <span data-translate-key="pref_no_nuts">不要堅果/花生</span></label></div>
+                                    <div class="pref-item"><label><input type="checkbox" id="pref-gluten-free"> <span data-translate-key="pref_gluten_free">無麩質</span></label></div>
+                                    <div class="pref-item"><label><input type="checkbox" id="pref-dairy-free"> <span data-translate-key="pref_dairy_free">無乳製品</span></label></div>
+                                    <div class="pref-item"><label><input type="checkbox" id="pref-egg-free"> <span data-translate-key="pref_egg_free">無雞蛋</span></label></div>
+                                    <div class="pref-item"><label><input type="checkbox" id="pref-no-soy"> <span data-translate-key="pref_no_soy">不要大豆</span></label></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <h4 style="margin-top:20px; margin-bottom: 5px; text-align: center; border:none; padding:0;" data-translate-key="custom_pref_title">自訂不想吃的食材 (例如: 雞肉, 海鮮, 豆腐)</h4>
                     <div id="custom-pref-container">
-                        <input type="text" id="custom-pref-input" placeholder="輸入關鍵字...">
-                        <button id="add-pref-btn">新增</button>
+                        <input type="text" id="custom-pref-input" data-translate-placeholder-key="placeholder_custom_pref" placeholder="輸入關鍵字...">
+                        <button id="add-pref-btn" data-translate-key="button_add">新增</button>
                     </div>
                     <div id="custom-prefs-display"></div>
                     <div class="divider"></div>
-                    <h3>3. 選擇翻譯語言</h3>
+                    <h3 data-translate-key="step3_title">3. 選擇翻譯語言</h3>
                     <select id="language-selector">
-                        <option value="zh-TW">繁體中文 (Traditional Chinese)</option>
+                        <option value="af">南非語 (Afrikaans)</option>
+                        <option value="am">阿姆哈拉語 (Amharic)</option>
+                        <option value="ar">阿拉伯語 (Arabic)</option>
+                        <option value="as">阿薩姆語 (Assamese)</option>
+                        <option value="az">亞塞拜然語 (Azerbaijani)</option>
+                        <option value="bg">保加利亞語 (Bulgarian)</option>
+                        <option value="bho">博杰普爾語 (Bhojpuri)</option>
+                        <option value="bn">孟加拉語 (Bengali)</option>
+                        <option value="bo">藏語 (Tibetan)</option>
+                        <option value="bs">波士尼亞語 (Bosnian)</option>
+                        <option value="ca">加泰隆尼亞語 (Catalan)</option>
+                        <option value="cs">捷克語 (Czech)</option>
+                        <option value="cy">威爾斯語 (Welsh)</option>
+                        <option value="da">丹麥語 (Danish)</option>
+                        <option value="de">德語 (German)</option>
+                        <option value="doi">多格來語 (Dogri)</option>
+                        <option value="el">希臘語 (Greek)</option>
+                        <option value="en">英語 (English)</option>
+                        <option value="es">西班牙語 (Spanish)</option>
+                        <option value="et">愛沙尼亞語 (Estonian)</option>
+                        <option value="eu">巴斯克語 (Basque)</option>
+                        <option value="fa">波斯語 (Persian)</option>
+                        <option value="fi">芬蘭語 (Finnish)</option>
+                        <option value="fil">菲律賓語 (Filipino)</option>
+                        <option value="fj">斐濟語 (Fijian)</option>
+                        <option value="fr">法語 (French)</option>
+                        <option value="fr-CA">加拿大法語 (French, Canada)</option>
+                        <option value="ga">愛爾蘭語 (Irish)</option>
+                        <option value="gl">加利西亞語 (Galician)</option>
+                        <option value="gu">古吉拉特語 (Gujarati)</option>
+                        <option value="he">希伯來語 (Hebrew)</option>
+                        <option value="hi">印地語 (Hindi)</option>
+                        <option value="hr">克羅埃西亞語 (Croatian)</option>
+                        <option value="ht">海地克里奧爾語 (Haitian Creole)</option>
+                        <option value="hu">匈牙利語 (Hungarian)</option>
+                        <option value="hy">亞美尼亞語 (Armenian)</option>
+                        <option value="id">印尼語 (Indonesian)</option>
+                        <option value="is">冰島語 (Icelandic)</option>
+                        <option value="it">義大利語 (Italian)</option>
+                        <option value="iu">伊努克提圖特語 (Inuktitut)</option>
+                        <option value="ja">日語 (Japanese)</option>
+                        <option value="ka">喬治亞語 (Georgian)</option>
+                        <option value="kk">哈薩克語 (Kazakh)</option>
+                        <option value="km">高棉語 (Khmer)</option>
+                        <option value="kn">卡納達語 (Kannada)</option>
+                        <option value="ko">韓語 (Korean)</option>
+                        <option value="ku">庫德語 (Kurdish)</option>
+                        <option value="ky">吉爾吉斯語 (Kyrgyz)</option>
+                        <option value="lo">寮語 (Lao)</option>
+                        <option value="lt">立陶宛語 (Lithuanian)</option>
+                        <option value="lv">拉脫維亞語 (Latvian)</option>
+                        <option value="mai">邁蒂利語 (Maithili)</option>
+                        <option value="mg">馬達加斯加語 (Malagasy)</option>
+                        <option value="mi">毛利語 (Maori)</option>
+                        <option value="mk">馬其頓語 (Macedonian)</option>
+                        <option value="ml">馬拉雅拉姆語 (Malayalam)</option>
+                        <option value="mn-Cyrl">蒙古語 (西里爾文) (Mongolian, Cyrillic)</option>
+                        <option value="mr">馬拉提語 (Marathi)</option>
+                        <option value="ms">馬來語 (Malay)</option>
+                        <option value="mt">馬爾他語 (Maltese)</option>
+                        <option value="mww">白苗語 (Hmong Daw)</option>
+                        <option value="my">緬甸語 (Burmese)</option>
+                        <option value="nb">挪威語 (巴克摩) (Norwegian, Bokmal)</option>
+                        <option value="ne">尼泊爾語 (Nepali)</option>
+                        <option value="nl">荷蘭語 (Dutch)</option>
+                        <option value="or">奧里亞語 (Odia)</option>
+                        <option value="otq">克雷塔羅奧托米語 (Queretaro Otomi)</option>
+                        <option value="pa">旁遮普語 (Punjabi)</option>
+                        <option value="pl">波蘭語 (Polish)</option>
+                        <option value="prs">達利語 (Dari)</option>
+                        <option value="ps">普什圖語 (Pashto)</option>
+                        <option value="pt">葡萄牙語 (巴西) (Portuguese, Brazil)</option>
+                        <option value="pt-PT">葡萄牙語 (葡萄牙) (Portuguese, Portugal)</option>
+                        <option value="ro">羅馬尼亞語 (Romanian)</option>
+                        <option value="ru">俄語 (Russian)</option>
+                        <option value="sk">斯洛伐克語 (Slovak)</option>
+                        <option value="sl">斯洛維尼亞語 (Slovenian)</option>
+                        <option value="sm">薩摩亞語 (Samoan)</option>
+                        <option value="sq">阿爾巴尼亞語 (Albanian)</option>
+                        <option value="sr-Cyrl">塞爾維亞語 (西里爾文) (Serbian, Cyrillic)</option>
+                        <option value="sr-Latn">塞爾維亞語 (拉丁文) (Serbian, Latin)</option>
+                        <option value="sv">瑞典語 (Swedish)</option>
+                        <option value="sw">史瓦希里語 (Swahili)</option>
+                        <option value="ta">坦米爾語 (Tamil)</option>
+                        <option value="te">泰盧固語 (Telugu)</option>
+                        <option value="th">泰語 (Thai)</option>
+                        <option value="ti">提格利尼亞語 (Tigrinya)</option>
+                        <option value="tk">土庫曼語 (Turkmen)</option>
+                        <option value="to">東加語 (Tongan)</option>
+                        <option value="tr">土耳其語 (Turkish)</option>
+                        <option value="tt">韃靼語 (Tatar)</option>
+                        <option value="ug">維吾爾語 (Uyghur)</option>
+                        <option value="uk">烏克蘭語 (Ukrainian)</option>
+                        <option value="ur">烏都語 (Urdu)</option>
+                        <option value="uz">烏茲別克語 (拉丁文) (Uzbek, Latin)</option>
+                        <option value="vi">越南語 (Vietnamese)</option>
+                        <option value="yua">尤卡坦馬雅語 (Yucatec Maya)</option>
+                        <option value="yue">粵語 (繁體) (Cantonese, Traditional)</option>
                         <option value="zh-CN">簡體中文 (Simplified Chinese)</option>
-                        <option value="en">English</option>
-                        <option value="ja">日本語 (Japanese)</option>
-                        <option value="ko">한국어 (Korean)</option>
+                        <option value="zh-TW" selected>繁體中文 (Traditional Chinese)</option>
                     </select>
-                    <button class="process-button" id="process-btn">開始分析菜單</button>
+                    <button class="process-button" id="process-btn" data-translate-key="button_process_menu">開始分析菜單</button>
                 </div>
                 <div id="analysis-results-section" style="display: none;">
                     <div class="divider"></div>
-                    <h3>4. AI 分析結果</h3>
+                    <h3 data-translate-key="step4_title">4. AI 分析結果</h3>
                     <div id="results"></div>
                 </div>
                 <div class="spinner-section" id="spinner-section">
                     <div class="divider"></div>
-                    <h3>5. 美食選擇轉盤</h3>
-                    <p id="spinner-result-text">點擊按鈕，決定你的下一餐！</p>
+                    <h3 data-translate-key="step5_title">5. 美食選擇轉盤</h3>
+                    <p id="spinner-result-text" data-translate-key="spinner_intro_text">點擊按鈕，決定你的下一餐！</p>
                     <div class="wheel-container">
                         <div class="pointer"></div>
                         <canvas id="wheel" width="350" height="350"></canvas>
                     </div>
                     <div class="action-btn-group" id="spinner-controls">
-                        <button class="spin-button" id="spin-btn">開始旋轉！</button>
+                        <button class="spin-button" id="spin-btn" data-translate-key="button_spin">開始旋轉！</button>
                         <div id="spin-actions" style="display: none;">
-                           <button class="action-btn" id="keep-btn">就是它了！</button>
+                           <button class="action-btn" id="keep-btn" data-translate-key="button_keep_it">就是它了！</button>
                         </div>
                     </div>
                 </div>
             </div>
 
             <div class="tab-content" id="tab-content-history">
-                <h3>美食護照</h3>
+                <h3 data-translate-key="passport_title">美食護照</h3>
                 <div id="history-list"></div>
                 <div class="history-footer-actions">
-                    <button id="add-new-log-btn">✍️ 新增護照紀錄</button>
-                    <button id="clear-history-btn">🗑️ 清除全部紀錄</button>
+                    <button id="add-new-log-btn" data-translate-key="button_add_log">✍️ 新增護照紀錄</button>
+                    <button id="clear-history-btn" data-translate-key="button_clear_history">🗑️ 清除全部紀錄</button>
                 </div>
             </div>
         </div>
@@ -480,16 +681,16 @@
     <div class="modal-overlay" id="log-modal-overlay">
         <div class="modal">
             <button class="modal-close-btn" aria-label="關閉">&times;</button>
-            <input id="log-title-input" placeholder="請輸入餐點名稱...">
-            <div class="modal-image-preview" id="modal-image-preview"><span>上傳照片來記錄美食</span></div>
+            <input id="log-title-input" data-translate-placeholder-key="placeholder_log_title" placeholder="請輸入餐點名稱...">
+            <div class="modal-image-preview" id="modal-image-preview"><span data-translate-key="modal_upload_prompt">上傳照片來記錄美食</span></div>
             <div class="upload-options" style="margin: 10px auto;">
-                <button id="modal-capture-camera-btn" class="upload-btn">📷 相機拍攝</button>
-                <button id="modal-upload-file-btn" class="upload-btn">🖼️ 從相簿選取</button>
+                <button id="modal-capture-camera-btn" class="upload-btn" data-translate-key="button_camera_shoot">📷 相機拍攝</button>
+                <button id="modal-upload-file-btn" class="upload-btn" data-translate-key="button_album_select_modal">🖼️ 從相簿選取</button>
             </div>
             <input type="file" id="modal-image-input" accept="image/*">
-            <textarea id="modal-text-input" placeholder="在這裡寫下你的用餐心得..."></textarea>
+            <textarea id="modal-text-input" data-translate-placeholder-key="placeholder_log_notes" placeholder="在這裡寫下你的用餐心得..."></textarea>
             <div class="modal-actions">
-                <button id="modal-save-btn">儲存護照紀錄</button>
+                <button id="modal-save-btn" data-translate-key="button_save_log">儲存護照紀錄</button>
             </div>
         </div>
     </div>
@@ -502,8 +703,8 @@
             <div class="modal-image-preview" id="history-view-image"></div>
             <p id="history-view-text"></p>
             <div class="modal-actions">
-                <button id="history-view-edit-btn">編輯護照紀錄</button>
-                <button id="history-view-share-btn">分享此護照紀錄</button>
+                <button id="history-view-edit-btn" data-translate-key="button_edit_log">編輯護照紀錄</button>
+                <button id="history-view-share-btn" data-translate-key="button_share_log">分享此護照紀錄</button>
             </div>
         </div>
     </div>
@@ -511,13 +712,13 @@
     <!-- 相機專用的彈出視窗 -->
     <div class="modal-overlay" id="camera-modal-overlay">
         <div class="modal" id="camera-modal">
-            <h2 style="margin-bottom: 15px;">相機掃描</h2>
-            <video id="camera-stream" playsinline autoplay style="width: 100%; border-radius: 8px; background: #000;"></video>
+            <h2 style="margin-bottom: 15px;" data-translate-key="camera_modal_title">相機掃描</h2>
+            <video id="camera-stream" playsinline autoplay></video>
             <canvas id="camera-canvas" style="display:none;"></canvas>
-            <div class="modal-actions" style="margin-top: 20px; display: flex; flex-direction: column; gap: 15px;">
-                 <button id="toggle-camera-btn" style="background-color: #3498db; color: white; padding: 14px;">🔄 切換鏡頭</button>
-                 <button id="take-photo-btn" style="background: var(--primary-gradient); color: #121212; padding: 14px;">拍攝照片</button>
-                 <button id="cancel-camera-btn" style="background: #e74c3c; color: white; padding: 14px;">取消</button>
+            <div class="modal-actions" style="margin-top: 20px;">
+                 <button id="toggle-camera-btn" style="background-color: #3498db; color: white;" data-translate-key="button_toggle_camera">🔄 切換鏡頭</button>
+                 <button id="take-photo-btn" style="background: var(--primary-gradient); color: #121212;" data-translate-key="button_take_photo">拍攝照片</button>
+                 <button id="cancel-camera-btn" style="background: #e74c3c; color: white;" data-translate-key="button_cancel">取消</button>
             </div>
         </div>
     </div>
@@ -527,18 +728,18 @@
         <div class="toast-content">
             <span id="toast-message"></span>
             <div class="toast-actions">
-                <button id="toast-edit-btn">編輯</button>
-                <button id="toast-confirm-btn">確認</button>
+                <button id="toast-edit-btn" data-translate-key="button_edit">編輯</button>
+                <button id="toast-confirm-btn" data-translate-key="button_confirm">確認</button>
             </div>
         </div>
     </div>
 
     <script>
         document.addEventListener('DOMContentLoaded', () => {
-            // =====【您的 Azure 資訊】=====
-            // 請注意：這些金鑰僅供範例，請勿將敏感資訊直接公開在前端程式碼中！
+            // =====【您的 Azure 資訊 - 請務必替換成您自己的金鑰】=====
+            // 警告：請勿將敏感資訊直接公開在前端程式碼中！
             // 實際部署時，這些金鑰應放在後端或透過安全的環境變數管理。
-            const AZURE_VISION_KEY = '2eIQpQlLKEaHUo6oPEOZ1Rc4OAcfgxwSQ1IGLPLMYxWxNavbuNxGJQQJ99BGACqBBLyXJ3w3AAAAACOG6FFo';
+           const AZURE_VISION_KEY = '2eIQpQlLKEaHUo6oPEOZ1Rc4OAcfgxwSQ1IGLPLMYxWxNavbuNxGJQQJ99BGACqBBLyXJ3w3AAAAACOG6FFo';
             const AZURE_VISION_ENDPOINT = 'https://myhackathon-cv-service.services.ai.azure.com/';
             const AZURE_TRANSLATOR_KEY = '4kHZNgnsEFrUxfkSAEkflaDgEOF4dDk9NI2EjDq8k6kcnYeqHiY2JQQJ99BGACqBBLyXJ3w3AAAAACOGrcjp';
             const AZURE_TRANSLATOR_REGION = 'southeastasia';
@@ -546,7 +747,121 @@
             const AZURE_OPENAI_KEY = '6VpbFBGvvQkGXqnIqBu3AvoqYnqyenQUS2TIUzg2LyqVS5eMln9yJQQJ99BGACYeBjFXJ3w3AAABACOG1nCR';
             const AZURE_OPENAI_DEPLOYMENT_NAME = 'my-menu-gpt';
 
-            // --- DOM 元素 ---
+            
+            // --- 全局 UI 翻譯字典 ---
+            const translations = {
+                'zh-TW': {
+                    'tab_analysis': '智慧分析 & 轉盤', 'tab_history': '美食護照',
+                    'app_description_initial': '上傳菜單圖片，設定偏好，讓 AI 幫您分析！',
+                    'step1_title': '1. 上傳菜單圖片', 'button_camera_scan': '📷 相機掃描', 'button_album_select': '🖼️ 從相簿選取',
+                    'step2_title': '2. 設定您的飲食偏好', 'profile_manage_title': '偏好設定檔管理',
+                    'profile_load_placeholder': '-- 載入設定檔 --', 'button_update_profile': '更新',
+                    'tooltip_update_profile': '用目前勾選的設定更新所選的設定檔', 'button_delete_profile': '刪除',
+                    'tooltip_delete_profile': '刪除所選的設定檔', 'placeholder_new_profile_name': '輸入新設定檔名稱...',
+                    'button_save_profile': '儲存為新設定檔', 'pref_general_title': '一般飲食偏好',
+                    'pref_vegetarian': '我是素食者', 'pref_vegan': '我是全素者 (Vegan)', 'pref_no_spicy': '不吃辣', 'pref_no_alcohol': '不要酒精',
+                    'pref_religious_title': '宗教飲食偏好', 'pref_halal': '清真 (Halal)', 'pref_kosher': '潔食 (Kosher)',
+                    'pref_buddhist_vegetarian': '佛門素食', 'pref_allergens_title': '特定食材與過敏原',
+                    'pref_no_pork': '不要豬肉', 'pref_no_beef': '不要牛肉', 'pref_no_fish': '不要魚肉',
+                    'pref_shellfish_free': '無貝類', 'pref_no_nuts': '不要堅果/花生', 'pref_gluten_free': '無麩質',
+                    'pref_dairy_free': '無乳製品', 'pref_egg_free': '無雞蛋', 'pref_no_soy': '不要大豆',
+                    'custom_pref_title': '自訂不想吃的食材 (例如: 雞肉, 海鮮, 豆腐)', 'placeholder_custom_pref': '輸入關鍵字...',
+                    'button_add': '新增', 'step3_title': '3. 選擇翻譯語言', 'button_process_menu': '開始分析菜單',
+                    'step4_title': '4. AI 分析結果', 'step5_title': '5. 美食選擇轉盤',
+                    'spinner_intro_text': '點擊按鈕，決定你的下一餐！', 'button_spin': '開始旋轉！', 'button_keep_it': '就是它了！',
+                    'passport_title': '美食護照', 'button_add_log': '✍️ 新增護照紀錄', 'button_clear_history': '🗑️ 清除全部紀錄',
+                    'placeholder_log_title': '請輸入餐點名稱...', 'modal_upload_prompt': '上傳照片來記錄美食',
+                    'button_camera_shoot': '📷 相機拍攝', 'button_album_select_modal': '🖼️ 從相簿選取',
+                    'placeholder_log_notes': '在這裡寫下你的用餐心得...', 'button_save_log': '儲存護照紀錄',
+                    'button_edit_log': '編輯護照紀錄', 'button_share_log': '分享此護照紀錄',
+                    'camera_modal_title': '相機掃描', 'button_toggle_camera': '🔄 切換鏡頭', 'button_take_photo': '拍攝照片',
+                    'button_cancel': '取消', 'button_edit': '編輯', 'button_confirm': '確認',
+                    // 動態訊息
+                    'alert_select_image': '請先用相機掃描或從相簿選取一張菜單圖片！',
+                    'alert_no_text_found': '錯誤：無法從圖片中辨識文字。',
+                    'alert_no_dishes_found': 'AI 在圖片中沒有找到可辨識的菜品項目。',
+                    'alert_error_prefix': '發生錯誤',
+                    'alert_profile_name_required': '請輸入設定檔名稱！',
+                    'confirm_overwrite_profile': (name) => `設定檔 "${name}" 已存在。您要覆蓋它嗎？`,
+                    'alert_profile_saved': (name) => `設定檔 "${name}" 已儲存！`,
+                    'alert_select_profile_to_update': '請先從下拉選單中選擇一個要更新的設定檔。',
+                    'confirm_update_profile': (name) => `您確定要用目前的設定更新 "${name}" 嗎？`,
+                    'alert_profile_updated': (name) => `設定檔 "${name}" 已更新！`,
+                    'alert_select_profile_to_delete': '請先從下拉選單中選擇一個要刪除的設定檔。',
+                    'confirm_delete_profile': (name) => `您確定要永久刪除設定檔 "${name}" 嗎？此操作無法復原。`,
+                    'alert_profile_deleted': (name) => `設定檔 "${name}" 已被刪除。`,
+                    'alert_dish_name_required': '請務必填寫餐點名稱！',
+                    'confirm_delete_log': (name) => `確定要刪除這筆「${name}」的護照紀錄嗎？`,
+                    'confirm_clear_all_history': '確定要清除【所有】美食護照紀錄嗎？此操作無法復原。',
+                    'toast_saved_to_passport': (name, isEditing) => `「${name}」${isEditing ? '已更新' : '已儲存至護照'}！`,
+                    'spinner_result_text_spinning': '轉啊轉...',
+                    'spinner_result_text_spin_again': '再轉一次',
+                    'spinner_result_text_winner': (name) => `恭喜！今天的選擇是：${name}`,
+                    'spinner_result_text_error': '出錯了，請刷新頁面！',
+                    'spinner_result_text_final': (name) => `太棒了！就決定吃「${name}」`,
+                    'spinner_no_options': '沒有推薦菜色可供選擇。',
+                    'spinner_load_options': '請先分析菜單以載入選項。',
+                    'spinner_hover_prompt': '將滑鼠移到轉盤上看看有什麼好料！',
+                    'alert_lang_switched': '語言已切換。為了獲得最準確的翻譯結果，請重新點擊「開始分析菜單」。'
+                },
+                'en': {
+                    'tab_analysis': 'Analysis & Spinner', 'tab_history': 'Food Passport',
+                    'app_description_initial': 'Upload a menu image, set your preferences, and let AI analyze it for you!',
+                    'step1_title': '1. Upload Menu Image', 'button_camera_scan': '📷 Scan with Camera', 'button_album_select': '🖼️ Select from Album',
+                    'step2_title': '2. Set Your Dietary Preferences', 'profile_manage_title': 'Preference Profile Management',
+                    'profile_load_placeholder': '-- Load a Profile --', 'button_update_profile': 'Update',
+                    'tooltip_update_profile': 'Update the selected profile with current settings', 'button_delete_profile': 'Delete',
+                    'tooltip_delete_profile': 'Delete the selected profile', 'placeholder_new_profile_name': 'Enter new profile name...',
+                    'button_save_profile': 'Save as New Profile', 'pref_general_title': 'General Preferences',
+                    'pref_vegetarian': 'I am a vegetarian', 'pref_vegan': 'I am a vegan', 'pref_no_spicy': 'No spicy food', 'pref_no_alcohol': 'No alcohol',
+                    'pref_religious_title': 'Religious Dietary Needs', 'pref_halal': 'Halal', 'pref_kosher': 'Kosher',
+                    'pref_buddhist_vegetarian': 'Buddhist Vegetarianism', 'pref_allergens_title': 'Specific Ingredients & Allergens',
+                    'pref_no_pork': 'No pork', 'pref_no_beef': 'No beef', 'pref_no_fish': 'No fish',
+                    'pref_shellfish_free': 'Shellfish-free', 'pref_no_nuts': 'No nuts/peanuts', 'pref_gluten_free': 'Gluten-free',
+                    'pref_dairy_free': 'Dairy-free', 'pref_egg_free': 'Egg-free', 'pref_no_soy': 'No soy',
+                    'custom_pref_title': 'Custom ingredients to avoid (e.g., chicken, seafood, tofu)',
+                    'placeholder_custom_pref': 'Enter keyword...', 'button_add': 'Add',
+                    'step3_title': '3. Select Translation Language', 'button_process_menu': 'Analyze Menu',
+                    'step4_title': '4. AI Analysis Results', 'step5_title': '5. The Food Spinner',
+                    'spinner_intro_text': 'Click the button to decide your next meal!', 'button_spin': 'Spin!', 'button_keep_it': 'This is it!',
+                    'passport_title': 'Food Passport', 'button_add_log': '✍️ Add New Log', 'button_clear_history': '🗑️ Clear All History',
+                    'placeholder_log_title': 'Enter dish name...', 'modal_upload_prompt': 'Upload a photo to remember your meal',
+                    'button_camera_shoot': '📷 Take with Camera', 'button_album_select_modal': '🖼️ Select from Album',
+                    'placeholder_log_notes': 'Write down your thoughts here...', 'button_save_log': 'Save Log Entry',
+                    'button_edit_log': 'Edit Log Entry', 'button_share_log': 'Share this Log',
+                    'camera_modal_title': 'Camera Scan', 'button_toggle_camera': '🔄 Toggle Camera', 'button_take_photo': 'Take Photo',
+                    'button_cancel': 'Cancel', 'button_edit': 'Edit', 'button_confirm': 'Confirm',
+                    // 動態訊息 (en)
+                    'alert_select_image': 'Please select a menu image from your album or scan it with the camera first!',
+                    'alert_no_text_found': 'Error: Could not recognize text from the image.',
+                    'alert_no_dishes_found': 'The AI did not find any recognizable dish items in the image.',
+                    'alert_error_prefix': 'An error occurred',
+                    'alert_profile_name_required': 'Please enter a profile name!',
+                    'confirm_overwrite_profile': (name) => `Profile "${name}" already exists. Do you want to overwrite it?`,
+                    'alert_profile_saved': (name) => `Profile "${name}" has been saved!`,
+                    'alert_select_profile_to_update': 'Please select a profile from the dropdown to update.',
+                    'confirm_update_profile': (name) => `Are you sure you want to update "${name}" with the current settings?`,
+                    'alert_profile_updated': (name) => `Profile "${name}" has been updated!`,
+                    'alert_select_profile_to_delete': 'Please select a profile from the dropdown to delete.',
+                    'confirm_delete_profile': (name) => `Are you sure you want to permanently delete the profile "${name}"? This action cannot be undone.`,
+                    'alert_profile_deleted': (name) => `Profile "${name}" has been deleted.`,
+                    'alert_dish_name_required': 'Dish name is required!',
+                    'confirm_delete_log': (name) => `Are you sure you want to delete the log for "${name}"?`,
+                    'confirm_clear_all_history': 'Are you sure you want to clear ALL Food Passport history? This action cannot be undone.',
+                    'toast_saved_to_passport': (name, isEditing) => `"${name}" has been ${isEditing ? 'updated' : 'saved'} to your passport!`,
+                    'spinner_result_text_spinning': 'Spinning...',
+                    'spinner_result_text_spin_again': 'Spin Again',
+                    'spinner_result_text_winner': (name) => `Congratulations! Today's choice is: ${name}`,
+                    'spinner_result_text_error': 'An error occurred, please refresh the page!',
+                    'spinner_result_text_final': (name) => `Great! Let's eat "${name}"`,
+                    'spinner_no_options': 'No recommended dishes available to spin.',
+                    'spinner_load_options': 'Please analyze a menu to load options.',
+                    'spinner_hover_prompt': 'Hover over the wheel to see the options!',
+                    'alert_lang_switched': 'Language has been switched. For the most accurate translations, please click "Analyze Menu" again.'
+                }
+            };
+            
+            // --- DOM 元素 (基本) ---
             const uploadFileBtn = document.getElementById('upload-file-btn');
             const captureCameraBtn = document.getElementById('capture-camera-btn');
             const uploadInput = document.getElementById('menu-image-upload');
@@ -561,6 +876,8 @@
             const tabNav = document.querySelector('.tab-nav');
             const tabBtns = document.querySelectorAll('.tab-btn');
             const tabContents = document.querySelectorAll('.tab-content');
+            
+            // --- DOM 元素 (轉盤) ---
             const spinnerSection = document.getElementById('spinner-section');
             const wheel = document.getElementById('wheel');
             const spinBtn = document.getElementById('spin-btn');
@@ -568,10 +885,11 @@
             const spinActions = document.getElementById('spin-actions');
             const keepBtn = document.getElementById('keep-btn');
             const ctx = wheel.getContext('2d');
+
+            // --- DOM 元素 (美食護照) ---
             const historyList = document.getElementById('history-list');
             const clearHistoryBtn = document.getElementById('clear-history-btn');
             const addNewLogBtn = document.getElementById('add-new-log-btn');
-            
             const logModalOverlay = document.getElementById('log-modal-overlay');
             const logTitleInput = document.getElementById('log-title-input');
             const modalImagePreview = document.getElementById('modal-image-preview');
@@ -580,7 +898,6 @@
             const modalSaveBtn = document.getElementById('modal-save-btn');
             const modalCaptureCameraBtn = document.getElementById('modal-capture-camera-btn');
             const modalUploadFileBtn = document.getElementById('modal-upload-file-btn');
-            
             const historyViewModalOverlay = document.getElementById('history-view-modal-overlay');
             const historyViewTitle = document.getElementById('history-view-title');
             const historyViewImage = document.getElementById('history-view-image');
@@ -588,13 +905,13 @@
             const historyViewEditBtn = document.getElementById('history-view-edit-btn');
             const historyViewShareBtn = document.getElementById('history-view-share-btn');
             
+            // --- DOM 元素 (通知 & 相機) ---
             const toastNotification = document.getElementById('toast-notification');
             const toastMessage = document.getElementById('toast-message');
             const toastEditBtn = document.getElementById('toast-edit-btn');
             const toastConfirmBtn = document.getElementById('toast-confirm-btn');
             const fireworksCanvas = document.getElementById('fireworks-canvas');
             const fireworksCtx = fireworksCanvas.getContext('2d');
-
             const cameraModalOverlay = document.getElementById('camera-modal-overlay');
             const cameraStream = document.getElementById('camera-stream');
             const cameraCanvas = document.getElementById('camera-canvas');
@@ -602,8 +919,18 @@
             const cancelCameraButton = document.getElementById('cancel-camera-btn');
             const toggleCameraBtn = document.getElementById('toggle-camera-btn'); 
 
+            // --- 全新 DOM 元素 (設定檔 & 手風琴) ---
+            const profileSelector = document.getElementById('profile-selector');
+            const profileNameInput = document.getElementById('profile-name-input');
+            const saveProfileBtn = document.getElementById('save-profile-btn');
+            const updateProfileBtn = document.getElementById('update-profile-btn');
+            const deleteProfileBtn = document.getElementById('delete-profile-btn');
+            const prefHeaders = document.querySelectorAll('.pref-header');
+            const allPrefCheckboxes = document.querySelectorAll('#dietary-preferences-groups input[type="checkbox"]');
+
             // --- 變數 ---
             let customPreferences = [];
+            let profiles = {}; // 全新：儲存所有設定檔
             let currentRotation = 0;
             let isSpinning = false;
             let isResultDisplayed = false; 
@@ -619,372 +946,145 @@
             
             // 相機變數
             let currentStream = null;
-            let currentFacingMode = 'environment'; // 預設後置鏡頭 'environment' (後置) or 'user' (前置)
-            let currentPhotoCallback = null; // 用來儲存拍照後要執行的函式
+            let currentFacingMode = 'environment';
+            let currentPhotoCallback = null;
 
             const spinnerColors = ['#34495e', '#f39c12', '#e74c3c', '#3498db', '#2ecc71', '#9b59b6', '#1abc9c', '#e67e22', '#a0a0a0', '#c0392b', '#7f8c8d', '#d35400'];
 
-            // --- 工具函式 ---
+            // --- 全局UI翻譯與訊息函式 ---
+            const getTranslation = (key, ...args) => {
+                const lang = languageSelector.value;
+                const langDict = translations[lang] || translations['en'];
+                const template = langDict[key] || key;
+                if (typeof template === 'function') {
+                    return template(...args);
+                }
+                return template;
+            };
+
+            const applyLanguage = () => {
+                document.querySelectorAll('[data-translate-key]').forEach(el => {
+                    const key = el.dataset.translateKey;
+                    el.textContent = getTranslation(key);
+                });
+                document.querySelectorAll('[data-translate-placeholder-key]').forEach(el => {
+                    const key = el.dataset.translatePlaceholderKey;
+                    el.placeholder = getTranslation(key);
+                });
+                document.querySelectorAll('[data-translate-title-key]').forEach(el => {
+                    const key = el.dataset.translateTitleKey;
+                    el.title = getTranslation(key);
+                });
+                // 特別處理 <select> 中的 <option>
+                const profileOption = profileSelector.querySelector('option[value=""]');
+                if (profileOption) {
+                    profileOption.textContent = getTranslation('profile_load_placeholder');
+                }
+            };
+            
+            // --- 工具函式 (無變動) ---
             const updateStatus = (message, showLoader) => { let loaderHtml = showLoader ? '<div class="loader"></div>' : ''; resultsDiv.innerHTML = `<div id="status-container">${loaderHtml}<div class="status-text">${message}</div></div>`; analysisResultsSection.style.display = 'block'; spinnerSection.style.display = 'none'; };
             const resizeImage = (file, maxWidth, maxHeight, quality) => new Promise((resolve, reject) => { const reader = new FileReader(); reader.readAsDataURL(file); reader.onload = event => { const img = new Image(); img.src = event.target.result; img.onload = () => { const canvas = document.createElement('canvas'); let { width, height } = img; if (width > height) { if (width > maxWidth) { height *= maxWidth / width; width = maxWidth; } } else { if (height > maxHeight) { width *= maxHeight / height; height = maxHeight; } } canvas.width = width; canvas.height = height; canvas.getContext('2d').drawImage(img, 0, 0, width, height); resolve(canvas.toDataURL('image/jpeg', quality)); }; }; reader.onerror = error => reject(error); });
             
-            // --- 煙火與通知邏輯 ---
+            // --- 煙火與通知邏輯 (無變動) ---
+            let fireworksParticles = [];
             function createFireworks() { const particleCount = 150; const colors = ["#f0c419", "#ffec8a", "#e74c3c", "#3498db", "#2ecc71", "#ffffff"]; const toastRect = toastNotification.getBoundingClientRect(); fireworksCanvas.width = window.innerWidth; fireworksCanvas.height = window.innerHeight; const startX = toastRect.left + toastRect.width / 2; const startY = toastRect.top + toastRect.height / 2; fireworksParticles = []; for (let i = 0; i < particleCount; i++) { fireworksParticles.push({ x: startX, y: startY, radius: Math.random() * 3 + 1, color: colors[Math.floor(Math.random() * colors.length)], vx: Math.random() * 12 - 6, vy: Math.random() * -18 - 6, opacity: 1, gravity: 0.3, }); } }
             function animateFireworks() { fireworksCtx.clearRect(0, 0, fireworksCanvas.width, fireworksCanvas.height); let activeParticles = false; fireworksParticles.forEach(p => { if(p.opacity > 0) { activeParticles = true; p.vy += p.gravity; p.x += p.vx; p.y += p.vy; p.opacity -= 0.015; fireworksCtx.globalAlpha = p.opacity; fireworksCtx.fillStyle = p.color; fireworksCtx.beginPath(); fireworksCtx.arc(p.x, p.y, p.radius, 0, Math.PI * 2); fireworksCtx.fill(); } }); if(activeParticles) { requestAnimationFrame(animateFireworks); } else { fireworksCtx.clearRect(0, 0, fireworksCanvas.width, fireworksCanvas.height); } }
             const hideToast = () => toastNotification.classList.remove('show');
-            const showSaveToast = (savedIndex, savedText, isEditing) => { toastMessage.textContent = `「${savedText}」${isEditing ? '已更新' : '已儲存至護照'}！`; toastNotification.classList.add('show'); createFireworks(); requestAnimationFrame(animateFireworks); toastEditBtn.onclick = () => { hideToast(); showLogModal({ index: savedIndex, entry: history[savedIndex], saveText: '儲存變更' }); }; toastConfirmBtn.onclick = hideToast; setTimeout(hideToast, 6000); };
-
-            // --- AI 與過濾邏輯 ---
-            async function getOcrText(imageSource) { updateStatus('正在將圖片上傳至 Azure AI Vision (v3.2) 進行分析...', true); const cleanEndpoint = AZURE_VISION_ENDPOINT.replace(/\/+$/, ""); const analyzeUrl = `${cleanEndpoint}/vision/v3.2/read/analyze`; let imageBody; if (typeof imageSource === 'string' && imageSource.startsWith('data:')) { // If it's a data URL (from canvas/resize)
-                const base64Data = imageSource.split(',')[1];
-                imageBody = new Uint8Array(atob(base64Data).split('').map(char => char.charCodeAt(0)));
-            } else if (typeof imageSource === 'string') { // If it's a direct URL to fetch (like the default image)
-                const imageResponse = await fetch(imageSource);
-                imageBody = await imageResponse.blob();
-            } else { // Assume it's a Blob or File object directly
-                imageBody = imageSource;
-            }
-
-            const response = await fetch(analyzeUrl, { method: 'POST', headers: { 'Content-Type': 'application/octet-stream', 'Ocp-Apim-Subscription-Key': AZURE_VISION_KEY }, body: imageBody });
-            if (!response.ok) { const errorData = await response.json(); throw new Error(`Azure API 錯誤 (提交階段): ${errorData.error.message}`); } const operationLocation = response.headers.get('Operation-Location'); if (!operationLocation) throw new Error('無法從 Azure 回應中獲取操作位置。'); let result; while (true) { await new Promise(resolve => setTimeout(resolve, 1000)); updateStatus('正在從 Azure 獲取辨識結果...', true); const resultResponse = await fetch(operationLocation, { headers: { 'Ocp-Apim-Subscription-Key': AZURE_VISION_KEY } }); result = await resultResponse.json(); if (result.status === 'succeeded') return result.analyzeResult.readResults.flatMap(page => page.lines.map(line => line.text)).join('\n'); if (result.status === 'failed') throw new Error(`Azure OCR 處理失敗: ${result.error?.message || '未知錯誤'}`); } }
+            const showSaveToast = (savedIndex, savedText, isEditing) => { toastMessage.textContent = getTranslation('toast_saved_to_passport', savedText, isEditing); toastNotification.classList.add('show'); createFireworks(); requestAnimationFrame(animateFireworks); toastEditBtn.onclick = () => { hideToast(); showLogModal({ index: savedIndex, entry: history[savedIndex], saveText: getTranslation('button_save_log') }); }; toastConfirmBtn.onclick = hideToast; setTimeout(hideToast, 6000); };
             
+            // --- AI 與過濾邏輯 (無變動) ---
+            async function getOcrText(imageSource) { updateStatus('正在將圖片上傳至 Azure AI Vision (v3.2) 進行分析...', true); const cleanEndpoint = AZURE_VISION_ENDPOINT.replace(/\/+$/, ""); const analyzeUrl = `${cleanEndpoint}/vision/v3.2/read/analyze`; let imageBody; if (typeof imageSource === 'string' && imageSource.startsWith('data:')) { const base64Data = imageSource.split(',')[1]; imageBody = new Uint8Array(atob(base64Data).split('').map(char => char.charCodeAt(0))); } else if (typeof imageSource === 'string') { const imageResponse = await fetch(imageSource); imageBody = await imageResponse.blob(); } else { imageBody = imageSource; } const response = await fetch(analyzeUrl, { method: 'POST', headers: { 'Content-Type': 'application/octet-stream', 'Ocp-Apim-Subscription-Key': AZURE_VISION_KEY }, body: imageBody }); if (!response.ok) { const errorData = await response.json(); throw new Error(`Azure API 錯誤 (提交階段): ${errorData.error.message}`); } const operationLocation = response.headers.get('Operation-Location'); if (!operationLocation) throw new Error('無法從 Azure 回應中獲取操作位置。'); let result; while (true) { await new Promise(resolve => setTimeout(resolve, 1000)); updateStatus('正在從 Azure 獲取辨識結果...', true); const resultResponse = await fetch(operationLocation, { headers: { 'Ocp-Apim-Subscription-Key': AZURE_VISION_KEY } }); result = await resultResponse.json(); if (result.status === 'succeeded') return result.analyzeResult.readResults.flatMap(page => page.lines.map(line => line.text)).join('\n'); if (result.status === 'failed') throw new Error(`Azure OCR 處理失敗: ${result.error?.message || '未知錯誤'}`); } }
             async function filterDishesWithAzureAI(rawText) { const apiEndpoint = `${AZURE_OPENAI_ENDPOINT}/openai/deployments/${AZURE_OPENAI_DEPLOYMENT_NAME}/chat/completions?api-version=2023-07-01-preview`; const systemPrompt = `你是一位專業的菜單分析師。我會提供從菜單圖片 OCR 辨識出的文字。你的任務是：\n1. 只找出代表「菜品名稱」或「飲料名稱」的項目。\n2. 忽略所有分類標題（如 "主食", "飲料", "Appetizers"）、價格、地址、電話、描述性文字或任何非菜品項目。\n3. 將結果以一個 JSON 陣列的形式回傳，陣列中每個元素都是一個菜品名稱字串。例如: ["麻婆豆腐", "豚骨拉麵", "可口可樂"]。\n4. 如果找不到任何菜品，請回傳一個空的 JSON 陣列 []。\n5. 你的回傳必須是嚴格的 JSON 格式，且根物件要有一個 key 叫做 "dishes"，其 value 是菜品名稱陣列。範例： { "dishes": ["菜品A", "菜品B"] }`; const userPrompt = `這是從菜單辨識出的文字，請幫我找出所有菜品和飲料名稱：\n\n${rawText}`; const body = { messages: [ { role: "system", content: systemPrompt }, { role: "user", content: userPrompt } ] }; const response = await fetch(apiEndpoint, { method: 'POST', headers: { 'Content-Type': 'application/json', 'api-key': AZURE_OPENAI_KEY }, body: JSON.stringify(body) }); if (!response.ok) { throw new Error(`Azure OpenAI (菜品辨識) API 錯誤: ${response.statusText}`); } const data = await response.json(); try { const content = JSON.parse(data.choices[0].message.content); const dishes = content.dishes || []; if (!Array.isArray(dishes)) throw new Error("AI 回傳的格式不是有效的陣列。"); return dishes; } catch (e) { console.error("解析 AI 回應時出錯 (菜品辨識):", data.choices[0].message.content); throw new Error("無法解析 AI 回傳的菜品列表。"); } }
             async function analyzeIngredientsWithAzureAI(dishes, customPrefs) { const apiEndpoint = `${AZURE_OPENAI_ENDPOINT}/openai/deployments/${AZURE_OPENAI_DEPLOYMENT_NAME}/chat/completions?api-version=2023-07-01-preview`; const systemPrompt = `你是一位專業的食品科學家和廚師。你的任務是分析菜品，並根據使用者的自訂偏好進行語意判斷。\n**你的回傳必須是嚴格的 JSON 格式，包含以下欄位：**\n1.  \`name\`: (string) 菜品的原始名稱。\n2.  \`englishName\`: (string) 這道菜最標準的**英文翻譯名稱**。\n3.  \`mainIngredients\`: (string array) 這道菜最常見的**英文**主要食材列表。\n4.  \`allergens\`: (string array) 從這個固定列表中選擇可能的過敏原：Pork, Beef, Chicken, Fish, Seafood, Lamb, Nuts, Peanuts, Alcohol, Spicy, Dairy, Gluten, Eggs, Soy。\n5.  \`customFilterMatch\`: (string or null) 檢查菜品是否符合使用者的自訂偏好。如果符合，此欄位應為**解釋原因的英文**（例如："Contains chicken thigh, matching the 'chicken' filter"）；如果不符合，此欄位必須為 \`null\`。\n**語意判斷規則：**\n- 你必須「舉一反三」。如果使用者的偏好是「雞肉 (chicken)」，那麼菜品中的「雞腿」或「雞翅」都算符合。\n- 如果使用者的偏好是「牛肉 (beef)」，那麼「牛排」、「牛腩」或「牛尾」都算符合。\n- 如果使用者的自訂偏好列表為空，則 \`customFilterMatch\` 永遠為 \`null\`。\n- 過敏原欄位應只包含清單中的單詞，且大小寫不敏感 (例如 'Pork' 或 'pork' 都可接受)。`; const analysisPromises = dishes.map(dishName => { const userPrompt = `使用者的自訂排除項目是：[${customPrefs.join(', ')}]\n\n現在，請分析這道菜品: "${dishName}"`; const body = { messages: [ { role: "system", content: systemPrompt }, { role: "user", content: userPrompt } ] }; return fetch(apiEndpoint, { method: 'POST', headers: { 'Content-Type': 'application/json', 'api-key': AZURE_OPENAI_KEY }, body: JSON.stringify(body) }).then(response => response.ok ? response.json() : { error: true }).then(data => { if (data.error) return { name: dishName, error: true, englishName: dishName, mainIngredients: [], allergens: [], customFilterMatch: null }; try { const parsedContent = JSON.parse(data.choices[0].message.content); return { name: parsedContent.name || dishName, englishName: parsedContent.englishName || dishName, mainIngredients: parsedContent.mainIngredients || [], allergens: parsedContent.allergens || [], customFilterMatch: parsedContent.customFilterMatch || null, error: false }; } catch (e) { return { name: dishName, error: true, englishName: dishName, mainIngredients: ["Analysis failed"], allergens: [], customFilterMatch: null }; } }).catch(err => ({ name: dishName, error: true, englishName: dishName, mainIngredients: ["Network error"], allergens: [], customFilterMatch: null })); }); return Promise.all(analysisPromises); }
+            function getFilterReasons(analyzedDish) { if (analyzedDish.error) return ["Analysis failed"]; const reasons = new Set(); const lowerCaseAllergens = (analyzedDish.allergens || []).map(a => a.toLowerCase()); const prefVegetarian = document.getElementById('pref-vegetarian').checked; const prefNoPork = document.getElementById('pref-no-pork').checked; const prefNoBeef = document.getElementById('pref-no-beef').checked; const prefNoFish = document.getElementById('pref-no-fish').checked; const prefShellfishFree = document.getElementById('pref-shellfish-free').checked; const prefNoNuts = document.getElementById('pref-no-nuts').checked; const prefNoAlcohol = document.getElementById('pref-no-alcohol').checked; const prefNoSpicy = document.getElementById('pref-no-spicy').checked; const prefGlutenFree = document.getElementById('pref-gluten-free').checked; const prefDairyFree = document.getElementById('pref-dairy-free').checked; const prefEggFree = document.getElementById('pref-egg-free').checked; const prefNoSoy = document.getElementById('pref-no-soy').checked; const prefHalal = document.getElementById('pref-halal').checked; const prefKosher = document.getElementById('pref-kosher').checked; const prefBuddhistVegetarian = document.getElementById('pref-buddhist-vegetarian').checked; const prefVegan = document.getElementById('pref-vegan').checked; if (prefVegan) { if (lowerCaseAllergens.some(a => ['pork', 'beef', 'chicken', 'lamb', 'fish', 'seafood'].includes(a))) { reasons.add("Not Vegan (Contains meat)"); } if (lowerCaseAllergens.includes('dairy')) { reasons.add("Not Vegan (Contains dairy)"); } if (lowerCaseAllergens.includes('eggs')) { reasons.add("Not Vegan (Contains eggs)"); } } else if (prefVegetarian) { if (lowerCaseAllergens.some(a => ['pork', 'beef', 'chicken', 'lamb', 'fish', 'seafood'].includes(a))) { reasons.add("Contains meat"); } } if (prefNoPork && lowerCaseAllergens.includes('pork')) { reasons.add("Contains pork"); } if (prefNoBeef && lowerCaseAllergens.includes('beef')) { reasons.add("Contains beef"); } if (prefNoFish && lowerCaseAllergens.includes('fish')) { reasons.add("Contains fish"); } if (prefShellfishFree && lowerCaseAllergens.includes('seafood')) { reasons.add("Contains shellfish"); } if (prefNoNuts && (lowerCaseAllergens.includes('nuts') || lowerCaseAllergens.includes('peanuts'))) { reasons.add("Contains nuts"); } if (prefNoAlcohol && lowerCaseAllergens.includes('alcohol')) { reasons.add("Contains alcohol"); } if (prefNoSpicy && lowerCaseAllergens.includes('spicy')) { reasons.add("Spicy"); } if (prefGlutenFree && lowerCaseAllergens.includes('gluten')) { reasons.add("Contains gluten"); } if (prefDairyFree && lowerCaseAllergens.includes('dairy')) { reasons.add("Contains dairy"); } if (prefEggFree && lowerCaseAllergens.includes('eggs')) { reasons.add("Contains eggs"); } if (prefNoSoy && lowerCaseAllergens.includes('soy')) { reasons.add("Contains soy"); } if (prefHalal) { if (lowerCaseAllergens.includes('pork')) reasons.add("Not Halal (Contains pork)"); if (lowerCaseAllergens.includes('alcohol')) reasons.add("Not Halal (Contains alcohol)"); } if (prefKosher) { if (lowerCaseAllergens.includes('pork')) reasons.add("Not Kosher (Contains pork)"); if (lowerCaseAllergens.includes('seafood') && !lowerCaseAllergens.includes('fish')) reasons.add("Not Kosher (Contains non-kosher seafood)"); if (lowerCaseAllergens.includes('alcohol')) reasons.add("Not Kosher (Contains alcohol)"); } if (prefBuddhistVegetarian) { if (lowerCaseAllergens.some(a => ['pork', 'beef', 'chicken', 'lamb', 'fish', 'seafood', 'dairy', 'eggs'].includes(a))) reasons.add("Not Buddhist Vegetarian (Contains animal product)"); if (lowerCaseAllergens.includes('alcohol')) reasons.add("Not Buddhist Vegetarian (Contains alcohol)"); } if (analyzedDish.customFilterMatch) { reasons.add(analyzedDish.customFilterMatch); } return Array.from(reasons); }
+            async function translateText(textArray, sourceLang, targetLang) { const endpoint = "https://api.cognitive.microsofttranslator.com"; const url = `${endpoint}/translate?api-version=3.0&from=${sourceLang}&to=${targetLang}`; const additionalTexts = ['👍 Recommended Dishes', '👎 Filtered Dishes', 'No recommended dishes found matching all your preferences.', "Great! All dishes seem to match your preferences.", 'Analysis failed', 'Network error', 'N/A', 'Contains meat', 'Spicy', 'Contains alcohol', 'Not Vegan (Contains meat)', 'Not Vegan (Contains dairy)', 'Not Vegan (Contains eggs)', 'Contains pork', 'Contains beef', 'Contains fish', 'Contains shellfish', 'Contains nuts', 'Contains gluten', 'Contains dairy', 'Contains eggs', 'Contains soy', 'Not Halal (Contains pork)', 'Not Halal (Contains alcohol)', 'Not Kosher (Contains pork)', 'Not Kosher (Contains non-kosher seafood)', 'Not Kosher (Contains alcohol)', 'Not Buddhist Vegetarian (Contains animal product)', 'Not Buddhist Vegetarian (Contains alcohol)']; const uniqueTexts = Array.from(new Set(textArray.filter(t => t && typeof t === 'string' && t.trim() !== '').concat(additionalTexts))); const body = uniqueTexts.map(text => ({ 'text': text })); if (body.length === 0) return {}; const response = await fetch(url, { method: 'POST', headers: { 'Ocp-Apim-Subscription-Key': AZURE_TRANSLATOR_KEY, 'Ocp-Apim-Subscription-Region': AZURE_TRANSLATOR_REGION, 'Content-Type': 'application/json' }, body: JSON.stringify(body) }); if (!response.ok) { const errorData = await response.json(); throw new Error(`Azure Translator API 錯誤: ${errorData.error.message}`); } const data = await response.json(); const translationMap = {}; for (let i = 0; i < uniqueTexts.length; i++) { translationMap[uniqueTexts[i]] = data[i].translations[0].text; } return translationMap; }
+            function generateFinalHtml(dishesWithReasons, translationMap) { let recommendedList = '', filteredList = '', recommendedCount = 0, filteredCount = 0; dishesWithReasons.forEach(dish => { const translatedName = translationMap[dish.englishName] || dish.englishName; const originalNameHtml = (translatedName.toLowerCase() !== dish.name.toLowerCase()) ? `<span class="original-text">${dish.name}</span>` : ''; const ingredientsTranslated = dish.error ? (translationMap["Analysis failed"] || "分析失敗") : (dish.mainIngredients.length > 0 ? (translationMap[dish.mainIngredients.join(', ')] || dish.mainIngredients.join(', ')) : (translationMap['N/A'] || 'N/A')); const ingredientsHtml = `<span class="original-text">${ingredientsTranslated}</span>`; const dishReasons = dish.filterReasons || []; if (dishReasons.length > 0) { filteredCount++; const reasonTagsHtml = dishReasons.map(r => `<span class="reason-tag">⚠️ ${translationMap[r] || r}</span>`).join(''); filteredList += `<li><div class="dish-translation"><span class="filtered-out">${translatedName}</span>${originalNameHtml}${ingredientsHtml}${reasonTagsHtml}</div></li>`; } else { recommendedCount++; recommendedList += `<li><div class="dish-translation"><span class="highlight">${translatedName}</span>${originalNameHtml}${ingredientsHtml}</div></li>`; } }); const tRecommended = translationMap['👍 Recommended Dishes'] || '👍 推薦菜色'; const tFiltered = translationMap['👎 Filtered Dishes'] || '👎 已過濾菜色'; const tNoRec = translationMap['No recommended dishes found matching all your preferences.'] || '沒有找到符合您所有偏好的推薦菜色。'; const tAllMatch = translationMap["Great! All dishes seem to match your preferences."] || '太棒了！所有菜色似乎都符合您的偏好。'; let finalHtml = `<div class="result-section"><h4>${tRecommended} (${recommendedCount})</h4><ul>${recommendedList || `<li>${tNoRec}</li>`}</ul></div>`; finalHtml += `<div class="result-section"><h4>${tFiltered} (${filteredCount})</h4><ul>${filteredList || `<li>${tAllMatch}</li>`}</ul></div>`; return finalHtml; }
+
+            // --- 轉盤邏輯 (無變動) ---
+            const drawWheel = () => { const numOptions = spinnerOptions.length; const centerX = wheel.width / 2; const centerY = wheel.height / 2; const baseRadius = wheel.width / 2 - 10; ctx.clearRect(0, 0, wheel.width, wheel.height); if (numOptions === 0) { spinBtn.disabled = true; spinnerResultText.textContent = analysisResultsSection.style.display !== 'none' ? getTranslation('spinner_no_options') : getTranslation('spinner_load_options'); spinActions.style.display = 'none'; return; } if (!isSpinning) { spinBtn.disabled = false; } const arcSize = 2 * Math.PI / numOptions; spinnerOptions.forEach((option, i) => { const isHighlighted = (i === hoveredSliceIndex); const radius = isHighlighted ? baseRadius + 5 : baseRadius; const angle = i * arcSize - Math.PI / 2; ctx.save(); ctx.fillStyle = spinnerColors[i % spinnerColors.length]; if (isHighlighted) { ctx.shadowColor = '#f0c419'; ctx.shadowBlur = 20; } ctx.beginPath(); ctx.moveTo(centerX, centerY); ctx.arc(centerX, centerY, radius, angle, angle + arcSize); ctx.closePath(); ctx.fill(); ctx.restore(); ctx.save(); ctx.strokeStyle = '#fff'; ctx.lineWidth = 3; ctx.beginPath(); ctx.moveTo(centerX, centerY); ctx.arc(centerX, centerY, radius, angle, angle + arcSize); ctx.closePath(); ctx.stroke(); ctx.restore(); if (isHighlighted) { ctx.save(); ctx.fillStyle = '#fff'; ctx.font = `bold 16px ${getComputedStyle(document.body).fontFamily.split(',')[0]}, sans-serif`; ctx.textAlign = 'center'; ctx.textBaseline = 'middle'; const textAngle = angle + arcSize / 2; ctx.translate(centerX + Math.cos(textAngle) * radius * 0.65, centerY + Math.sin(textAngle) * radius * 0.65); ctx.rotate(textAngle + Math.PI / 2); ctx.shadowColor = 'rgba(0, 0, 0, 0.7)'; ctx.shadowBlur = 5; const maxWidth = radius * 1.1; ctx.fillText(option, 0, 0, maxWidth); ctx.restore(); } }); };
+            const spin = () => { if (isSpinning || spinnerOptions.length === 0) return; isSpinning = true; isResultDisplayed = false; spinBtn.disabled = true; spinnerResultText.textContent = getTranslation('spinner_result_text_spinning'); spinActions.style.display = 'none'; hoveredSliceIndex = null; drawWheel(); const randomSpins = Math.floor(Math.random() * 5) + 5; const randomStopAngle = Math.random() * 360; const totalRotation = randomSpins * 360 + randomStopAngle; const newRotation = currentRotation + totalRotation; wheel.style.transition = 'transform 5s cubic-bezier(0.1, 0.7, 0.3, 1)'; wheel.style.transform = `rotate(${newRotation}deg)`; currentRotation = newRotation; setTimeout(() => { isSpinning = false; isResultDisplayed = true; spinBtn.disabled = false; spinBtn.textContent = getTranslation('spinner_result_text_spin_again'); const finalAngle = currentRotation % 360; const winnerIndex = Math.floor(((360 - finalAngle) % 360) / (360 / spinnerOptions.length)); const winnerDishName = spinnerOptions[winnerIndex]; if (winnerDishName) { spinnerResultText.textContent = getTranslation('spinner_result_text_winner', winnerDishName); const dishFullDetails = recommendedDishes.find(d => (languageSelector.value === 'en' ? d.englishName : (finalTranslationMap[d.englishName] || d.englishName)) === winnerDishName); currentLogEntry = { text: winnerDishName, fullDetails: dishFullDetails }; spinActions.style.display = 'block'; } else { spinnerResultText.textContent = getTranslation('spinner_result_text_error'); spinActions.style.display = 'none'; } }, 5000); };
+            function handleMouseMove(e) { if (isSpinning || isResultDisplayed) return; const rect = wheel.getBoundingClientRect(), scaleX = wheel.width / rect.width, scaleY = wheel.height / rect.height, mouseX = (e.clientX - rect.left) * scaleX, mouseY = (e.clientY - rect.top) * scaleY; const dx = mouseX - wheel.width / 2, dy = mouseY - wheel.height / 2, distance = Math.sqrt(dx * dx + dy * dy); const oldHoveredIndex = hoveredSliceIndex; let newHoveredIndex = null; if (distance <= (wheel.width / 2 - 10) + 5 && spinnerOptions.length > 0) { let normalizedAngle = (Math.atan2(dy, dx) - (currentRotation % 360) * Math.PI / 180 + (2.5 * Math.PI)) % (2 * Math.PI); newHoveredIndex = Math.floor(normalizedAngle / (2 * Math.PI / spinnerOptions.length)); } if (newHoveredIndex !== oldHoveredIndex) { hoveredSliceIndex = newHoveredIndex; drawWheel(); spinnerResultText.textContent = newHoveredIndex !== null ? getTranslation('spinner_intro_text') : getTranslation('spinner_hover_prompt'); } }
+            function handleMouseLeave() { if (isSpinning || isResultDisplayed || hoveredSliceIndex === null) return; hoveredSliceIndex = null; drawWheel(); spinnerResultText.textContent = getTranslation('spinner_hover_prompt'); }
             
-            // --- getFilterReasons 函式，現在會回傳一個包含多個過濾原因的陣列 ---
-            function getFilterReasons(analyzedDish) {
-                if (analyzedDish.error) return ["Analysis failed"];
-
-                const reasons = new Set();
-                const lowerCaseAllergens = (analyzedDish.allergens || []).map(a => a.toLowerCase());
-                // const mainIngredientsText = (analyzedDish.mainIngredients || []).join(', ').toLowerCase(); // 目前未用到，但保留
-
-                // Individual standard preferences
-                const prefVegetarian = document.getElementById('pref-vegetarian').checked;
-                const prefNoPork = document.getElementById('pref-no-pork').checked;
-                const prefNoBeef = document.getElementById('pref-no-beef').checked;
-                const prefNoFish = document.getElementById('pref-no-fish').checked;
-                const prefShellfishFree = document.getElementById('pref-shellfish-free').checked;
-                const prefNoNuts = document.getElementById('pref-no-nuts').checked;
-                const prefNoAlcohol = document.getElementById('pref-no-alcohol').checked;
-                const prefNoSpicy = document.getElementById('pref-no-spicy').checked;
-                const prefGlutenFree = document.getElementById('pref-gluten-free').checked;
-                const prefDairyFree = document.getElementById('pref-dairy-free').checked;
-                const prefEggFree = document.getElementById('pref-egg-free').checked;
-                const prefNoSoy = document.getElementById('pref-no-soy').checked;
-
-                // Religious dietary preferences
-                const prefHalal = document.getElementById('pref-halal').checked;
-                const prefKosher = document.getElementById('pref-kosher').checked;
-                const prefBuddhistVegetarian = document.getElementById('pref-buddhist-vegetarian').checked;
-                const prefVegan = document.getElementById('pref-vegan').checked;
-
-                // Filtering logic based on checkboxes
-                // --- Vegan Check (most restrictive) ---
-                if (prefVegan) {
-                    if (lowerCaseAllergens.some(a => ['pork', 'beef', 'chicken', 'lamb', 'fish', 'seafood'].includes(a))) {
-                        reasons.add("Not Vegan (Contains meat)");
-                    }
-                    if (lowerCaseAllergens.includes('dairy')) {
-                        reasons.add("Not Vegan (Contains dairy)");
-                    }
-                    if (lowerCaseAllergens.includes('eggs')) {
-                        reasons.add("Not Vegan (Contains eggs)");
-                    }
-                    // AI won't reliably detect honey, animal fat, or other non-standard vegan ingredients.
-                }
-                // --- Vegetarian Check (only if NOT already filtered by Vegan) ---
-                else if (prefVegetarian) { 
-                    if (lowerCaseAllergens.some(a => ['pork', 'beef', 'chicken', 'lamb', 'fish', 'seafood'].includes(a))) {
-                        reasons.add("Contains meat"); 
-                    }
-                }
-
-                // --- Specific Animal Products (apply generally) ---
-                if (prefNoPork && lowerCaseAllergens.includes('pork')) {
-                    reasons.add("Contains pork");
-                }
-                if (prefNoBeef && lowerCaseAllergens.includes('beef')) {
-                    reasons.add("Contains beef");
-                }
-                if (prefNoFish && lowerCaseAllergens.includes('fish')) {
-                    reasons.add("Contains fish");
-                }
-                if (prefShellfishFree && lowerCaseAllergens.includes('seafood')) { 
-                    reasons.add("Contains shellfish");
-                }
-
-                // --- Other Allergens & Preferences ---
-                if (prefNoNuts && (lowerCaseAllergens.includes('nuts') || lowerCaseAllergens.includes('peanuts'))) {
-                    reasons.add("Contains nuts");
-                }
-                if (prefNoAlcohol && lowerCaseAllergens.includes('alcohol')) {
-                    reasons.add("Contains alcohol");
-                }
-                if (prefNoSpicy && lowerCaseAllergens.includes('spicy')) {
-                    reasons.add("Spicy");
-                }
-                if (prefGlutenFree && lowerCaseAllergens.includes('gluten')) {
-                    reasons.add("Contains gluten");
-                }
-                if (prefDairyFree && lowerCaseAllergens.includes('dairy')) {
-                    reasons.add("Contains dairy");
-                }
-                if (prefEggFree && lowerCaseAllergens.includes('eggs')) {
-                    reasons.add("Contains eggs");
-                }
-                if (prefNoSoy && lowerCaseAllergens.includes('soy')) { 
-                    reasons.add("Contains soy");
-                }
-
-                // --- Religious dietary preferences (additional strict checks) ---
-                if (prefHalal) {
-                    if (lowerCaseAllergens.includes('pork')) reasons.add("Not Halal (Contains pork)");
-                    if (lowerCaseAllergens.includes('alcohol')) reasons.add("Not Halal (Contains alcohol)");
-                    // Broader Halal checks like proper slaughter methods, specific animals not covered by 'pork', are beyond current AI's scope.
-                }
-                if (prefKosher) {
-                    if (lowerCaseAllergens.includes('pork')) reasons.add("Not Kosher (Contains pork)");
-                    if (lowerCaseAllergens.includes('seafood') && !lowerCaseAllergens.includes('fish')) reasons.add("Not Kosher (Contains non-kosher seafood)"); 
-                    if (lowerCaseAllergens.includes('alcohol')) reasons.add("Not Kosher (Contains alcohol)"); 
-                    // Strict Kosher (meat-dairy separation, Passover, kosher supervision) is beyond AI.
-                }
-                if (prefBuddhistVegetarian) {
-                    if (lowerCaseAllergens.some(a => ['pork', 'beef', 'chicken', 'lamb', 'fish', 'seafood', 'dairy', 'eggs'].includes(a))) reasons.add("Not Buddhist Vegetarian (Contains animal product)"); 
-                    if (lowerCaseAllergens.includes('alcohol')) reasons.add("Not Buddhist Vegetarian (Contains alcohol)");
-                    // Five pungent vegetables (onion, garlic, chives, scallions, asafoetida) cannot be reliably detected by AI in generic dishes.
-                }
-
-                // Custom user filter matches (last to ensure specific reasons are kept)
-                if (analyzedDish.customFilterMatch) {
-                    reasons.add(analyzedDish.customFilterMatch);
-                }
-
-                return Array.from(reasons);
-            }
-
-            async function translateText(textArray, sourceLang, targetLang) {
-                const endpoint = "https://api.cognitive.microsofttranslator.com";
-                const url = `${endpoint}/translate?api-version=3.0&from=${sourceLang}&to=${targetLang}`;
-                
-                const additionalTexts = [
-                    '👍 Recommended Dishes', '👎 Filtered Dishes', 
-                    'No recommended dishes found matching all your preferences.', 
-                    "Great! All dishes seem to match your preferences.", 
-                    'Analysis failed', 'Network error', 'N/A', // General utility messages
-
-                    // General Dietary Needs & Preferences (including Vegan)
-                    'Contains meat',
-                    'Spicy',
-                    'Contains alcohol',
-                    'Not Vegan (Contains meat)',
-                    'Not Vegan (Contains dairy)',
-                    'Not Vegan (Contains eggs)',
-
-                    // Specific Animal Product / Allergen Information
-                    'Contains pork',
-                    'Contains beef',
-                    'Contains fish',
-                    'Contains shellfish', // for seafood if it means non-fish shellfish
-                    'Contains nuts', // covers both 'Nuts' and 'Peanuts' from AI
-                    'Contains gluten',
-                    'Contains dairy',
-                    'Contains eggs',
-                    'Contains soy',
-
-                    // Religious Dietary Needs reasons
-                    'Not Halal (Contains pork)',
-                    'Not Halal (Contains alcohol)',
-                    'Not Kosher (Contains pork)',
-                    'Not Kosher (Contains non-kosher seafood)',
-                    'Not Kosher (Contains alcohol)', 
-                    'Not Buddhist Vegetarian (Contains animal product)', 
-                    'Not Buddhist Vegetarian (Contains alcohol)'
-                ];
-
-                const uniqueTexts = Array.from(new Set(textArray.filter(t => t && typeof t === 'string' && t.trim() !== '').concat(additionalTexts)));
-                const body = uniqueTexts.map(text => ({ 'text': text }));
-
-                if (body.length === 0) return {};
-
-                const response = await fetch(url, { method: 'POST', headers: { 'Ocp-Apim-Subscription-Key': AZURE_TRANSLATOR_KEY, 'Ocp-Apim-Subscription-Region': AZURE_TRANSLATOR_REGION, 'Content-Type': 'application/json' }, body: JSON.stringify(body) });
-                if (!response.ok) { const errorData = await response.json(); throw new Error(`Azure Translator API 錯誤: ${errorData.error.message}`); }
-                const data = await response.json();
-                const translationMap = {};
-                for (let i = 0; i < uniqueTexts.length; i++) {
-                    translationMap[uniqueTexts[i]] = data[i].translations[0].text;
-                }
-                return translationMap;
-            }
-
-            // 更新 generateFinalHtml 以處理多個過濾原因標籤
-            function generateFinalHtml(dishesWithReasons, translationMap) { 
-                let recommendedList = '', filteredList = '', recommendedCount = 0, filteredCount = 0; 
-                dishesWithReasons.forEach(dish => { 
-                    const translatedName = translationMap[dish.englishName] || dish.englishName; 
-                    const originalNameHtml = (translatedName.toLowerCase() !== dish.name.toLowerCase()) ? `<span class="original-text">${dish.name}</span>` : ''; 
-                    const ingredientsTranslated = dish.error ? (translationMap["Analysis failed"] || "分析失敗") : (dish.mainIngredients.length > 0 ? (translationMap[dish.mainIngredients.join(', ')] || dish.mainIngredients.join(', ')) : (translationMap['N/A'] || 'N/A')); // 確保 N/A 被翻譯
-                    const ingredientsHtml = `<span class="original-text">${ingredientsTranslated}</span>`;
-                    
-                    const dishReasons = dish.filterReasons || []; // filterReasons 現在是個陣列
-                    
-                    if (dishReasons.length > 0) { // 檢查是否有多個原因
-                        filteredCount++; 
-                        // 為每個原因生成標籤，並使用 join('') 防止它們之間有額外的逗號或空格
-                        const reasonTagsHtml = dishReasons.map(r => `<span class="reason-tag">⚠️ ${translationMap[r] || r}</span>`).join(''); 
-                        filteredList += `<li><div class="dish-translation"><span class="filtered-out">${translatedName}</span>${originalNameHtml}${ingredientsHtml}${reasonTagsHtml}</div></li>`; 
-                    } else { 
-                        recommendedCount++; 
-                        recommendedList += `<li><div class="dish-translation"><span class="highlight">${translatedName}</span>${originalNameHtml}${ingredientsHtml}</div></li>`; 
-                    } 
-                }); 
-                const tRecommended = translationMap['👍 Recommended Dishes'] || '👍 推薦菜色'; 
-                const tFiltered = translationMap['👎 Filtered Dishes'] || '👎 已過濾菜色'; 
-                const tNoRec = translationMap['No recommended dishes found matching all your preferences.'] || '沒有找到符合您所有偏好的推薦菜色。'; 
-                const tAllMatch = translationMap["Great! All dishes seem to match your preferences."] || '太棒了！所有菜色似乎都符合您的偏好。'; 
-                let finalHtml = `<div class="result-section"><h4>${tRecommended} (${recommendedCount})</h4><ul>${recommendedList || `<li>${tNoRec}</li>`}</ul></div>`; 
-                finalHtml += `<div class="result-section"><h4>${tFiltered} (${filteredCount})</h4><ul>${filteredList || `<li>${tAllMatch}</li>`}</ul></div>`; 
-                return finalHtml; 
-            }
-
-            // --- 轉盤邏輯 ---
-            const drawWheel = () => { const numOptions = spinnerOptions.length; const centerX = wheel.width / 2; const centerY = wheel.height / 2; const baseRadius = wheel.width / 2 - 10; ctx.clearRect(0, 0, wheel.width, wheel.height); if (numOptions === 0) { spinBtn.disabled = true; spinnerResultText.textContent = analysisResultsSection.style.display !== 'none' ? '沒有推薦菜色可供選擇。' : '請先分析菜單以載入選項。'; spinActions.style.display = 'none'; return; } if (!isSpinning) { spinBtn.disabled = false; } const arcSize = 2 * Math.PI / numOptions; spinnerOptions.forEach((option, i) => { const isHighlighted = (i === hoveredSliceIndex); const radius = isHighlighted ? baseRadius + 5 : baseRadius; const angle = i * arcSize - Math.PI / 2; ctx.save(); ctx.fillStyle = spinnerColors[i % spinnerColors.length]; if (isHighlighted) { ctx.shadowColor = '#f0c419'; ctx.shadowBlur = 20; } ctx.beginPath(); ctx.moveTo(centerX, centerY); ctx.arc(centerX, centerY, radius, angle, angle + arcSize); ctx.closePath(); ctx.fill(); ctx.restore(); ctx.save(); ctx.strokeStyle = '#fff'; ctx.lineWidth = 3; ctx.beginPath(); ctx.moveTo(centerX, centerY); ctx.arc(centerX, centerY, radius, angle, angle + arcSize); ctx.closePath(); ctx.stroke(); ctx.restore(); if (isHighlighted) { ctx.save(); ctx.fillStyle = '#fff'; ctx.font = `bold 16px ${getComputedStyle(document.body).fontFamily.split(',')[0]}, sans-serif`; ctx.textAlign = 'center'; ctx.textBaseline = 'middle'; const textAngle = angle + arcSize / 2; ctx.translate(centerX + Math.cos(textAngle) * radius * 0.65, centerY + Math.sin(textAngle) * radius * 0.65); ctx.rotate(textAngle + Math.PI / 2); ctx.shadowColor = 'rgba(0, 0, 0, 0.7)'; ctx.shadowBlur = 5; const maxWidth = radius * 1.1; ctx.fillText(option, 0, 0, maxWidth); ctx.restore(); } }); };
-            const spin = () => { if (isSpinning || spinnerOptions.length === 0) return; isSpinning = true; isResultDisplayed = false; spinBtn.disabled = true; spinnerResultText.textContent = '轉啊轉...'; spinActions.style.display = 'none'; hoveredSliceIndex = null; drawWheel(); const randomSpins = Math.floor(Math.random() * 5) + 5; const randomStopAngle = Math.random() * 360; const totalRotation = randomSpins * 360 + randomStopAngle; const newRotation = currentRotation + totalRotation; wheel.style.transition = 'transform 5s cubic-bezier(0.1, 0.7, 0.3, 1)'; wheel.style.transform = `rotate(${newRotation}deg)`; currentRotation = newRotation; setTimeout(() => { isSpinning = false; isResultDisplayed = true; spinBtn.disabled = false; spinBtn.textContent = '再轉一次'; const finalAngle = currentRotation % 360; const winnerIndex = Math.floor(((360 - finalAngle) % 360) / (360 / spinnerOptions.length)); const winnerDishName = spinnerOptions[winnerIndex]; if (winnerDishName) { spinnerResultText.textContent = `恭喜！今天的選擇是：${winnerDishName}`; const dishFullDetails = recommendedDishes.find(d => (languageSelector.value === 'en' ? d.englishName : (finalTranslationMap[d.englishName] || d.englishName)) === winnerDishName); currentLogEntry = { text: winnerDishName, fullDetails: dishFullDetails }; spinActions.style.display = 'block'; } else { spinnerResultText.textContent = '出錯了，請刷新頁面！'; spinActions.style.display = 'none'; } }, 5000); };
-            function handleMouseMove(e) { if (isSpinning || isResultDisplayed) return; const rect = wheel.getBoundingClientRect(), scaleX = wheel.width / rect.width, scaleY = wheel.height / rect.height, mouseX = (e.clientX - rect.left) * scaleX, mouseY = (e.clientY - rect.top) * scaleY; const dx = mouseX - wheel.width / 2, dy = mouseY - wheel.height / 2, distance = Math.sqrt(dx * dx + dy * dy); const oldHoveredIndex = hoveredSliceIndex; let newHoveredIndex = null; if (distance <= (wheel.width / 2 - 10) + 5 && spinnerOptions.length > 0) { let normalizedAngle = (Math.atan2(dy, dx) - (currentRotation % 360) * Math.PI / 180 + (2.5 * Math.PI)) % (2 * Math.PI); newHoveredIndex = Math.floor(normalizedAngle / (2 * Math.PI / spinnerOptions.length)); } if (newHoveredIndex !== oldHoveredIndex) { hoveredSliceIndex = newHoveredIndex; drawWheel(); spinnerResultText.textContent = newHoveredIndex !== null ? '點擊按鈕來決定你的下一餐！' : '將滑鼠移到轉盤上看看有什麼好料！'; } }
-            function handleMouseLeave() { if (isSpinning || isResultDisplayed || hoveredSliceIndex === null) return; hoveredSliceIndex = null; drawWheel(); spinnerResultText.textContent = '將滑鼠移到轉盤上看看有什麼好料！'; }
-            
-            // --- 美食護照邏輯 ---
+            // --- 美食護照邏輯 (無變動) ---
             const formatTimestamp = (ts) => new Date(ts).toLocaleString('zh-TW', { dateStyle: 'short', timeStyle: 'short' });
             const renderHistory = () => { if (history.length === 0) { historyList.innerHTML = `<p style="color: var(--text-secondary-color); margin-bottom: 15px;">目前沒有任何護照紀錄喔！</p>`; } else { historyList.innerHTML = ''; history.slice().reverse().forEach((entry, revIndex) => { const originalIndex = history.length - 1 - revIndex; const li = document.createElement('li'); li.dataset.index = originalIndex; const imgHTML = entry.image ? `<img src="${entry.image}" class="history-img" alt="${entry.text}">` : `<div class="history-img">無圖片</div>`; const noteHTML = entry.note ? `<p class="truncated-note">${entry.note}</p>` : `<p class="truncated-note" style="color: var(--text-secondary-color);"><i>無心得筆記</i></p>`; li.innerHTML = `${imgHTML}<div class="history-details"><div class="history-header"><h4>${entry.text}</h4></div>${noteHTML}<span class="timestamp">${formatTimestamp(entry.timestamp)}</span></div><div class="history-actions"><button class="delete-btn" title="刪除">🗑️</button></div>`; li.addEventListener('click', (e) => { if (!e.target.closest('.delete-btn')) { showHistoryViewModal(originalIndex); } }); li.querySelector('.delete-btn').addEventListener('click', () => deleteHistoryEntry(originalIndex)); historyList.appendChild(li); }); } };
             const saveHistory = (entry) => { if (editingIndex !== null) { history[editingIndex] = { ...history[editingIndex], ...entry }; } else { entry.timestamp = Date.now(); history.push(entry); } localStorage.setItem('foodWheelHistory', JSON.stringify(history)); renderHistory(); };
-            const deleteHistoryEntry = (index) => { if (confirm(`確定要刪除這筆「${history[index].text}」的護照紀錄嗎？`)) { history.splice(index, 1); localStorage.setItem('foodWheelHistory', JSON.stringify(history)); renderHistory(); } };
+            const deleteHistoryEntry = (index) => { if (confirm(getTranslation('confirm_delete_log', history[index].text))) { history.splice(index, 1); localStorage.setItem('foodWheelHistory', JSON.stringify(history)); renderHistory(); } };
             const loadHistory = () => { const savedHistory = localStorage.getItem('foodWheelHistory'); if (savedHistory) history = JSON.parse(savedHistory); renderHistory(); };
-            const clearHistory = () => { if (history.length > 0 && confirm('確定要清除【所有】美食護照紀錄嗎？此操作無法復原。')) { history = []; localStorage.removeItem('foodWheelHistory'); renderHistory(); } };
-
-            // --- 彈出視窗 (編輯與檢視) ---
-            const showLogModal = (config) => { 
-                const entry = config.entry || {}; 
-                editingIndex = typeof config.index === 'number' ? config.index : null; 
-                currentLogEntry = { ...entry }; 
-                logTitleInput.value = entry.text || ''; 
-                modalImagePreview.innerHTML = entry.image ? `<img src="${currentLogEntry.image}" alt="預覽">` : '<span>上傳照片來記錄美食</span>'; 
-                modalTextInput.value = entry.note || ''; 
-                modalImageInput.value = ''; 
-                modalSaveBtn.textContent = config.saveText || '儲存護照紀錄'; // 確保按鈕文字正確顯示
-                logModalOverlay.style.display = 'flex'; 
-                document.body.style.overflow = 'hidden'; 
-            };
+            const clearHistory = () => { if (history.length > 0 && confirm(getTranslation('confirm_clear_all_history'))) { history = []; localStorage.removeItem('foodWheelHistory'); renderHistory(); } };
+            const showLogModal = (config) => { const entry = config.entry || {}; editingIndex = typeof config.index === 'number' ? config.index : null; currentLogEntry = { ...entry }; logTitleInput.value = entry.text || ''; modalImagePreview.innerHTML = entry.image ? `<img src="${currentLogEntry.image}" alt="預覽">` : `<span data-translate-key="modal_upload_prompt">${getTranslation('modal_upload_prompt')}</span>`; modalTextInput.value = entry.note || ''; modalImageInput.value = ''; modalSaveBtn.textContent = config.saveText || getTranslation('button_save_log'); logModalOverlay.style.display = 'flex'; document.body.style.overflow = 'hidden'; };
             const hideLogModal = () => { logModalOverlay.style.display = 'none'; document.body.style.overflow = 'auto'; };
             const showHistoryViewModal = (index) => { viewingIndex = index; const entry = history[index]; historyViewTitle.textContent = entry.text; historyViewImage.innerHTML = entry.image ? `<img src="${entry.image}" alt="${entry.text}">` : '<span>無照片</span>'; historyViewText.textContent = entry.note || '沒有留下任何心得筆記。'; historyViewModalOverlay.style.display = 'flex'; document.body.style.overflow = 'hidden'; };
             const hideHistoryViewModal = () => { historyViewModalOverlay.style.display = 'none'; document.body.style.overflow = 'auto'; };
             const handleImageUpload = async (event) => { const file = event.target.files[0]; if (!file) return; try { const imageDataUrl = await resizeImage(file, 800, 800, 0.8); currentLogEntry.image = imageDataUrl; modalImagePreview.innerHTML = `<img src="${imageDataUrl}" alt="預覽">`; } catch (error) { console.error("圖片處理失敗:", error); alert("圖片處理失敗，請稍後再試。"); } };
-            const handleSaveLog = () => { const title = logTitleInput.value.trim(); if (!title) { alert('請務必填寫餐點名稱！'); return; } currentLogEntry.text = title; currentLogEntry.note = modalTextInput.value.trim(); const isEditing = editingIndex !== null; const savedIndex = isEditing ? editingIndex : history.length; saveHistory(currentLogEntry); hideLogModal(); showSaveToast(savedIndex, title, isEditing); };
+            const handleSaveLog = () => { const title = logTitleInput.value.trim(); if (!title) { alert(getTranslation('alert_dish_name_required')); return; } currentLogEntry.text = title; currentLogEntry.note = modalTextInput.value.trim(); const isEditing = editingIndex !== null; const savedIndex = isEditing ? editingIndex : history.length; saveHistory(currentLogEntry); hideLogModal(); showSaveToast(savedIndex, title, isEditing); };
             const shareLog = async (index) => { const entry = history[index]; const shareData = { title: `[美食護照分享] 我吃了：${entry.text}`, text: `這是我在 TOUR EATS 上的美食護照紀錄：\n\n「${entry.text}」\n心得：${entry.note || '無'}\n\n你也來試試這個有趣的 App 吧！`, }; if (entry.image && navigator.share) { try { const response = await fetch(entry.image); const blob = await response.blob(); const filename = `${entry.text.replace(/[\s/\\?%*:|"<>]/g, '_')}.jpg`; const file = new File([blob], filename, { type: blob.type }); if (navigator.canShare && navigator.canShare({ files: [file] })) { shareData.files = [file]; } } catch (e) { console.error('圖片轉換或檢查分享能力時發生錯誤:', e); } } if (navigator.share) { try { await navigator.share(shareData); console.log('護照紀錄分享成功！'); } catch (err) { if (err.name !== 'AbortError') { console.error('分享失敗:', err); } } } else { navigator.clipboard.writeText(shareData.text) .then(() => { alert('您的瀏覽器不支援直接分享，分享內容已複製到剪貼簿，可以手動貼上分享囉！'); }) .catch(err => { alert('複製失敗，您的瀏覽器可能不支援此功能。'); }); } };
-
-            // --- 相機控制邏輯 (更健壯的版本) ---
-            const openCamera = async (onPhotoTakenCallback) => {
-                if (!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia) {
-                    alert('抱歉，您的瀏覽器不支援相機功能。請在安全的 HTTPS 環境下使用。');
-                    return;
-                }
-                currentPhotoCallback = onPhotoTakenCallback; 
-
-                // 停止現有的串流以切換鏡頭或確保清理
-                if (currentStream) { 
-                    currentStream.getTracks().forEach(track => track.stop()); 
-                    currentStream = null;
-                }
-
-                try {
-                    // 1. 嘗試使用目前設定的 facingMode
-                    console.log(`嘗試啟動 ${currentFacingMode === 'environment' ? '後置' : '前置'} 鏡頭...`);
-                    const stream = await navigator.mediaDevices.getUserMedia({ video: { facingMode: currentFacingMode } });
-                    currentStream = stream;
-                    cameraStream.srcObject = stream;
-                    cameraModalOverlay.style.display = 'flex';
-                    document.body.style.overflow = 'hidden';
-                } catch (err) {
-                    console.error(`無法存取 ${currentFacingMode === 'environment' ? '後置' : '前置'} 鏡頭。`, err);
-                    
-                    // 2. 如果目前的 facingMode 失敗，嘗試切換到另一個 facingMode
-                    const nextFacingMode = (currentFacingMode === 'environment') ? 'user' : 'environment';
-                    try {
-                        console.log(`嘗試切換到 ${nextFacingMode === 'environment' ? '後置' : '前置'} 鏡頭...`);
-                        const stream = await navigator.mediaDevices.getUserMedia({ video: { facingMode: nextFacingMode } });
-                        currentStream = stream;
-                        currentFacingMode = nextFacingMode; // 更新成功的 facingMode
-                        cameraStream.srcObject = stream;
-                        cameraModalOverlay.style.display = 'flex';
-                        document.body.style.overflow = 'hidden';
-                    } catch (err2) {
-                        console.error(`也無法存取 ${nextFacingMode === 'environment' ? '後置' : '前置'} 鏡頭。`, err2);
-
-                        // 3. 如果兩個明確的 facingMode 都失敗，嘗試不指定 facingMode (讓瀏覽器選擇)
-                        try {
-                            console.log('嘗試不指定鏡頭方向 (讓瀏覽器自動選擇)...');
-                            const stream = await navigator.mediaDevices.getUserMedia({ video: true });
-                            currentStream = stream;
-                            // 注意：此時 currentFacingMode 可能與實際啟用的鏡頭不符，但確保有鏡頭可用
-                            // For consistency, we might update currentFacingMode based on track.getSettings() if a specific camera is preferred for next attempts
-                            const settings = stream.getVideoTracks()[0].getSettings();
-                            if (settings.facingMode) {
-                                currentFacingMode = settings.facingMode;
-                                console.log(`瀏覽器選擇了 ${currentFacingMode} 鏡頭.`);
-                            }
-                            
-                            cameraStream.srcObject = stream;
-                            cameraModalOverlay.style.display = 'flex';
-                            document.body.style.overflow = 'hidden';
-                        } catch (finalErr) {
-                             console.error("無法啟動任何相機:", finalErr);
-                             alert('無法啟動您的相機。請確認您已授權網頁使用，且相機未被其他程式佔用，或您的瀏覽器不支援相機功能（通常需要在 HTTPS 環境下）。');
-                             closeCamera(); // 確保關閉 Modal
-                        }
-                    }
-                }
-            };
-
-            const closeCamera = () => {
-                if (currentStream) { 
-                    currentStream.getTracks().forEach(track => track.stop()); 
-                    currentStream = null;
-                }
-                cameraModalOverlay.style.display = 'none';
-                document.body.style.overflow = 'auto';
-                currentFacingMode = 'environment'; // 重置為後置鏡頭，以便下次開啟時優先使用
-            };
-
-            const takePhoto = () => {
-                if (!currentStream) {
-                    alert('相機尚未啟動！');
-                    return;
-                }
-                cameraCanvas.width = cameraStream.videoWidth;
-                cameraCanvas.height = cameraStream.videoHeight;
-                const ctx = cameraCanvas.getContext('2d');
-                // Consider adding a rotation for front camera if mirrored, based on settings.facingMode == 'user'
-                // However, CSS transform 'scaleX(-1)' on the video element is generally simpler for display
-                ctx.drawImage(cameraStream, 0, 0, cameraCanvas.width, cameraCanvas.height);
-                const imageDataUrl = cameraCanvas.toDataURL('image/jpeg', 0.9);
-                if (currentPhotoCallback) {
-                    currentPhotoCallback(imageDataUrl); 
-                }
-                closeCamera();
-            };
             
-            // --- 自訂偏好 ---
-            function renderCustomPrefs() { customPrefsDisplay.innerHTML = ''; customPreferences.forEach((pref, index) => { const tag = document.createElement('span'); tag.className = 'custom-tag'; tag.textContent = pref; const deleteBtn = document.createElement('button'); deleteBtn.className = 'delete-tag-btn'; deleteBtn.textContent = 'x'; deleteBtn.onclick = () => { customPreferences.splice(index, 1); renderCustomPrefs(); savePrefsToLocalStorage(); }; tag.appendChild(deleteBtn); customPrefsDisplay.appendChild(tag); }); }
-            function savePrefsToLocalStorage() { localStorage.setItem('myMenuAppCustomPrefs', JSON.stringify(customPreferences)); }
-            function loadPrefsFromLocalStorage() { const savedPrefs = localStorage.getItem('myMenuAppCustomPrefs'); if (savedPrefs) { customPreferences = JSON.parse(savedPrefs); renderCustomPrefs(); } }
+            // --- 相機控制邏輯 (無變動) ---
+            const openCamera = async (onPhotoTakenCallback) => { if (!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia) { alert('抱歉，您的瀏覽器不支援相機功能。請在安全的 HTTPS 環境下使用。'); return; } currentPhotoCallback = onPhotoTakenCallback; if (currentStream) { currentStream.getTracks().forEach(track => track.stop()); currentStream = null; } try { const stream = await navigator.mediaDevices.getUserMedia({ video: { facingMode: currentFacingMode } }); currentStream = stream; cameraStream.srcObject = stream; cameraModalOverlay.style.display = 'flex'; document.body.style.overflow = 'hidden'; } catch (err) { const nextFacingMode = (currentFacingMode === 'environment') ? 'user' : 'environment'; try { const stream = await navigator.mediaDevices.getUserMedia({ video: { facingMode: nextFacingMode } }); currentStream = stream; currentFacingMode = nextFacingMode; cameraStream.srcObject = stream; cameraModalOverlay.style.display = 'flex'; document.body.style.overflow = 'hidden'; } catch (err2) { try { const stream = await navigator.mediaDevices.getUserMedia({ video: true }); currentStream = stream; const settings = stream.getVideoTracks()[0].getSettings(); if (settings.facingMode) { currentFacingMode = settings.facingMode; } cameraStream.srcObject = stream; cameraModalOverlay.style.display = 'flex'; document.body.style.overflow = 'hidden'; } catch (finalErr) { alert('無法啟動您的相機。請確認您已授權網頁使用，且相機未被其他程式佔用。'); closeCamera(); } } } };
+            const closeCamera = () => { if (currentStream) { currentStream.getTracks().forEach(track => track.stop()); currentStream = null; } cameraModalOverlay.style.display = 'none'; document.body.style.overflow = 'auto'; currentFacingMode = 'environment'; };
+            const takePhoto = () => { if (!currentStream) { alert('相機尚未啟動！'); return; } cameraCanvas.width = cameraStream.videoWidth; cameraCanvas.height = cameraStream.videoHeight; const ctx = cameraCanvas.getContext('2d'); ctx.drawImage(cameraStream, 0, 0, cameraCanvas.width, cameraCanvas.height); const imageDataUrl = cameraCanvas.toDataURL('image/jpeg', 0.9); if (currentPhotoCallback) { currentPhotoCallback(imageDataUrl); } closeCamera(); };
+            
+            // --- 自訂偏好 (無變動) ---
+            function renderCustomPrefs() { customPrefsDisplay.innerHTML = ''; customPreferences.forEach((pref, index) => { const tag = document.createElement('span'); tag.className = 'custom-tag'; tag.textContent = pref; const deleteBtn = document.createElement('button'); deleteBtn.className = 'delete-tag-btn'; deleteBtn.textContent = 'x'; deleteBtn.onclick = () => { customPreferences.splice(index, 1); renderCustomPrefs(); }; tag.appendChild(deleteBtn); customPrefsDisplay.appendChild(tag); }); }
+            
+            // --- 全新：設定檔管理邏輯 ---
+            const PROFILES_STORAGE_KEY = 'tourEatsProfiles';
 
-            // --- 主要流程 ---
+            function saveProfiles() {
+                localStorage.setItem(PROFILES_STORAGE_KEY, JSON.stringify(profiles));
+            }
+
+            function loadProfiles() {
+                const savedProfiles = localStorage.getItem(PROFILES_STORAGE_KEY);
+                if (savedProfiles) {
+                    profiles = JSON.parse(savedProfiles);
+                }
+            }
+
+            function renderProfileSelector() {
+                const currentSelection = profileSelector.value;
+                profileSelector.innerHTML = `<option value="" data-translate-key="profile_load_placeholder">${getTranslation('profile_load_placeholder')}</option>`;
+                Object.keys(profiles).sort().forEach(name => {
+                    const option = document.createElement('option');
+                    option.value = name;
+                    option.textContent = name;
+                    profileSelector.appendChild(option);
+                });
+                profileSelector.value = currentSelection; // 保持選擇
+            }
+            
+            function getCurrentPreferences() {
+                const checked = {};
+                allPrefCheckboxes.forEach(cb => {
+                    checked[cb.id] = cb.checked;
+                });
+                return {
+                    checkboxes: checked,
+                    custom: [...customPreferences] // 複製一份
+                };
+            }
+
+            function applyPreferences(profileData) {
+                // 應用 checkbox 狀態
+                allPrefCheckboxes.forEach(cb => {
+                    cb.checked = profileData.checkboxes[cb.id] || false;
+                });
+
+                // 應用自訂偏好
+                customPreferences = profileData.custom ? [...profileData.custom] : [];
+                renderCustomPrefs();
+            }
+
+            // --- 主要流程 (無變動) ---
             processBtn.addEventListener('click', async () => {
                 const imageSource = imagePreview.src;
-                // 注意：如果 imagePreview 還是預設的imgur圖片，代表用戶還沒選圖，需要引導用戶選圖
-                if (!imageSource || imageSource.includes('wSAa8a1.jpeg')) { alert('請先用相機掃描或從相簿選取一張菜單圖片！'); return; }
+                if (!imageSource || imageSource.includes('wSAa8a1.jpeg')) { alert(getTranslation('alert_select_image')); return; }
                 
                 processBtn.disabled = true; 
-                spinBtn.textContent = '開始旋轉！'; 
+                spinBtn.textContent = getTranslation('button_spin');
                 spinBtn.disabled = true; 
                 spinActions.style.display = 'none'; 
                 isResultDisplayed = false; 
@@ -994,19 +1094,17 @@
                     const actualImageSource = imagePreview.src.startsWith('data:') ? imagePreview.src : imagePreview.src;
                     
                     const ocrText = await getOcrText(actualImageSource);
-                    if (!ocrText) { updateStatus('錯誤：無法從圖片中辨識文字。', false); return; }
+                    if (!ocrText) { updateStatus(getTranslation('alert_no_text_found'), false); return; }
                     updateStatus('OCR 辨識完成，正在請 AI 辨識菜品名稱...', true);
                     const originalDishes = await filterDishesWithAzureAI(ocrText);
-                    if (originalDishes.length === 0) { updateStatus('AI 在圖片中沒有找到可辨識的菜品項目。', false); spinnerSection.style.display = 'none'; return; }
+                    if (originalDishes.length === 0) { updateStatus(getTranslation('alert_no_dishes_found'), false); spinnerSection.style.display = 'none'; return; }
                     updateStatus(`菜品辨識完成 (${originalDishes.length}項)，正在為每個菜品進行智慧分析...`, true);
                     
                     allAnalyzedDishes = await analyzeIngredientsWithAzureAI(originalDishes, customPreferences);
 
-                    // 重新計算每個菜品的過濾原因，並更新到 dish 物件中
                     const dishesWithReasons = allAnalyzedDishes.map(d => ({ ...d, filterReasons: getFilterReasons(d) }));
                     recommendedDishes = dishesWithReasons.filter(dish => dish.filterReasons.length === 0);
 
-                    // 收集所有需要翻譯的文本，包括原始菜名、英文菜名、主要成分和所有可能的過濾原因字串
                     const allTextsToTranslate = new Set();
                     allAnalyzedDishes.forEach(d => {
                         allTextsToTranslate.add(d.englishName);
@@ -1025,11 +1123,11 @@
                     
                     spinnerOptions = recommendedDishes.map(dish => languageSelector.value === 'en' ? dish.englishName : (finalTranslationMap[dish.englishName] || dish.englishName));
                     spinnerSection.style.display = 'block';
-                    spinnerResultText.textContent = spinnerOptions.length > 0 ? '將滑鼠移到轉盤上看看有什麼好料！' : '沒有推薦菜色可供選擇。';
+                    spinnerResultText.textContent = spinnerOptions.length > 0 ? getTranslation('spinner_hover_prompt') : getTranslation('spinner_no_options');
                     drawWheel();
                 } catch (error) {
                     console.error('發生錯誤:', error);
-                    updateStatus(`發生錯誤: ${error.message}`, false);
+                    updateStatus(`${getTranslation('alert_error_prefix')}: ${error.message}`, false);
                     spinnerSection.style.display = 'none';
                 } finally {
                     processBtn.disabled = false;
@@ -1054,49 +1152,28 @@
                     reader.onload = (e) => { imagePreview.src = e.target.result; };
                     reader.readAsDataURL(file);
                 }
-                event.target.value = ''; // 清除 input 選擇，允許再次選擇同一檔案
+                event.target.value = '';
             };
             
-            // 主畫面上傳
             uploadFileBtn.addEventListener('click', () => uploadInput.click());
-            captureCameraBtn.addEventListener('click', () => {
-                // 主動指定每次開啟都優先用後置鏡頭，除非切換
-                currentFacingMode = 'environment';
-                openCamera((imageDataUrl) => {
-                    imagePreview.src = imageDataUrl;
-                });
-            });
+            captureCameraBtn.addEventListener('click', () => { currentFacingMode = 'environment'; openCamera((imageDataUrl) => { imagePreview.src = imageDataUrl; }); });
             uploadInput.addEventListener('change', handleImageSelection);
             
-            // 護照Modal上傳
             modalUploadFileBtn.addEventListener('click', () => modalImageInput.click());
-            modalCaptureCameraBtn.addEventListener('click', () => {
-                // 主動指定每次開啟都優先用後置鏡頭，除非切換
-                currentFacingMode = 'environment';
-                openCamera((imageDataUrl) => {
-                    currentLogEntry.image = imageDataUrl;
-                    modalImagePreview.innerHTML = `<img src="${imageDataUrl}" alt="預覽">`;
-                });
-            });
+            modalCaptureCameraBtn.addEventListener('click', () => { currentFacingMode = 'environment'; openCamera((imageDataUrl) => { currentLogEntry.image = imageDataUrl; modalImagePreview.innerHTML = `<img src="${imageDataUrl}" alt="預覽">`; }); });
             
-            // 通用相機 modal 按鈕
             takePhotoButton.addEventListener('click', takePhoto);
             cancelCameraButton.addEventListener('click', closeCamera);
-            toggleCameraBtn.addEventListener('click', async () => {
-                currentFacingMode = (currentFacingMode === 'environment') ? 'user' : 'environment';
-                await openCamera(currentPhotoCallback); 
-            });
-            cameraModalOverlay.addEventListener('click', (e) => { 
-                if (e.target === cameraModalOverlay) closeCamera(); 
-            });
+            toggleCameraBtn.addEventListener('click', async () => { currentFacingMode = (currentFacingMode === 'environment') ? 'user' : 'environment'; await openCamera(currentPhotoCallback); });
+            cameraModalOverlay.addEventListener('click', (e) => { if (e.target === cameraModalOverlay) closeCamera(); });
 
-            addPrefBtn.addEventListener('click', () => { const newPref = customPrefInput.value.trim(); if (newPref && !customPreferences.includes(newPref)) { customPreferences.push(newPref); customPrefInput.value = ''; renderCustomPrefs(); savePrefsToLocalStorage(); } });
+            addPrefBtn.addEventListener('click', () => { const newPref = customPrefInput.value.trim(); if (newPref && !customPreferences.includes(newPref)) { customPreferences.push(newPref); customPrefInput.value = ''; renderCustomPrefs(); } });
             customPrefInput.addEventListener('keypress', (e) => { if (e.key === 'Enter') addPrefBtn.click(); });
             
             spinBtn.addEventListener('click', spin);
-            keepBtn.addEventListener('click', () => { spinBtn.disabled = true; isResultDisplayed = false; showLogModal({ entry: currentLogEntry, saveText: '儲存護照紀錄' }); spinActions.style.display = 'none'; spinnerResultText.textContent = `太棒了！就決定吃「${currentLogEntry.text}」`; });
+            keepBtn.addEventListener('click', () => { spinBtn.disabled = true; isResultDisplayed = false; showLogModal({ entry: currentLogEntry, saveText: getTranslation('button_save_log') }); spinActions.style.display = 'none'; spinnerResultText.textContent = getTranslation('spinner_result_text_final', currentLogEntry.text); });
             clearHistoryBtn.addEventListener('click', clearHistory);
-            addNewLogBtn.addEventListener('click', () => { showLogModal({ saveText: '建立新護照紀錄' }); });
+            addNewLogBtn.addEventListener('click', () => { showLogModal({ saveText: getTranslation('button_add_log') }); });
             
             modalImageInput.addEventListener('change', handleImageUpload);
             modalSaveBtn.addEventListener('click', handleSaveLog);
@@ -1104,17 +1181,154 @@
             logModalOverlay.addEventListener('click', (e) => { if (e.target === logModalOverlay) hideLogModal(); });
             
             historyViewModalOverlay.querySelectorAll('.modal-close-btn').forEach(btn => btn.addEventListener('click', hideHistoryViewModal));
-            historyViewEditBtn.addEventListener('click', () => { hideHistoryViewModal(); showLogModal({ index: viewingIndex, entry: history[viewingIndex], saveText: '儲存變更' }); });
+            historyViewEditBtn.addEventListener('click', () => { hideHistoryViewModal(); showLogModal({ index: viewingIndex, entry: history[viewingIndex], saveText: getTranslation('button_save_log') }); });
             historyViewShareBtn.addEventListener('click', () => { shareLog(viewingIndex); });
             historyViewModalOverlay.addEventListener('click', (e) => { if (e.target === historyViewModalOverlay) hideHistoryViewModal(); });
             
             wheel.addEventListener('mousemove', handleMouseMove);
             wheel.addEventListener('mouseleave', handleMouseLeave);
+            
+            // --- MODIFIED: Event Listener for Language Change with Azure Translation and Caching ---
+            languageSelector.addEventListener('change', async () => {
+                const targetLang = languageSelector.value;
+                const sourceLang = 'zh-TW'; // Using Traditional Chinese as the source of truth for UI keys
+
+                // 1. Check Cache: If the language already exists in our cache, just apply it.
+                if (translations[targetLang]) {
+                    applyLanguage();
+                    if (analysisResultsSection.style.display === 'block' && allAnalyzedDishes.length > 0) {
+                        alert(getTranslation('alert_lang_switched'));
+                    }
+                    return; // Translation exists, no need to call API.
+                }
+
+                // 2. Translate via API: If not in cache, fetch from Azure Translator.
+                try {
+                    // Provide user feedback and prevent further changes during translation.
+                    document.body.style.cursor = 'wait';
+                    languageSelector.disabled = true;
+                    
+                    const sourceDict = translations[sourceLang];
+                    if (!sourceDict) {
+                         throw new Error(`Source language dictionary '${sourceLang}' not found.`);
+                    }
+
+                    // 3. Gather all unique UI text strings to be translated from the source language.
+                    const allKeys = Object.keys(sourceDict);
+                    const staticTexts = allKeys
+                        .map(key => sourceDict[key])
+                        .filter(value => typeof value === 'string');
+                    const uniqueTextsToTranslate = Array.from(new Set(staticTexts));
+
+                    // 4. Call the existing Azure translation function.
+                    updateStatus(`正在將介面翻譯為 ${languageSelector.options[languageSelector.selectedIndex].text}...`, true);
+                    const translationMap = await translateText(uniqueTextsToTranslate, sourceLang, targetLang);
+                    
+                    // Clear the status message after translation is done, only if there are no results yet.
+                    if(document.getElementById('status-container') && !allAnalyzedDishes.length > 0) {
+                         resultsDiv.innerHTML = '';
+                         analysisResultsSection.style.display = 'none';
+                    }
+
+                    // 5. Build and cache the new language dictionary.
+                    const newLangDict = {};
+                    allKeys.forEach(key => {
+                        const originalValue = sourceDict[key];
+                        if (typeof originalValue === 'string') {
+                            // Find the translation in the map returned by the API.
+                            newLangDict[key] = translationMap[originalValue] || originalValue; // Fallback to original text if not found.
+                        } else {
+                            // For dynamic messages (functions), we cannot translate them directly.
+                            // We will use the English version as a sensible fallback.
+                            newLangDict[key] = translations['en'][key] || originalValue;
+                        }
+                    });
+                    translations[targetLang] = newLangDict;
+
+                    // 6. Apply the newly translated and cached language.
+                    applyLanguage();
+
+                } catch (error) {
+                    console.error('UI Translation Error:', error);
+                    alert(`介面翻譯失敗: ${error.message}. 將切換至英語。`);
+                    languageSelector.value = 'en'; // Revert to English on failure.
+                    applyLanguage();
+                } finally {
+                    document.body.style.cursor = 'default';
+                    languageSelector.disabled = false;
+                }
+            });
+
+
+            // --- 全新事件監聽：手風琴 ---
+            prefHeaders.forEach(header => {
+                header.addEventListener('click', () => {
+                    const group = header.parentElement;
+                    group.classList.toggle('active');
+                });
+            });
+            
+            // --- 全新事件監聽：設定檔管理 ---
+            saveProfileBtn.addEventListener('click', () => {
+                const name = profileNameInput.value.trim();
+                if (!name) {
+                    alert(getTranslation('alert_profile_name_required'));
+                    return;
+                }
+                if (profiles[name]) {
+                    if (!confirm(getTranslation('confirm_overwrite_profile', name))) {
+                        return;
+                    }
+                }
+                profiles[name] = getCurrentPreferences();
+                saveProfiles();
+                renderProfileSelector();
+                profileSelector.value = name; // 自動選中剛儲存的
+                profileNameInput.value = '';
+                alert(getTranslation('alert_profile_saved', name));
+            });
+
+            profileSelector.addEventListener('change', () => {
+                const name = profileSelector.value;
+                if (name && profiles[name]) {
+                    applyPreferences(profiles[name]);
+                }
+            });
+
+            updateProfileBtn.addEventListener('click', () => {
+                const name = profileSelector.value;
+                if (!name) {
+                    alert(getTranslation('alert_select_profile_to_update'));
+                    return;
+                }
+                if (confirm(getTranslation('confirm_update_profile', name))) {
+                    profiles[name] = getCurrentPreferences();
+                    saveProfiles();
+                    alert(getTranslation('alert_profile_updated', name));
+                }
+            });
+
+            deleteProfileBtn.addEventListener('click', () => {
+                const name = profileSelector.value;
+                 if (!name) {
+                    alert(getTranslation('alert_select_profile_to_delete'));
+                    return;
+                }
+                if (confirm(getTranslation('confirm_delete_profile', name))) {
+                    delete profiles[name];
+                    saveProfiles();
+                    renderProfileSelector(); // 重新渲染列表
+                    alert(getTranslation('alert_profile_deleted', name));
+                }
+            });
+
 
             // --- 初始載入 ---
-            loadPrefsFromLocalStorage();
             loadHistory();
             drawWheel();
+            loadProfiles();
+            renderProfileSelector();
+            applyLanguage(); // 首次載入時應用預設語言
         });
     </script>
 </body>
